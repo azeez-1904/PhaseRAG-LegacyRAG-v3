@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhaseRAG v3 — LLM on Legacy Hardware</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Courier New', monospace; background: #0d1117; color: #c9d1d9; min-height: 100vh; }
+  .container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+  h1 { font-size: 1.4rem; color: #58a6ff; margin-bottom: 4px; }
+  .subtitle { font-size: 0.8rem; color: #8b949e; margin-bottom: 24px; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+  label { font-size: 0.85rem; color: #8b949e; display: block; margin-bottom: 6px; }
+  textarea, input[type="file"] {
+    width: 100%; background: #0d1117; color: #c9d1d9;
+    border: 1px solid #30363d; border-radius: 6px;
+    padding: 10px; font-family: inherit; font-size: 0.9rem;
+    resize: vertical;
+  }
+  textarea { min-height: 80px; }
+  button {
+    background: #238636; color: #fff; border: none; border-radius: 6px;
+    padding: 10px 24px; font-size: 0.9rem; cursor: pointer; margin-top: 12px;
+    font-family: inherit; width: 100%;
+  }
+  button:hover { background: #2ea043; }
+  button:disabled { background: #21262d; color: #8b949e; cursor: not-allowed; }
+  .stats-bar {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    font-size: 0.78rem; color: #8b949e; margin-bottom: 12px;
+    padding: 8px 0; border-bottom: 1px solid #21262d;
+  }
+  .stat { display: flex; flex-direction: column; }
+  .stat-val { color: #58a6ff; font-size: 1.0rem; font-weight: bold; }
+  #output-area {
+    background: #0d1117; border: 1px solid #30363d; border-radius: 6px;
+    padding: 14px; min-height: 120px; max-height: 480px;
+    overflow-y: auto; white-space: pre-wrap; font-size: 0.9rem;
+    line-height: 1.6; color: #c9d1d9;
+  }
+  .cursor { display: inline-block; width: 8px; height: 1em; background: #58a6ff; animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .error { color: #f85149; }
+  .tag { display: inline-block; background: #21262d; border-radius: 4px; padding: 2px 8px; font-size: 0.75rem; color: #8b949e; }
+  .vram-bar { height: 4px; background: #21262d; border-radius: 2px; margin-top: 2px; }
+  .vram-fill { height: 100%; background: #238636; border-radius: 2px; transition: width 0.3s; }
+  @media (max-width: 600px) { .stats-bar { gap: 10px; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>PhaseRAG v3</h1>
+  <p class="subtitle">CPU-GPU Heterogeneous LLM Inference &nbsp;|&nbsp; Dual K4200 Vulkan &nbsp;|&nbsp; MLSys 2027</p>
+
+  <div class="card">
+    <form id="query-form">
+      <label for="question">Question</label>
+      <textarea id="question" name="question" placeholder="Ask anything about your documents or a general question..." required></textarea>
+
+      <label for="document" style="margin-top:12px;">Document (optional — PDF or .txt)</label>
+      <input type="file" id="document" name="document" accept=".txt,.pdf,.md">
+
+      <button type="submit" id="submit-btn">Generate Response</button>
+    </form>
+  </div>
+
+  <div class="card" id="response-card" style="display:none;">
+    <div class="stats-bar">
+      <div class="stat">
+        <span>tok/s</span>
+        <span class="stat-val" id="stat-toks">—</span>
+      </div>
+      <div class="stat">
+        <span>Tokens</span>
+        <span class="stat-val" id="stat-tokens">0</span>
+      </div>
+      <div class="stat">
+        <span>Elapsed</span>
+        <span class="stat-val" id="stat-elapsed">0s</span>
+      </div>
+      <div class="stat" style="flex:1;">
+        <span>VRAM</span>
+        <span class="stat-val" id="stat-vram" style="font-size:0.82rem;">checking...</span>
+      </div>
+    </div>
+    <div id="output-area"><span class="cursor" id="cursor"></span></div>
+  </div>
+
+  <div class="card" style="font-size:0.78rem; color:#8b949e;">
+    <strong style="color:#c9d1d9;">Hardware:</strong>
+    Dual NVIDIA Quadro K4200 (Maxwell GM204) &nbsp;|&nbsp; 4GB GDDR5 × 2 &nbsp;|&nbsp;
+    173 GB/s bandwidth &nbsp;|&nbsp; Vulkan 1.3 (no FP16/tensor cores)
+    <br><br>
+    <strong style="color:#c9d1d9;">Expected performance:</strong>
+    ~8-9 tok/s decode, ~0.7 tok/s prefill for long prompts.
+    Short queries: ~25s &nbsp;|&nbsp; Medium queries: ~150s &nbsp;|&nbsp; Long prompts: ~400s.
+  </div>
+</div>
+
+<script>
+const form = document.getElementById('query-form');
+const btn = document.getElementById('submit-btn');
+const responseCard = document.getElementById('response-card');
+const outputArea = document.getElementById('output-area');
+const cursor = document.getElementById('cursor');
+
+let statsInterval = null;
+
+async function fetchStats() {
+  try {
+    const r = await fetch('/stats');
+    if (!r.ok) return;
+    const d = await r.json();
+    if (d.vram && d.vram.length > 0) {
+      document.getElementById('stat-vram').textContent =
+        d.vram.map(g => `GPU${g.gpu}: ${g.used_mb.toFixed(0)}/${g.total_mb.toFixed(0)}MB`).join(' | ');
+    }
+  } catch(e) {}
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  responseCard.style.display = 'block';
+  outputArea.innerHTML = '';
+  outputArea.appendChild(cursor);
+
+  document.getElementById('stat-toks').textContent = '—';
+  document.getElementById('stat-tokens').textContent = '0';
+  document.getElementById('stat-elapsed').textContent = '0s';
+
+  statsInterval = setInterval(fetchStats, 2000);
+  fetchStats();
+
+  const formData = new FormData(form);
+  let fullText = '';
+
+  try {
+    const res = await fetch('/query', { method: 'POST', body: formData });
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+
+      for (const line of lines) {
+        if (!line.startsWith('data:')) continue;
+        const dataStr = line.slice(5).trim();
+        if (dataStr === '[DONE]') break;
+        try {
+          const data = JSON.parse(dataStr);
+          if (data.error) {
+            outputArea.innerHTML = `<span class="error">Error: ${data.error}</span>`;
+            break;
+          }
+          if (data.token) {
+            fullText += data.token;
+            outputArea.textContent = fullText;
+            outputArea.appendChild(cursor);
+            outputArea.scrollTop = outputArea.scrollHeight;
+          }
+          if (data.tok_s !== undefined)
+            document.getElementById('stat-toks').textContent = data.tok_s.toFixed(2);
+          if (data.tokens !== undefined)
+            document.getElementById('stat-tokens').textContent = data.tokens;
+          if (data.elapsed_s !== undefined)
+            document.getElementById('stat-elapsed').textContent = data.elapsed_s + 's';
+          if (data.vram)
+            document.getElementById('stat-vram').textContent = data.vram;
+        } catch(e) {}
+      }
+    }
+  } catch(err) {
+    outputArea.innerHTML = `<span class="error">Connection error: ${err.message}</span>`;
+  }
+
+  cursor.remove();
+  clearInterval(statsInterval);
+  btn.disabled = false;
+  btn.textContent = 'Generate Response';
+});
+</script>
+</body>
+</html>
