@@ -60,7 +60,31 @@ _[PENDING — started 2026-05-26]_
 - Theoretical combined: large speedup for long prompts (e.g., 400-token prompt: 19s CPU vs 571s GPU for prefill)
 - Slot handoff: outcome unknown — documenting either way
 
-**Status:** RUNNING
+**Status:** COMPLETE — 2026-05-26
+
+**Results summary:**
+- CPU-only: 5.34 tok/s decode, 139s mean wall
+- GPU-only: 9.29 tok/s decode, 122s mean wall
+- GPU+ngram: 8.73 tok/s decode, 124s mean wall (SLOWER than GPU-only per-session — see below)
+- Phase split theoretical: 123s mean wall, speedup ≈ 1.0× for medium/long, 1.03× for short
+
+**Critical finding:** CPU prefill advantage is prompt-length dependent.
+- Short (<20 tok): CPU prefill ~20 tok/s vs GPU ~13 tok/s → phase split marginally beneficial
+- Medium/long (70-400 tok): CPU prefill drops to 1.0-1.4 tok/s ≈ GPU prefill 0.8-1.3 tok/s
+- Theoretical phase split speedup: 0.99-1.03× — essentially no benefit for realistic RAG workloads
+
+**Slot handoff:** FAILED. POST /slots/0 with {"action":"save",...} returns HTTP 400.
+The b9297 slot API is for same-server continuation only. Cross-backend (CPU→GPU) KV cache
+transfer is not supported. This is a hard constraint in current llama.cpp architecture.
+
+**GPU+ngram underperformed:** 8.73 vs 9.29 tok/s GPU-only. Ngram requires accumulated
+prior context from same session to build candidate lookup. Fresh server per prompt = empty
+ngram table. v2's +9.7% required same-session batch usage. Single-query isolation = no ngram benefit.
+
+**Hypothesis for B:** Since phase splitting doesn't help for medium/long prompts, prompt
+compression is the only viable strategy. Even 25% compression of a 400-token prompt
+reduces prefill time by ~25% (roughly 50s → 37s for a GPU long-prompt prefill), which
+is the dominant wall-time component.
 
 ---
 

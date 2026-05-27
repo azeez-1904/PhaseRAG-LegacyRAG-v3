@@ -1,0 +1,1008 @@
+{
+  "experiment": "exp_phase_split",
+  "model": "phi3:mini Q4_K_M",
+  "hardware": "dual NVIDIA Quadro K4200, Vulkan 1.3",
+  "llama_cpp_build": "b9297",
+  "timestamp": "2026-05-27T00:25:51.039457+00:00",
+  "n_prompts": 10,
+  "vram_pre_experiment": [
+    {
+      "gpu": 0,
+      "free_mb": 3647.0,
+      "used_mb": 387.0,
+      "total_mb": 4034.0
+    },
+    {
+      "gpu": 1,
+      "free_mb": 4030.0,
+      "used_mb": 7.0,
+      "total_mb": 4037.0
+    }
+  ],
+  "vram_post_experiment": [
+    {
+      "gpu": 0,
+      "free_mb": 3692.0,
+      "used_mb": 342.0,
+      "total_mb": 4034.0
+    },
+    {
+      "gpu": 1,
+      "free_mb": 4030.0,
+      "used_mb": 7.0,
+      "total_mb": 4037.0
+    }
+  ],
+  "summary": {
+    "cpu_only": {
+      "n": 10,
+      "mean_wall_s": 139.06,
+      "p95_wall_s": 294.29,
+      "mean_decode_tok_s": 5.3386,
+      "by_bucket": {
+        "short": {
+          "count": 3,
+          "mean_decode_tok_s": 5.7187,
+          "mean_wall_s": 35.91
+        },
+        "medium": {
+          "count": 4,
+          "mean_decode_tok_s": 5.3792,
+          "mean_wall_s": 121.95
+        },
+        "long": {
+          "count": 3,
+          "mean_decode_tok_s": 4.9044,
+          "mean_wall_s": 265.02
+        }
+      }
+    },
+    "gpu_only": {
+      "n": 10,
+      "mean_wall_s": 122.28,
+      "p95_wall_s": 273.92,
+      "mean_decode_tok_s": 9.2892,
+      "by_bucket": {
+        "short": {
+          "count": 3,
+          "mean_decode_tok_s": 9.8005,
+          "mean_wall_s": 21.96
+        },
+        "medium": {
+          "count": 4,
+          "mean_decode_tok_s": 9.3449,
+          "mean_wall_s": 105.04
+        },
+        "long": {
+          "count": 3,
+          "mean_decode_tok_s": 8.7035,
+          "mean_wall_s": 245.58
+        }
+      }
+    },
+    "gpu_ngram": {
+      "n": 10,
+      "mean_wall_s": 123.78,
+      "p95_wall_s": 276.1,
+      "mean_decode_tok_s": 8.7258,
+      "by_bucket": {
+        "short": {
+          "count": 3,
+          "mean_decode_tok_s": 9.7984,
+          "mean_wall_s": 21.83
+        },
+        "medium": {
+          "count": 4,
+          "mean_decode_tok_s": 8.5223,
+          "mean_wall_s": 107.16
+        },
+        "long": {
+          "count": 3,
+          "mean_decode_tok_s": 7.9244,
+          "mean_wall_s": 247.88
+        }
+      }
+    },
+    "phase_split_theoretical": {
+      "n": 10,
+      "mean_wall_s": 122.99,
+      "p95_wall_s": 275.88,
+      "mean_decode_tok_s": 9.2892,
+      "by_bucket": {
+        "short": {
+          "count": 3,
+          "mean_decode_tok_s": 9.8005,
+          "mean_wall_s": 21.33
+        },
+        "medium": {
+          "count": 4,
+          "mean_decode_tok_s": 9.3449,
+          "mean_wall_s": 106.07
+        },
+        "long": {
+          "count": 3,
+          "mean_decode_tok_s": 8.7035,
+          "mean_wall_s": 247.2
+        }
+      }
+    },
+    "slot_handoff": {
+      "attempted": true,
+      "success": false,
+      "failure_reason": "Slot save API error: HTTPError: HTTP Error 400: Bad Request"
+    },
+    "v2_reference": {
+      "mean_tok_s": 9.08,
+      "mean_wall_s": 81.4,
+      "config": "GPU + ngram-simple, phi3-mini, dual K4200"
+    }
+  },
+  "results": [
+    {
+      "id": 1,
+      "bucket": "short",
+      "prompt_words": 15,
+      "timestamp": "2026-05-26T23:08:42.932619+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 3647.0,
+          "used_mb": 387.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "cpu_only": {
+        "prefill_n": 18,
+        "prefill_ms": 886.88,
+        "prefill_tok_s": 20.296,
+        "decode_n": 200,
+        "decode_ms": 35017.29,
+        "decode_tok_s": 5.7115,
+        "total_wall_s": 35.925,
+        "mode": "cpu_only",
+        "ngl": 0
+      },
+      "gpu_only": {
+        "prefill_n": 18,
+        "prefill_ms": 1628.94,
+        "prefill_tok_s": 11.0502,
+        "decode_n": 200,
+        "decode_ms": 20407.13,
+        "decode_tok_s": 9.8005,
+        "total_wall_s": 22.039,
+        "mode": "gpu_only",
+        "ngl": 99
+      },
+      "phase_split_theoretical": {
+        "mode": "phase_split_theoretical",
+        "cpu_prefill_ms": 886.88,
+        "cpu_prefill_tok_s": 20.296,
+        "gpu_decode_ms": 20407.13,
+        "gpu_decode_tok_s": 9.8005,
+        "theoretical_total_ms": 21294.01,
+        "theoretical_total_s": 21.294,
+        "cpu_only_total_ms": 35904.17,
+        "gpu_only_total_ms": 22036.07,
+        "speedup_vs_cpu_only": 1.686,
+        "speedup_vs_gpu_only": 1.035,
+        "gpu_prefill_pct_of_gpu_total": 7.4
+      },
+      "phase_split_actual": {
+        "mode": "phase_split_failed",
+        "failure_reason": "Slot save API error: HTTPError: HTTP Error 400: Bad Request",
+        "prefill_timings": {
+          "prefill_n": 18,
+          "prefill_ms": 881.55,
+          "prefill_tok_s": 20.4187,
+          "prefill_wall_s": 0.884
+        }
+      },
+      "gpu_ngram": {
+        "prefill_n": 18,
+        "prefill_ms": 1517.8,
+        "prefill_tok_s": 11.8592,
+        "decode_n": 200,
+        "decode_ms": 20403.45,
+        "decode_tok_s": 9.8023,
+        "total_wall_s": 21.924,
+        "mode": "gpu_ngram",
+        "ngl": 99,
+        "ngram": true
+      },
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 3646.0,
+          "used_mb": 388.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "bucket": "short",
+      "prompt_words": 12,
+      "timestamp": "2026-05-26T23:12:15.788265+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 3646.0,
+          "used_mb": 388.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "cpu_only": {
+        "prefill_n": 18,
+        "prefill_ms": 929.46,
+        "prefill_tok_s": 19.3662,
+        "decode_n": 200,
+        "decode_ms": 34820.46,
+        "decode_tok_s": 5.7438,
+        "total_wall_s": 35.752,
+        "mode": "cpu_only",
+        "ngl": 0
+      },
+      "gpu_only": {
+        "prefill_n": 18,
+        "prefill_ms": 1482.25,
+        "prefill_tok_s": 12.1437,
+        "decode_n": 200,
+        "decode_ms": 20400.71,
+        "decode_tok_s": 9.8036,
+        "total_wall_s": 21.886,
+        "mode": "gpu_only",
+        "ngl": 99
+      },
+      "phase_split_theoretical": {
+        "mode": "phase_split_theoretical",
+        "cpu_prefill_ms": 929.46,
+        "cpu_prefill_tok_s": 19.3662,
+        "gpu_decode_ms": 20400.71,
+        "gpu_decode_tok_s": 9.8036,
+        "theoretical_total_ms": 21330.17,
+        "theoretical_total_s": 21.33,
+        "cpu_only_total_ms": 35749.92,
+        "gpu_only_total_ms": 21882.96,
+        "speedup_vs_cpu_only": 1.676,
+        "speedup_vs_gpu_only": 1.026,
+        "gpu_prefill_pct_of_gpu_total": 6.8
+      },
+      "phase_split_actual": {
+        "mode": "phase_split_failed",
+        "failure_reason": "skipped \u2014 initial attempt failed: Slot save API error: HTTPError: HTTP Error 400: Bad Request"
+      },
+      "gpu_ngram": {
+        "prefill_n": 18,
+        "prefill_ms": 1353.12,
+        "prefill_tok_s": 13.3026,
+        "decode_n": 200,
+        "decode_ms": 20440.11,
+        "decode_tok_s": 9.7847,
+        "total_wall_s": 21.796,
+        "mode": "gpu_ngram",
+        "ngl": 99,
+        "ngram": true
+      },
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 3646.0,
+          "used_mb": 388.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "bucket": "short",
+      "prompt_words": 16,
+      "timestamp": "2026-05-26T23:14:46.965674+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 3646.0,
+          "used_mb": 388.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "cpu_only": {
+        "prefill_n": 19,
+        "prefill_ms": 958.38,
+        "prefill_tok_s": 19.825,
+        "decode_n": 200,
+        "decode_ms": 35082.59,
+        "decode_tok_s": 5.7008,
+        "total_wall_s": 36.043,
+        "mode": "cpu_only",
+        "ngl": 0
+      },
+      "gpu_only": {
+        "prefill_n": 19,
+        "prefill_ms": 1530.81,
+        "prefill_tok_s": 12.4118,
+        "decode_n": 200,
+        "decode_ms": 20413.8,
+        "decode_tok_s": 9.7973,
+        "total_wall_s": 21.947,
+        "mode": "gpu_only",
+        "ngl": 99
+      },
+      "phase_split_theoretical": {
+        "mode": "phase_split_theoretical",
+        "cpu_prefill_ms": 958.38,
+        "cpu_prefill_tok_s": 19.825,
+        "gpu_decode_ms": 20413.8,
+        "gpu_decode_tok_s": 9.7973,
+        "theoretical_total_ms": 21372.18,
+        "theoretical_total_s": 21.372,
+        "cpu_only_total_ms": 36040.97,
+        "gpu_only_total_ms": 21944.61,
+        "speedup_vs_cpu_only": 1.686,
+        "speedup_vs_gpu_only": 1.027,
+        "gpu_prefill_pct_of_gpu_total": 7.0
+      },
+      "phase_split_actual": {
+        "mode": "phase_split_failed",
+        "failure_reason": "skipped \u2014 initial attempt failed: Slot save API error: HTTPError: HTTP Error 400: Bad Request"
+      },
+      "gpu_ngram": {
+        "prefill_n": 19,
+        "prefill_ms": 1373.44,
+        "prefill_tok_s": 13.8338,
+        "decode_n": 200,
+        "decode_ms": 20390.81,
+        "decode_tok_s": 9.8083,
+        "total_wall_s": 21.767,
+        "mode": "gpu_ngram",
+        "ngl": 99,
+        "ngram": true
+      },
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 3646.0,
+          "used_mb": 388.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "bucket": "medium",
+      "prompt_words": 71,
+      "timestamp": "2026-05-26T23:17:18.465230+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 3646.0,
+          "used_mb": 388.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "cpu_only": {
+        "prefill_n": 91,
+        "prefill_ms": 85215.79,
+        "prefill_tok_s": 1.0679,
+        "decode_n": 200,
+        "decode_ms": 36083.41,
+        "decode_tok_s": 5.5427,
+        "total_wall_s": 121.302,
+        "mode": "cpu_only",
+        "ngl": 0
+      },
+      "gpu_only": {
+        "prefill_n": 91,
+        "prefill_ms": 83593.24,
+        "prefill_tok_s": 1.0886,
+        "decode_n": 200,
+        "decode_ms": 20954.67,
+        "decode_tok_s": 9.5444,
+        "total_wall_s": 104.552,
+        "mode": "gpu_only",
+        "ngl": 99
+      },
+      "phase_split_theoretical": {
+        "mode": "phase_split_theoretical",
+        "cpu_prefill_ms": 85215.79,
+        "cpu_prefill_tok_s": 1.0679,
+        "gpu_decode_ms": 20954.67,
+        "gpu_decode_tok_s": 9.5444,
+        "theoretical_total_ms": 106170.46,
+        "theoretical_total_s": 106.17,
+        "cpu_only_total_ms": 121299.2,
+        "gpu_only_total_ms": 104547.91,
+        "speedup_vs_cpu_only": 1.142,
+        "speedup_vs_gpu_only": 0.985,
+        "gpu_prefill_pct_of_gpu_total": 80.0
+      },
+      "phase_split_actual": {
+        "mode": "phase_split_failed",
+        "failure_reason": "skipped \u2014 initial attempt failed: Slot save API error: HTTPError: HTTP Error 400: Bad Request"
+      },
+      "gpu_ngram": {
+        "prefill_n": 91,
+        "prefill_ms": 83540.95,
+        "prefill_tok_s": 1.0893,
+        "decode_n": 200,
+        "decode_ms": 20952.65,
+        "decode_tok_s": 9.5453,
+        "total_wall_s": 104.497,
+        "mode": "gpu_ngram",
+        "ngl": 99,
+        "ngram": true
+      },
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 3646.0,
+          "used_mb": 388.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "bucket": "medium",
+      "prompt_words": 71,
+      "timestamp": "2026-05-26T23:24:00.508854+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 3646.0,
+          "used_mb": 388.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "cpu_only": {
+        "prefill_n": 110,
+        "prefill_ms": 84496.47,
+        "prefill_tok_s": 1.3018,
+        "decode_n": 200,
+        "decode_ms": 36725.96,
+        "decode_tok_s": 5.4457,
+        "total_wall_s": 121.225,
+        "mode": "cpu_only",
+        "ngl": 0
+      },
+      "gpu_only": {
+        "prefill_n": 110,
+        "prefill_ms": 83745.1,
+        "prefill_tok_s": 1.3135,
+        "decode_n": 200,
+        "decode_ms": 21155.29,
+        "decode_tok_s": 9.4539,
+        "total_wall_s": 104.904,
+        "mode": "gpu_only",
+        "ngl": 99
+      },
+      "phase_split_theoretical": {
+        "mode": "phase_split_theoretical",
+        "cpu_prefill_ms": 84496.47,
+        "cpu_prefill_tok_s": 1.3018,
+        "gpu_decode_ms": 21155.29,
+        "gpu_decode_tok_s": 9.4539,
+        "theoretical_total_ms": 105651.76,
+        "theoretical_total_s": 105.652,
+        "cpu_only_total_ms": 121222.43,
+        "gpu_only_total_ms": 104900.39,
+        "speedup_vs_cpu_only": 1.147,
+        "speedup_vs_gpu_only": 0.993,
+        "gpu_prefill_pct_of_gpu_total": 79.8
+      },
+      "phase_split_actual": {
+        "mode": "phase_split_failed",
+        "failure_reason": "skipped \u2014 initial attempt failed: Slot save API error: HTTPError: HTTP Error 400: Bad Request"
+      },
+      "gpu_ngram": {
+        "prefill_n": 110,
+        "prefill_ms": 83611.03,
+        "prefill_tok_s": 1.3156,
+        "decode_n": 200,
+        "decode_ms": 26358.74,
+        "decode_tok_s": 7.5876,
+        "total_wall_s": 109.974,
+        "mode": "gpu_ngram",
+        "ngl": 99,
+        "ngram": true
+      },
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 3646.0,
+          "used_mb": 388.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "bucket": "medium",
+      "prompt_words": 57,
+      "timestamp": "2026-05-26T23:30:46.626857+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 3646.0,
+          "used_mb": 388.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "cpu_only": {
+        "prefill_n": 78,
+        "prefill_ms": 84376.52,
+        "prefill_tok_s": 0.9244,
+        "decode_n": 200,
+        "decode_ms": 35602.21,
+        "decode_tok_s": 5.6176,
+        "total_wall_s": 119.981,
+        "mode": "cpu_only",
+        "ngl": 0
+      },
+      "gpu_only": {
+        "prefill_n": 78,
+        "prefill_ms": 83596.57,
+        "prefill_tok_s": 0.9331,
+        "decode_n": 200,
+        "decode_ms": 21291.98,
+        "decode_tok_s": 9.3932,
+        "total_wall_s": 104.893,
+        "mode": "gpu_only",
+        "ngl": 99
+      },
+      "phase_split_theoretical": {
+        "mode": "phase_split_theoretical",
+        "cpu_prefill_ms": 84376.52,
+        "cpu_prefill_tok_s": 0.9244,
+        "gpu_decode_ms": 21291.98,
+        "gpu_decode_tok_s": 9.3932,
+        "theoretical_total_ms": 105668.5,
+        "theoretical_total_s": 105.668,
+        "cpu_only_total_ms": 119978.73,
+        "gpu_only_total_ms": 104888.55,
+        "speedup_vs_cpu_only": 1.135,
+        "speedup_vs_gpu_only": 0.993,
+        "gpu_prefill_pct_of_gpu_total": 79.7
+      },
+      "phase_split_actual": {
+        "mode": "phase_split_failed",
+        "failure_reason": "skipped \u2014 initial attempt failed: Slot save API error: HTTPError: HTTP Error 400: Bad Request"
+      },
+      "gpu_ngram": {
+        "prefill_n": 78,
+        "prefill_ms": 83499.21,
+        "prefill_tok_s": 0.9341,
+        "decode_n": 200,
+        "decode_ms": 23536.78,
+        "decode_tok_s": 8.4973,
+        "total_wall_s": 107.04,
+        "mode": "gpu_ngram",
+        "ngl": 99,
+        "ngram": true
+      },
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 3666.0,
+          "used_mb": 368.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "bucket": "medium",
+      "prompt_words": 63,
+      "timestamp": "2026-05-26T23:37:30.283248+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 3666.0,
+          "used_mb": 368.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "cpu_only": {
+        "prefill_n": 89,
+        "prefill_ms": 84549.81,
+        "prefill_tok_s": 1.0526,
+        "decode_n": 200,
+        "decode_ms": 40724.62,
+        "decode_tok_s": 4.911,
+        "total_wall_s": 125.277,
+        "mode": "cpu_only",
+        "ngl": 0
+      },
+      "gpu_only": {
+        "prefill_n": 89,
+        "prefill_ms": 83553.86,
+        "prefill_tok_s": 1.0652,
+        "decode_n": 200,
+        "decode_ms": 22251.47,
+        "decode_tok_s": 8.9882,
+        "total_wall_s": 105.809,
+        "mode": "gpu_only",
+        "ngl": 99
+      },
+      "phase_split_theoretical": {
+        "mode": "phase_split_theoretical",
+        "cpu_prefill_ms": 84549.81,
+        "cpu_prefill_tok_s": 1.0526,
+        "gpu_decode_ms": 22251.47,
+        "gpu_decode_tok_s": 8.9882,
+        "theoretical_total_ms": 106801.28,
+        "theoretical_total_s": 106.801,
+        "cpu_only_total_ms": 125274.43,
+        "gpu_only_total_ms": 105805.33,
+        "speedup_vs_cpu_only": 1.173,
+        "speedup_vs_gpu_only": 0.991,
+        "gpu_prefill_pct_of_gpu_total": 79.0
+      },
+      "phase_split_actual": {
+        "mode": "phase_split_failed",
+        "failure_reason": "skipped \u2014 initial attempt failed: Slot save API error: HTTPError: HTTP Error 400: Bad Request"
+      },
+      "gpu_ngram": {
+        "prefill_n": 89,
+        "prefill_ms": 83491.26,
+        "prefill_tok_s": 1.066,
+        "decode_n": 200,
+        "decode_ms": 23643.49,
+        "decode_tok_s": 8.459,
+        "total_wall_s": 107.137,
+        "mode": "gpu_ngram",
+        "ngl": 99,
+        "ngram": true
+      },
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 3695.0,
+          "used_mb": 339.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "bucket": "long",
+      "prompt_words": 173,
+      "timestamp": "2026-05-26T23:44:20.199615+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 3708.0,
+          "used_mb": 326.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "cpu_only": {
+        "prefill_n": 313,
+        "prefill_ms": 252285.07,
+        "prefill_tok_s": 1.2407,
+        "decode_n": 200,
+        "decode_ms": 40483.04,
+        "decode_tok_s": 4.9403,
+        "total_wall_s": 292.773,
+        "mode": "cpu_only",
+        "ngl": 0
+      },
+      "gpu_only": {
+        "prefill_n": 313,
+        "prefill_ms": 250325.08,
+        "prefill_tok_s": 1.2504,
+        "decode_n": 200,
+        "decode_ms": 23594.44,
+        "decode_tok_s": 8.4766,
+        "total_wall_s": 273.923,
+        "mode": "gpu_only",
+        "ngl": 99
+      },
+      "phase_split_theoretical": {
+        "mode": "phase_split_theoretical",
+        "cpu_prefill_ms": 252285.07,
+        "cpu_prefill_tok_s": 1.2407,
+        "gpu_decode_ms": 23594.44,
+        "gpu_decode_tok_s": 8.4766,
+        "theoretical_total_ms": 275879.51,
+        "theoretical_total_s": 275.88,
+        "cpu_only_total_ms": 292768.11,
+        "gpu_only_total_ms": 273919.52,
+        "speedup_vs_cpu_only": 1.061,
+        "speedup_vs_gpu_only": 0.993,
+        "gpu_prefill_pct_of_gpu_total": 91.4
+      },
+      "phase_split_actual": {
+        "mode": "phase_split_failed",
+        "failure_reason": "skipped \u2014 initial attempt failed: Slot save API error: HTTPError: HTTP Error 400: Bad Request"
+      },
+      "gpu_ngram": {
+        "prefill_n": 313,
+        "prefill_ms": 250369.61,
+        "prefill_tok_s": 1.2502,
+        "decode_n": 200,
+        "decode_ms": 25728.55,
+        "decode_tok_s": 7.7735,
+        "total_wall_s": 276.103,
+        "mode": "gpu_ngram",
+        "ngl": 99,
+        "ngram": true
+      },
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 3709.0,
+          "used_mb": 325.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "bucket": "long",
+      "prompt_words": 129,
+      "timestamp": "2026-05-26T23:59:34.821365+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 3709.0,
+          "used_mb": 325.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "cpu_only": {
+        "prefill_n": 213,
+        "prefill_ms": 168292.02,
+        "prefill_tok_s": 1.2657,
+        "decode_n": 200,
+        "decode_ms": 39696.96,
+        "decode_tok_s": 5.0382,
+        "total_wall_s": 207.992,
+        "mode": "cpu_only",
+        "ngl": 0
+      },
+      "gpu_only": {
+        "prefill_n": 213,
+        "prefill_ms": 166932.68,
+        "prefill_tok_s": 1.276,
+        "decode_n": 200,
+        "decode_ms": 23024.7,
+        "decode_tok_s": 8.6863,
+        "total_wall_s": 189.963,
+        "mode": "gpu_only",
+        "ngl": 99
+      },
+      "phase_split_theoretical": {
+        "mode": "phase_split_theoretical",
+        "cpu_prefill_ms": 168292.02,
+        "cpu_prefill_tok_s": 1.2657,
+        "gpu_decode_ms": 23024.7,
+        "gpu_decode_tok_s": 8.6863,
+        "theoretical_total_ms": 191316.72,
+        "theoretical_total_s": 191.317,
+        "cpu_only_total_ms": 207988.98,
+        "gpu_only_total_ms": 189957.38,
+        "speedup_vs_cpu_only": 1.087,
+        "speedup_vs_gpu_only": 0.993,
+        "gpu_prefill_pct_of_gpu_total": 87.9
+      },
+      "phase_split_actual": {
+        "mode": "phase_split_failed",
+        "failure_reason": "skipped \u2014 initial attempt failed: Slot save API error: HTTPError: HTTP Error 400: Bad Request"
+      },
+      "gpu_ngram": {
+        "prefill_n": 213,
+        "prefill_ms": 166961.0,
+        "prefill_tok_s": 1.2757,
+        "decode_n": 200,
+        "decode_ms": 25092.76,
+        "decode_tok_s": 7.9704,
+        "total_wall_s": 192.059,
+        "mode": "gpu_ngram",
+        "ngl": 99,
+        "ngram": true
+      },
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 3709.0,
+          "used_mb": 325.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "bucket": "long",
+      "prompt_words": 191,
+      "timestamp": "2026-05-27T00:10:36.577809+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 3709.0,
+          "used_mb": 325.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "cpu_only": {
+        "prefill_n": 342,
+        "prefill_ms": 252046.15,
+        "prefill_tok_s": 1.3569,
+        "decode_n": 200,
+        "decode_ms": 42241.88,
+        "decode_tok_s": 4.7346,
+        "total_wall_s": 294.292,
+        "mode": "cpu_only",
+        "ngl": 0
+      },
+      "gpu_only": {
+        "prefill_n": 342,
+        "prefill_ms": 250486.46,
+        "prefill_tok_s": 1.3653,
+        "decode_n": 200,
+        "decode_ms": 22352.22,
+        "decode_tok_s": 8.9477,
+        "total_wall_s": 272.844,
+        "mode": "gpu_only",
+        "ngl": 99
+      },
+      "phase_split_theoretical": {
+        "mode": "phase_split_theoretical",
+        "cpu_prefill_ms": 252046.15,
+        "cpu_prefill_tok_s": 1.3569,
+        "gpu_decode_ms": 22352.22,
+        "gpu_decode_tok_s": 8.9477,
+        "theoretical_total_ms": 274398.37,
+        "theoretical_total_s": 274.398,
+        "cpu_only_total_ms": 294288.03,
+        "gpu_only_total_ms": 272838.68,
+        "speedup_vs_cpu_only": 1.072,
+        "speedup_vs_gpu_only": 0.994,
+        "gpu_prefill_pct_of_gpu_total": 91.8
+      },
+      "phase_split_actual": {
+        "mode": "phase_split_failed",
+        "failure_reason": "skipped \u2014 initial attempt failed: Slot save API error: HTTPError: HTTP Error 400: Bad Request"
+      },
+      "gpu_ngram": {
+        "prefill_n": 342,
+        "prefill_ms": 250567.76,
+        "prefill_tok_s": 1.3649,
+        "decode_n": 200,
+        "decode_ms": 24908.71,
+        "decode_tok_s": 8.0293,
+        "total_wall_s": 275.482,
+        "mode": "gpu_ngram",
+        "ngl": 99,
+        "ngram": true
+      },
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 3692.0,
+          "used_mb": 342.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ]
+    }
+  ]
+}

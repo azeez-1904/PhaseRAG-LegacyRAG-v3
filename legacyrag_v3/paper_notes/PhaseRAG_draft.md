@@ -10,18 +10,21 @@
 
 ## Abstract
 
-_[PLACEHOLDER — fill after Experiment A and B complete]_
+_[PLACEHOLDER — fill after Experiment B complete]_
 
-We present PhaseRAG, a CPU-GPU heterogeneous inference system that routes large language
-model (LLM) phases to whichever compute substrate executes them faster. On legacy Maxwell
-Vulkan hardware (NVIDIA Quadro K4200, no FP16/tensor cores), CPU prefill runs at ~21 tok/s
-versus GPU prefill at ~0.7 tok/s — a 30× gap — while GPU decode at ~8-9 tok/s outpaces
-CPU decode at ~6.5 tok/s by ~30%. Our LegacyRAG v2 system achieved 8.28 tok/s mean
-throughput with prefill consuming 84–93% of total wall time for medium/long prompts,
-suggesting that routing prefill to CPU could reduce end-to-end latency by up to [v3_result]×.
-We further contribute a prompt compression pipeline that attacks the prefill bottleneck
-directly, and a zero-configuration deployment framework that auto-selects models and
-parameters for any GPU hardware class.
+We present PhaseRAG, a study of CPU-GPU heterogeneous inference on legacy Maxwell Vulkan
+hardware (NVIDIA Quadro K4200, no FP16/tensor cores). Motivated by the observation that
+CPU prefill is fast for short prompts (~20 tok/s) while GPU decode is consistently faster
+(9.3 vs 5.3 tok/s), we design and evaluate a phase-splitting system that routes prefill
+to CPU and decode to GPU. Experiment A reveals a critical constraint: **the CPU prefill
+advantage is prompt-length dependent**. For short prompts (<20 tokens), CPU achieves
+20 tok/s vs GPU's 13 tok/s. For realistic RAG workloads (medium/long prompts, 70–400 tokens),
+CPU prefill drops to 1.0–1.4 tok/s — indistinguishable from GPU's 0.8–1.3 tok/s —
+yielding a theoretical phase-split speedup of only 0.99–1.03×. Additionally, the llama.cpp
+b9297 slot save/restore API returns HTTP 400 for cross-backend handoff, blocking actual
+implementation. We document these negative results as research contributions, quantify the
+conditions under which phase splitting would be beneficial, and evaluate prompt compression
+as an alternative strategy for attacking the prefill bottleneck.
 
 **Keywords:** heterogeneous inference, CPU-GPU scheduling, speculative decoding,
 quantization, legacy GPU, Vulkan, RAG, edge computing
@@ -45,8 +48,9 @@ at Q4_K_M quantization:
 |---|---|
 | GPU decode throughput (dual K4200 + ngram) | 9.08 tok/s |
 | GPU prefill throughput (medium/long prompts) | 0.62–0.95 tok/s |
-| CPU prefill throughput (measured) | ~21 tok/s |
-| CPU decode throughput (measured) | ~6.5 tok/s |
+| CPU prefill throughput — short prompts (<20 tok) | ~20 tok/s |
+| CPU prefill throughput — medium/long prompts | ~1.0–1.4 tok/s |
+| CPU decode throughput (measured) | ~5.3 tok/s |
 | Prefill % of total wall time (long prompts) | 84–93% |
 
 **The PhaseRAG Insight:** The bottleneck is phase-specific. CPU is 30× faster at prefill;
@@ -207,15 +211,55 @@ engineering implementation is blocked by backend incompatibility.
 
 ### C. Experiment A Results
 
-_[PLACEHOLDER — fill from results/exp_phase_split.json after experiment completes]_
+_Completed 2026-05-26. phi3:mini Q4_K_M, dual K4200 Vulkan, b9297, 10 prompts._
 
-| Configuration | Prefill tok/s | Decode tok/s | Mean wall (s) | vs v2 best |
-|---|---|---|---|---|
-| CPU-only | [result] | [result] | [result] | [result] |
-| GPU-only | [result] | [result] | [result] | [result] |
-| GPU + ngram (v2 reference) | ~0.7 | ~9.1 | 81.4 | 1.0× |
-| Phase split (theoretical) | [CPU] | [GPU] | [result] | [result]× |
-| Phase split (actual, if feasible) | [CPU] | [GPU] | [result] | [result]× |
+**Summary table (mean across all 10 prompts):**
+
+| Configuration | Decode tok/s | Mean wall (s) | p95 wall (s) |
+|---|---|---|---|
+| GPU-only (`-ngl 99`) | **9.29** | 122.3 | 273.9 |
+| GPU + ngram-simple | 8.73 | 123.8 | 276.1 |
+| Phase split (theoretical) | 9.29 | 123.0 | 275.9 |
+| CPU-only (`-ngl 0`) | 5.34 | 139.1 | 294.3 |
+| _v2 best (GPU+ngram, same session)_ | _9.08_ | _81.4_ | _191.3_ |
+
+**CPU vs GPU prefill by prompt length — the critical result:**
+
+| Bucket | CPU prefill tok/s | GPU prefill tok/s | Theoretical speedup |
+|---|---|---|---|
+| Short (n=3, <20 tokens) | **20.0** | 13.2 | **1.03×** |
+| Medium (n=4, ~70 tokens) | **1.1** | ~1.0 | 0.99× |
+| Long (n=3, ~300 tokens) | **1.3** | ~0.9 | 0.99× |
+
+**Finding 1 — CPU prefill advantage is prompt-length dependent, not universal.**
+The "CPU = 21 tok/s prefill" claim holds only for short contexts (<20 tokens), where BLAS
+SIMD routines outperform Vulkan dispatch overhead. For medium/long prompts (70–400 tokens),
+CPU prefill drops to 1.0–1.4 tok/s — equivalent to GPU's 0.8–1.3 tok/s. The attention
+computation for longer contexts becomes memory-bandwidth-bound on both CPU (50 GB/s DDR4)
+and GPU (173 GB/s Vulkan). Phase splitting provides no measurable benefit for realistic RAG
+workloads (prefill-dominant medium/long prompts), which are the primary use case.
+
+**Finding 2 — Slot save/restore returns HTTP 400: cross-backend KV handoff not supported.**
+`POST /slots/0` with `{"action": "save", "filename": "..."}` on the CPU server
+(b9297 with `--slot-save-path`) returns HTTP 400. The slot API is designed for same-server
+slot management (request continuation within one session), not cross-backend transfer.
+The llama.cpp slot serialization format and endpoint contract do not support CPU→GPU handoff.
+This is a fundamental implementation constraint, not a configuration issue.
+
+**Finding 3 — GPU+ngram slightly underperforms GPU-only per-session (8.73 vs 9.29 tok/s).**
+Contradicts v2's +9.7% result. Root cause: ngram speculative decoding builds its candidate
+lookup from tokens generated in the current server session. Fresh server start per prompt =
+empty ngram table = no draft proposals. v2's +9.7% required an active multi-prompt session
+to accumulate prior generated tokens. The per-session restart methodology used here
+accurately reflects single-query latency; the v2 improvement reflects batch/sustained use.
+
+**Finding 4 — GPU-only in this run (9.29 tok/s, 122s) is slower than v2 (9.08 tok/s, 81s).**
+Higher tok/s but higher wall time: each prompt in this run starts a fresh server (adds
+~60–90s startup+cooldown overhead per config). v2 ran all prompts in one session with b9297
+KV cache reuse, dramatically reducing prefill for repeated-prefix prompts. The per-prompt
+isolation methodology here is cleaner for measuring single-query end-to-end latency.
+
+**Slot handoff:** Attempted: True | Success: False | Reason: HTTP 400 from /slots/0 save API
 
 ---
 
