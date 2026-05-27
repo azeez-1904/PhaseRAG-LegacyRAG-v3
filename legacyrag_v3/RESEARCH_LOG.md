@@ -230,4 +230,40 @@ under PhaseRAG §4 (Experimental Methodology) or §6 (Discussion / Deployment Im
 - Long prompt speedup peaks at 24.77× (token budget 50%, baseline 464.2s → 18.8s)
 - Best quality-efficiency: token budget 50% (18.22× speedup, ROUGE=0.412, zero comp latency)
 
-_End of log — updated 2026-05-27_
+---
+
+## Status — 2026-05-27 (end of session)
+
+**Both experiments complete.**
+
+### Experiment A: CPU-GPU Phase Splitting
+- Status: COMPLETE
+- Key finding: Phase transition at ~20 tokens. CPU prefill advantage (21 tok/s) collapses to
+  1.0–1.4 tok/s for medium/long prompts, matching GPU prefill — no benefit for RAG workloads.
+- KV handoff: BLOCKED. `/slots/{id}` returns HTTP 400 across processes in b9297.
+  10.5× theoretical speedup (short prompts, P=313 tokens) documented but unimplementable.
+
+### Experiment B: Prompt Compression
+- Status: COMPLETE (P1–P10, after Vulkan TDR fix on rerun)
+- Key finding 1: **Phase transition at ~200 tokens.** Prompts below threshold: 25–45 tok/s
+  GPU prefill. Above: 0.7–1.5 tok/s. Compression that crosses the threshold → step speedup.
+- Key finding 2: **Token budget 50% = 18.22× speedup** (326.8s → 17.8s mean), ROUGE-1 0.412.
+  Best latency-critical option. Zero compression latency.
+- Key finding 3: Extractive 75% = best quality (ROUGE-1 0.496) at 2.88× speedup.
+- Key finding 4: Abstractive overshoots compression targets (target 25% → actual 35.6%),
+  adds 14–24s latency, max net speedup 3.33×. Not recommended for this hardware class.
+- Key finding 5: Long prompts benefit most — token budget 50% on long baseline (464s) → 18.8s = **24.77×**.
+
+### Hardware Finding: Vulkan TDR
+- Maxwell Vulkan: no process isolation for compute queues
+- Concurrent llama-server + Ollama GPU inference → deterministic `vk::DeviceLostError` after 4–6h
+- Fix: strict serialization (precompute compressions on CPU-only Ollama, then inference only)
+- Documented in paper §VIII.C
+
+### Paper Status
+- Complete draft: `paper_notes/PhaseRAG_final_draft.md` (688 lines)
+- Zero placeholders remaining
+- LaTeX tables: `results/table_compression.tex`, `results/table_compression_bucket.tex`
+- **Next step: convert to IEEE two-column LaTeX format for MLSys 2027 submission**
+
+_End of log — 2026-05-27_
