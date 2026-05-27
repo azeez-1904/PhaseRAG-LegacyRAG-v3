@@ -1,0 +1,1012 @@
+{
+  "5": {
+    "token_budget_keep75pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.6103,
+      "compressed_context": "The NVIDIA Quadro K4200 is based on the Maxwell GM204 architecture (2014), featuring 1344 CUDA cores, 4 GB GDDR5 VRAM, and 173 GB/s memory bandwidth. It supports Vulkan 1.3 through the proprietary NVIDIA driver stack. Unlike later architectures, Maxwell lacks several features critical for efficient LLM inference:\n\nFirst, Maxwell has no FP16 matrix multiply units. All matrix operations execute as FP32 SIMD instructions, halving the theoretical throughput compared to hardware with native FP16 support. Second, there are no INT8 dot product instructions, eliminating 8-bit quantization acceleration. Third, Maxwell predates tensor cores entirely, which in Volta+ architectures provide 4-8x speedup for small matrix multiplications common in attention computation. Memory bandwidth (173 GB/s) is the primary throughput determinant for autoregressive decode.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 195,
+        "budget_words": 146,
+        "actual_words": 119,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 0.26
+      },
+      "compressed_words": 119
+    },
+    "token_budget_keep50pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.441,
+      "compressed_context": "The NVIDIA Quadro K4200 is based on the Maxwell GM204 architecture (2014), featuring 1344 CUDA cores, 4 GB GDDR5 VRAM, and 173 GB/s memory bandwidth. It supports Vulkan 1.3 through the proprietary NVIDIA driver stack. Unlike later architectures, Maxwell lacks several features critical for efficient LLM inference:\n\nFirst, Maxwell has no FP16 matrix multiply units. All matrix operations execute as FP32 SIMD instructions, halving the theoretical throughput compared to hardware with native FP16 support. Second, there are no INT8 dot product instructions, eliminating 8-bit quantization acceleration.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 195,
+        "budget_words": 98,
+        "actual_words": 86,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 0.1
+      },
+      "compressed_words": 86
+    },
+    "token_budget_keep25pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.1795,
+      "compressed_context": "The NVIDIA Quadro K4200 is based on the Maxwell GM204 architecture (2014), featuring 1344 CUDA cores, 4 GB GDDR5 VRAM, and 173 GB/s memory bandwidth. It supports Vulkan 1.3 through the proprietary NVIDIA driver stack.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 195,
+        "budget_words": 49,
+        "actual_words": 35,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 0.06
+      },
+      "compressed_words": 35
+    },
+    "extractive_keep75pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.8872,
+      "compressed_context": "The NVIDIA Quadro K4200 is based on the Maxwell GM204 architecture (2014), featuring 1344 CUDA cores, 4 GB GDDR5 VRAM, and 173 GB/s memory bandwidth. Unlike later architectures, Maxwell lacks several features critical for efficient LLM inference:\n\nFirst, Maxwell has no FP16 matrix multiply units. All matrix operations execute as FP32 SIMD instructions, halving the theoretical throughput compared to hardware with native FP16 support. Third, Maxwell predates tensor cores entirely, which in Volta+ architectures provide 4-8x speedup for small matrix multiplications common in attention computation. Memory bandwidth (173 GB/s) is the primary throughput determinant for autoregressive decode. A 3.8B parameter model at Q4_K_M (2.1 GB) requires reading the full weight matrix each forward pass, theoretically limiting throughput to approximately 173/2.1 approximately 82 passes per second. However, KV cache and Vulkan dispatch overhead reduce practical throughput to 8-9 tok/s, representing roughly 10% efficiency versus the bandwidth-bound theoretical maximum. For prefill with longer contexts, the attention computation adds O(n squared) memory accesses, making prefill throughput approximately 0.7 tok/s for 300-400 token prompts on this hardware.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 10,
+        "kept_sentences": 8,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 6886.53,
+        "top_scores": [
+          0.5518,
+          0.6558,
+          0.5867,
+          0.65,
+          0.6404,
+          0.695,
+          0.5869,
+          0.6123
+        ]
+      },
+      "compressed_words": 173
+    },
+    "extractive_keep50pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.5487,
+      "compressed_context": "Unlike later architectures, Maxwell lacks several features critical for efficient LLM inference:\n\nFirst, Maxwell has no FP16 matrix multiply units. Third, Maxwell predates tensor cores entirely, which in Volta+ architectures provide 4-8x speedup for small matrix multiplications common in attention computation. Memory bandwidth (173 GB/s) is the primary throughput determinant for autoregressive decode. A 3.8B parameter model at Q4_K_M (2.1 GB) requires reading the full weight matrix each forward pass, theoretically limiting throughput to approximately 173/2.1 approximately 82 passes per second. For prefill with longer contexts, the attention computation adds O(n squared) memory accesses, making prefill throughput approximately 0.7 tok/s for 300-400 token prompts on this hardware.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 10,
+        "kept_sentences": 5,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 924.74,
+        "top_scores": [
+          0.6558,
+          0.65,
+          0.6404,
+          0.695,
+          0.6123
+        ]
+      },
+      "compressed_words": 107
+    },
+    "extractive_keep25pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2462,
+      "compressed_context": "Unlike later architectures, Maxwell lacks several features critical for efficient LLM inference:\n\nFirst, Maxwell has no FP16 matrix multiply units. A 3.8B parameter model at Q4_K_M (2.1 GB) requires reading the full weight matrix each forward pass, theoretically limiting throughput to approximately 173/2.1 approximately 82 passes per second.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 10,
+        "kept_sentences": 2,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 1029.48,
+        "top_scores": [
+          0.6558,
+          0.695
+        ]
+      },
+      "compressed_words": 48
+    },
+    "abstractive_keep75pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.5385,
+      "compressed_context": "The NVIDIA Quadro K4200 is a GPU designed for high-performance computing tasks such as machine learning inference. It lacks features critical for efficient LLM inference, including FP16 matrix multiply units and INT8 dot product instructions. The memory bandwidth of 173 GB/s is the primary throughput determinant for autoregressive decode, limiting theoretical throughput to approximately 82 passes per second. However, KV cache and Vulkan dispatch overhead reduce practical throughput to 8-9 tok/s, representing roughly 10% efficiency versus the bandwidth-bound theoretical maximum. For prefill with longer contexts, attention computation adds O(n squared) memory accesses, making prefill throughput approximately 0.7 tok/s for 300-400 token prompts on this hardware.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 195,
+        "target_words": 146,
+        "actual_words": 105,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 24174.03,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 105
+    },
+    "abstractive_keep50pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.4103,
+      "compressed_context": "The NVIDIA Quadro K4200 is a graphics processing unit (GPU) designed for high-performance computing tasks such as machine learning inference. It lacks features critical for efficient LLM inference, including FP16 matrix multiply units and INT8 dot product instructions. These limitations result in lower theoretical throughput compared to later architectures with native support for these features. Memory bandwidth remains the primary bottleneck, limiting practical inference speed to approximately 82 passes per second, but prefill throughput is limited by attention computation complexity.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 195,
+        "target_words": 98,
+        "actual_words": 80,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 15098.03,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 80
+    },
+    "abstractive_keep25pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2103,
+      "compressed_context": "Maxwell architecture lacks FP16 matrix multiply units and INT8 dot product instructions, limiting inference speed. Memory bandwidth is the primary bottleneck; practical throughput is reduced by KV cache and Vulkan dispatch overhead to approximately 8-9 tok/s for prefill with longer contexts.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 195,
+        "target_words": 49,
+        "actual_words": 41,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 11093.88,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 41
+    }
+  },
+  "6": {
+    "token_budget_keep75pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.731,
+      "compressed_context": "The Open Public Records Act establishes a presumption of openness for government records but enumerates specific categories exempt from mandatory disclosure. The major exemption categories include:\n\nPersonnel records: Employee performance evaluations, disciplinary records, medical information, and home addresses of government employees are generally exempt to protect privacy. Criminal investigative records: Records compiled for law enforcement purposes that would interfere with an ongoing investigation, deprive defendants of fair trial rights, disclose confidential sources, or endanger the safety of individuals are exempt under N.J.S.A. 47:1A-3. Attorney-client privileged communications: Legal advice provided by government counsel and attorney work product prepared in anticipation of litigation are exempt. Trade secrets and proprietary business information: Information submitted by private entities to government agencies that constitutes trade secrets or confidential commercial information.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 171,
+        "budget_words": 128,
+        "actual_words": 125,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 0.06
+      },
+      "compressed_words": 125
+    },
+    "token_budget_keep50pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.4854,
+      "compressed_context": "The Open Public Records Act establishes a presumption of openness for government records but enumerates specific categories exempt from mandatory disclosure. The major exemption categories include:\n\nPersonnel records: Employee performance evaluations, disciplinary records, medical information, and home addresses of government employees are generally exempt to protect privacy. Criminal investigative records: Records compiled for law enforcement purposes that would interfere with an ongoing investigation, deprive defendants of fair trial rights, disclose confidential sources, or endanger the safety of individuals are exempt under N.J.S.A. 47:1A-3.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 171,
+        "budget_words": 86,
+        "actual_words": 83,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 0.04
+      },
+      "compressed_words": 83
+    },
+    "token_budget_keep25pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.1228,
+      "compressed_context": "The Open Public Records Act establishes a presumption of openness for government records but enumerates specific categories exempt from mandatory disclosure.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 171,
+        "budget_words": 43,
+        "actual_words": 21,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 0.04
+      },
+      "compressed_words": 21
+    },
+    "extractive_keep75pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.8538,
+      "compressed_context": "The Open Public Records Act establishes a presumption of openness for government records but enumerates specific categories exempt from mandatory disclosure. The major exemption categories include:\n\nPersonnel records: Employee performance evaluations, disciplinary records, medical information, and home addresses of government employees are generally exempt to protect privacy. Criminal investigative records: Records compiled for law enforcement purposes that would interfere with an ongoing investigation, deprive defendants of fair trial rights, disclose confidential sources, or endanger the safety of individuals are exempt under N.J.S.A. Attorney-client privileged communications: Legal advice provided by government counsel and attorney work product prepared in anticipation of litigation are exempt. Trade secrets and proprietary business information: Information submitted by private entities to government agencies that constitutes trade secrets or confidential commercial information. Security-sensitive information: Records that, if disclosed, would jeopardize the security of any structure, facility, or system, including cybersecurity vulnerabilities and access codes.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 8,
+        "kept_sentences": 6,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 779.08,
+        "top_scores": [
+          0.8111,
+          0.8064,
+          0.7702,
+          0.6569,
+          0.6432,
+          0.6194
+        ]
+      },
+      "compressed_words": 146
+    },
+    "extractive_keep50pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.5965,
+      "compressed_context": "The Open Public Records Act establishes a presumption of openness for government records but enumerates specific categories exempt from mandatory disclosure. The major exemption categories include:\n\nPersonnel records: Employee performance evaluations, disciplinary records, medical information, and home addresses of government employees are generally exempt to protect privacy. Criminal investigative records: Records compiled for law enforcement purposes that would interfere with an ongoing investigation, deprive defendants of fair trial rights, disclose confidential sources, or endanger the safety of individuals are exempt under N.J.S.A. Attorney-client privileged communications: Legal advice provided by government counsel and attorney work product prepared in anticipation of litigation are exempt.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 8,
+        "kept_sentences": 4,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 734.13,
+        "top_scores": [
+          0.8111,
+          0.8064,
+          0.7702,
+          0.6569
+        ]
+      },
+      "compressed_words": 102
+    },
+    "extractive_keep25pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2749,
+      "compressed_context": "The Open Public Records Act establishes a presumption of openness for government records but enumerates specific categories exempt from mandatory disclosure. The major exemption categories include:\n\nPersonnel records: Employee performance evaluations, disciplinary records, medical information, and home addresses of government employees are generally exempt to protect privacy.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 8,
+        "kept_sentences": 2,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 772.05,
+        "top_scores": [
+          0.8111,
+          0.8064
+        ]
+      },
+      "compressed_words": 47
+    },
+    "abstractive_keep75pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.2924,
+      "compressed_context": "The Open Public Records Act in New Jersey has specific exemptions for records that must be kept confidential to protect privacy, safety, or security. These include personnel records, criminal investigative records, attorney-client privileged communications, trade secrets and proprietary business information, security-sensitive information, and draft documents not circulated outside the agency.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 171,
+        "target_words": 128,
+        "actual_words": 50,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 9578.16,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 50
+    },
+    "abstractive_keep50pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.3333,
+      "compressed_context": "The Open Public Records Act establishes a presumption of openness for government records but enumerates specific categories exempt from mandatory disclosure. The major exemption categories include personnel records, criminal investigative records, attorney-client privileged communications, trade secrets and proprietary business information, security-sensitive information, draft documents, and advisory, consultative, or deliberative materials that are part of the decision-making process.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 171,
+        "target_words": 86,
+        "actual_words": 57,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 10598.06,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 57
+    },
+    "abstractive_keep25pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.1404,
+      "compressed_context": "The Open Public Records Act exempts records related to personnel, criminal investigations, attorney-client privileged communications, trade secrets, security-sensitive information, draft documents, and other categories.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 171,
+        "target_words": 43,
+        "actual_words": 24,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 7472.74,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 24
+    }
+  },
+  "7": {
+    "token_budget_keep75pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.7273,
+      "compressed_context": "llama.cpp implements multi-GPU tensor splitting through its Vulkan backend when multiple Vulkan devices are present. The -ngl (number of GPU layers) flag controls how many transformer layers are offloaded to GPU. When set to 99 (or any value exceeding total layers), all available layers are distributed across detected Vulkan devices. The distribution algorithm divides transformer layers approximately evenly by VRAM capacity across detected GPUs. For two GPUs with equal VRAM (e.g., dual K4200 at 4 GB each), layers split approximately 50/50. For unequal VRAM configurations, the split is weighted proportionally. Layer boundaries are chosen at transformer block boundaries to minimize inter-GPU communication. In practice, dual K4200 operation places phi3-mini's 32 transformer layers across both cards: GPU0 handles layers 0-15 (using approximately 1976 MB) and GPU1 handles layers 16-31 (approximately 1545 MB). The asymmetry arises because the embedding and output projection layers reside on GPU0.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 198,
+        "budget_words": 148,
+        "actual_words": 144,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 0.06
+      },
+      "compressed_words": 144
+    },
+    "token_budget_keep50pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.4545,
+      "compressed_context": "llama.cpp implements multi-GPU tensor splitting through its Vulkan backend when multiple Vulkan devices are present. The -ngl (number of GPU layers) flag controls how many transformer layers are offloaded to GPU. When set to 99 (or any value exceeding total layers), all available layers are distributed across detected Vulkan devices. The distribution algorithm divides transformer layers approximately evenly by VRAM capacity across detected GPUs. For two GPUs with equal VRAM (e.g., dual K4200 at 4 GB each), layers split approximately 50/50. For unequal VRAM configurations, the split is weighted proportionally.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 198,
+        "budget_words": 99,
+        "actual_words": 90,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 0.04
+      },
+      "compressed_words": 90
+    },
+    "token_budget_keep25pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2525,
+      "compressed_context": "llama.cpp implements multi-GPU tensor splitting through its Vulkan backend when multiple Vulkan devices are present. The -ngl (number of GPU layers) flag controls how many transformer layers are offloaded to GPU. When set to 99 (or any value exceeding total layers), all available layers are distributed across detected Vulkan devices.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 198,
+        "budget_words": 50,
+        "actual_words": 50,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 0.04
+      },
+      "compressed_words": 50
+    },
+    "extractive_keep75pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.6616,
+      "compressed_context": "llama.cpp implements multi-GPU tensor splitting through its Vulkan backend when multiple Vulkan devices are present. The -ngl (number of GPU layers) flag controls how many transformer layers are offloaded to GPU. When set to 99 (or any value exceeding total layers), all available layers are distributed across detected Vulkan devices. The distribution algorithm divides transformer layers approximately evenly by VRAM capacity across detected GPUs. For two GPUs with equal VRAM (e.g., dual K4200 at 4 GB each), layers split approximately 50/50. For unequal VRAM configurations, the split is weighted proportionally. The asymmetry arises because the embedding and output projection layers reside on GPU0. During a forward pass, activations transfer between GPUs at each layer boundary via PCIe 3.0 x16. The PCIe transfer overhead is small relative to compute time on Maxwell.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 12,
+        "kept_sentences": 9,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 1008.04,
+        "top_scores": [
+          0.7652,
+          0.5732,
+          0.5602,
+          0.5781,
+          0.5741,
+          0.5338,
+          0.5646,
+          0.5536,
+          0.5428
+        ]
+      },
+      "compressed_words": 131
+    },
+    "extractive_keep50pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.4747,
+      "compressed_context": "llama.cpp implements multi-GPU tensor splitting through its Vulkan backend when multiple Vulkan devices are present. The -ngl (number of GPU layers) flag controls how many transformer layers are offloaded to GPU. When set to 99 (or any value exceeding total layers), all available layers are distributed across detected Vulkan devices. The distribution algorithm divides transformer layers approximately evenly by VRAM capacity across detected GPUs. For two GPUs with equal VRAM (e.g., dual K4200 at 4 GB each), layers split approximately 50/50. The asymmetry arises because the embedding and output projection layers reside on GPU0.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 12,
+        "kept_sentences": 6,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 995.15,
+        "top_scores": [
+          0.7652,
+          0.5732,
+          0.5602,
+          0.5781,
+          0.5741,
+          0.5646
+        ]
+      },
+      "compressed_words": 94
+    },
+    "extractive_keep25pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2323,
+      "compressed_context": "llama.cpp implements multi-GPU tensor splitting through its Vulkan backend when multiple Vulkan devices are present. The distribution algorithm divides transformer layers approximately evenly by VRAM capacity across detected GPUs. For two GPUs with equal VRAM (e.g., dual K4200 at 4 GB each), layers split approximately 50/50.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 12,
+        "kept_sentences": 3,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 964.97,
+        "top_scores": [
+          0.7652,
+          0.5781,
+          0.5741
+        ]
+      },
+      "compressed_words": 46
+    },
+    "abstractive_keep75pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.3333,
+      "compressed_context": "llama.cpp uses Vulkan to distribute a model across multiple GPUs by dividing transformer layers approximately evenly based on VRAM capacity. Layers are split at block boundaries for minimal inter-GPU communication, and dual K4200 operation places phi3-mini's 32 transformer layers across both cards. The asymmetry arises because the embedding and output projection layers reside on GPU0, reducing per-GPU VRAM pressure and eliminating thermal throttling in single-GPU operation.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 198,
+        "target_words": 148,
+        "actual_words": 66,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 13900.21,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 66
+    },
+    "abstractive_keep50pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.2475,
+      "compressed_context": "llama.cpp uses Vulkan to distribute model layers across multiple GPUs by dividing transformer layers evenly based on VRAM capacity. Layers are split approximately 50/50 for two GPUs with equal VRAM, and weighted proportionally for unequal configurations. This approach reduces inter-GPU communication overhead and eliminates thermal throttling in single-GPU operation.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 198,
+        "target_words": 99,
+        "actual_words": 49,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 12501.16,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 49
+    },
+    "abstractive_keep25pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.3333,
+      "compressed_context": "llama.cpp uses Vulkan to distribute transformer layers across multiple GPUs by dividing them approximately evenly based on VRAM capacity. Layers are split at block boundaries for minimal inter-GPU communication, and dual K4200 operation places phi3-mini's 32 layers across two GPUs with unequal VRAM. This setup reduces per-GPU VRAM pressure and eliminates thermal throttling in single-GPU mode, resulting in 8.28 tok/s of throughput compared to 0.95 tok",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 198,
+        "target_words": 50,
+        "actual_words": 66,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 15228.28,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 66
+    }
+  },
+  "8": {
+    "token_budget_keep75pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.7168,
+      "compressed_context": "A retrieval-augmented generation (RAG) pipeline for municipal OPRA compliance involves several interconnected components. The following architecture is derived from analysis of government document retrieval requirements and the constraints of on-premises deployment. Document Ingestion Layer: Municipal records arrive in multiple formats - scanned PDFs from physical archives, digitized meeting minutes, budget spreadsheets, and email correspondence. A preprocessing pipeline applies OCR (Tesseract or equivalent) to scanned documents, extracts text from digital PDFs using PyMuPDF, and normalizes formatting. Documents are chunked into 512-token segments with 50-token overlap to preserve sentence context at boundaries. Each chunk is tagged with metadata: document type, date range, department, and OPRA exemption flags. Embedding and Indexing: Each text chunk is embedded using nomic-embed-text (274 MB, 768-dimension vectors) running via the Ollama API on the local GPU. Embeddings are stored in a NumPy array alongside chunk text and metadata. For the K4200 hardware, embedding throughput is approximately 50-100 chunks per minute. A corpus of 10,000 scanned pages produces roughly 20,000-30,000 chunks requiring 2-3 hours of initial indexing. The vector store occupies approximately 450 MB on disk (20,000 chunks x 768 dimensions x 4 bytes FP32). Query Processing: When a citizen submits an OPRA request, the query text is embedded using the same nomic-embed-text model. The top-k most similar chunks (k=5 by default) are retrieved via cosine similarity against the stored embeddings. Retrieval latency is under 100ms for 30,000 vectors on CPU. Retrieved chunks are concatenated into a context window of up to 2048 tokens. Generation: The assembled prompt (system instruction + retrieved context + query) is passed to phi3-mini running on dual K4200 GPUs via llama-server. For a 400-token prompt, generation of a 200-token response takes approximately 25 seconds for decode at 8 tok/s, plus 280 seconds for prefill at 0.7 tok/s - dominated by prefill. The generated response summarizes relevant records and flags any OPRA exemptions applicable to the request. Staff Workflow: Generated responses are presented to the records custodian as a draft, not a final determination.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 459,
+        "budget_words": 344,
+        "actual_words": 329,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 0.14
+      },
+      "compressed_words": 329
+    },
+    "token_budget_keep50pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.4837,
+      "compressed_context": "A retrieval-augmented generation (RAG) pipeline for municipal OPRA compliance involves several interconnected components. The following architecture is derived from analysis of government document retrieval requirements and the constraints of on-premises deployment. Document Ingestion Layer: Municipal records arrive in multiple formats - scanned PDFs from physical archives, digitized meeting minutes, budget spreadsheets, and email correspondence. A preprocessing pipeline applies OCR (Tesseract or equivalent) to scanned documents, extracts text from digital PDFs using PyMuPDF, and normalizes formatting. Documents are chunked into 512-token segments with 50-token overlap to preserve sentence context at boundaries. Each chunk is tagged with metadata: document type, date range, department, and OPRA exemption flags. Embedding and Indexing: Each text chunk is embedded using nomic-embed-text (274 MB, 768-dimension vectors) running via the Ollama API on the local GPU. Embeddings are stored in a NumPy array alongside chunk text and metadata. For the K4200 hardware, embedding throughput is approximately 50-100 chunks per minute. A corpus of 10,000 scanned pages produces roughly 20,000-30,000 chunks requiring 2-3 hours of initial indexing. The vector store occupies approximately 450 MB on disk (20,000 chunks x 768 dimensions x 4 bytes FP32). Query Processing: When a citizen submits an OPRA request, the query text is embedded using the same nomic-embed-text model. The top-k most similar chunks (k=5 by default) are retrieved via cosine similarity against the stored embeddings.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 459,
+        "budget_words": 230,
+        "actual_words": 222,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 0.1
+      },
+      "compressed_words": 222
+    },
+    "token_budget_keep25pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2288,
+      "compressed_context": "A retrieval-augmented generation (RAG) pipeline for municipal OPRA compliance involves several interconnected components. The following architecture is derived from analysis of government document retrieval requirements and the constraints of on-premises deployment. Document Ingestion Layer: Municipal records arrive in multiple formats - scanned PDFs from physical archives, digitized meeting minutes, budget spreadsheets, and email correspondence. A preprocessing pipeline applies OCR (Tesseract or equivalent) to scanned documents, extracts text from digital PDFs using PyMuPDF, and normalizes formatting. Documents are chunked into 512-token segments with 50-token overlap to preserve sentence context at boundaries. Each chunk is tagged with metadata: document type, date range, department, and OPRA exemption flags.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 459,
+        "budget_words": 115,
+        "actual_words": 105,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 0.08
+      },
+      "compressed_words": 105
+    },
+    "extractive_keep75pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.7538,
+      "compressed_context": "A retrieval-augmented generation (RAG) pipeline for municipal OPRA compliance involves several interconnected components. The following architecture is derived from analysis of government document retrieval requirements and the constraints of on-premises deployment. Document Ingestion Layer: Municipal records arrive in multiple formats - scanned PDFs from physical archives, digitized meeting minutes, budget spreadsheets, and email correspondence. A preprocessing pipeline applies OCR (Tesseract or equivalent) to scanned documents, extracts text from digital PDFs using PyMuPDF, and normalizes formatting. Each chunk is tagged with metadata: document type, date range, department, and OPRA exemption flags. Embeddings are stored in a NumPy array alongside chunk text and metadata. For the K4200 hardware, embedding throughput is approximately 50-100 chunks per minute. A corpus of 10,000 scanned pages produces roughly 20,000-30,000 chunks requiring 2-3 hours of initial indexing. Query Processing: When a citizen submits an OPRA request, the query text is embedded using the same nomic-embed-text model. Retrieved chunks are concatenated into a context window of up to 2048 tokens. Generation: The assembled prompt (system instruction + retrieved context + query) is passed to phi3-mini running on dual K4200 GPUs via llama-server. The generated response summarizes relevant records and flags any OPRA exemptions applicable to the request. Staff Workflow: Generated responses are presented to the records custodian as a draft, not a final determination. The custodian reviews the AI summary, verifies the cited records, and either approves the draft response or adds annotations before sending to the requestor. All AI-generated responses are logged with the source chunks and similarity scores for audit purposes. The system does not autonomously release records - it accelerates the search and drafting process while maintaining human oversight required by OPRA. Performance Constraints: At 0.95 tok/s (v1 baseline) or 8-9 tok/s (v2 optimized), response generation for a typical 200-word OPRA response requires 25-470 seconds excluding prefill. With 500 requests per month and assuming 8-hour working days, the system must process roughly 25 requests per day. At 9 tok/s decode with 400-token prompts, each request requires approximately 5-8 minutes. Daily capacity is approximately 60-96 requests, comfortably exceeding the 25-request daily demand.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 26,
+        "kept_sentences": 20,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 2230.4,
+        "top_scores": [
+          0.7483,
+          0.6118,
+          0.5984,
+          0.6709,
+          0.5467,
+          0.5031,
+          0.5468,
+          0.5183,
+          0.6518,
+          0.5096,
+          0.5762,
+          0.5596,
+          0.5576,
+          0.5474,
+          0.5319,
+          0.5909,
+          0.5404,
+          0.6102,
+          0.5073,
+          0.6128
+        ]
+      },
+      "compressed_words": 346
+    },
+    "extractive_keep50pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.5163,
+      "compressed_context": "A retrieval-augmented generation (RAG) pipeline for municipal OPRA compliance involves several interconnected components. The following architecture is derived from analysis of government document retrieval requirements and the constraints of on-premises deployment. Document Ingestion Layer: Municipal records arrive in multiple formats - scanned PDFs from physical archives, digitized meeting minutes, budget spreadsheets, and email correspondence. A preprocessing pipeline applies OCR (Tesseract or equivalent) to scanned documents, extracts text from digital PDFs using PyMuPDF, and normalizes formatting. For the K4200 hardware, embedding throughput is approximately 50-100 chunks per minute. Query Processing: When a citizen submits an OPRA request, the query text is embedded using the same nomic-embed-text model. Generation: The assembled prompt (system instruction + retrieved context + query) is passed to phi3-mini running on dual K4200 GPUs via llama-server. The generated response summarizes relevant records and flags any OPRA exemptions applicable to the request. Staff Workflow: Generated responses are presented to the records custodian as a draft, not a final determination. The custodian reviews the AI summary, verifies the cited records, and either approves the draft response or adds annotations before sending to the requestor. The system does not autonomously release records - it accelerates the search and drafting process while maintaining human oversight required by OPRA. With 500 requests per month and assuming 8-hour working days, the system must process roughly 25 requests per day. Daily capacity is approximately 60-96 requests, comfortably exceeding the 25-request daily demand.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 26,
+        "kept_sentences": 13,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 2299.58,
+        "top_scores": [
+          0.7483,
+          0.6118,
+          0.5984,
+          0.6709,
+          0.5468,
+          0.6518,
+          0.5762,
+          0.5596,
+          0.5576,
+          0.5474,
+          0.5909,
+          0.6102,
+          0.6128
+        ]
+      },
+      "compressed_words": 237
+    },
+    "extractive_keep25pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2222,
+      "compressed_context": "A retrieval-augmented generation (RAG) pipeline for municipal OPRA compliance involves several interconnected components. The following architecture is derived from analysis of government document retrieval requirements and the constraints of on-premises deployment. A preprocessing pipeline applies OCR (Tesseract or equivalent) to scanned documents, extracts text from digital PDFs using PyMuPDF, and normalizes formatting. Query Processing: When a citizen submits an OPRA request, the query text is embedded using the same nomic-embed-text model. With 500 requests per month and assuming 8-hour working days, the system must process roughly 25 requests per day. Daily capacity is approximately 60-96 requests, comfortably exceeding the 25-request daily demand.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 26,
+        "kept_sentences": 6,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 2103.32,
+        "top_scores": [
+          0.7483,
+          0.6118,
+          0.6709,
+          0.6518,
+          0.6102,
+          0.6128
+        ]
+      },
+      "compressed_words": 102
+    },
+    "abstractive_keep75pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.2745,
+      "compressed_context": "A RAG pipeline for municipal OPRA compliance involves document ingestion, embedding and indexing, query processing, generation, and staff workflow. Document ingestion includes preprocessing of scanned documents using OCR and PyMuPDF to extract text and normalize formatting. Embedding and indexing use nomic-embed-text to store 768-dimensional vectors alongside chunk text and metadata. Query processing retrieves top-k most similar chunks via cosine similarity against stored embeddings. Generation uses phi3-mini on dual K4200 GPUs for a 200-token response, taking approximately 25 seconds with prefill. Staff workflow involves reviewing AI summaries, verifying cited records, and adding annotations before sending to the requestor. Performance constraints include response generation time of 25-470 seconds per request, daily capacity of 60-96 requests, and a 0.95 tok/s baseline for v1 or 8-9 tok/s optimized for v2.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 459,
+        "target_words": 344,
+        "actual_words": 126,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 30596.61,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 126
+    },
+    "abstractive_keep50pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.2636,
+      "compressed_context": "A RAG pipeline for municipal OPRA compliance involves document ingestion, embedding and indexing, query processing, generation, and staff workflow. Document ingestion includes preprocessing of scanned documents, digitized meeting minutes, budget spreadsheets, and email correspondence. Embedding and indexing use nomic-embed-text to store 20,000-30,000 chunks of text with metadata into a vector store on disk. Query processing retrieves top-k most similar chunks using cosine similarity against stored embeddings. Generation uses phi3-mini running on dual K4200 GPUs via llama-server for summarizing relevant records and flags OPRA exemptions. Staff workflow involves reviewing AI-generated responses, verifying cited records, and adding annotations before sending to the requestor. Performance constraints include response generation time of 25-470 seconds, daily capacity of 60-96 requests, and staff oversight required by OPRA.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 459,
+        "target_words": 230,
+        "actual_words": 121,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 29965.88,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 121
+    },
+    "abstractive_keep25pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2353,
+      "compressed_context": "A RAG pipeline for municipal OPRA compliance involves document ingestion, embedding and indexing, query processing, generation, and staff workflow. Document ingestion includes preprocessing of scanned documents, digitized meeting minutes, budget spreadsheets, and email correspondence. Embedding and indexing use nomic-embed-text to store 20,000-30,000 chunks of text with metadata into a vector store on disk. Query processing retrieves top-k most similar chunks using cosine similarity against stored embeddings. Generation uses phi3-mini running on dual K4200 GPUs via llama-server for summarizing relevant records and flags exemptions. Staff workflow involves reviewing AI summaries and adding annotations before sending to the requestor. Performance constraints include response generation time, staff workload, and daily capacity.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 459,
+        "target_words": 115,
+        "actual_words": 108,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 27589.81,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 108
+    }
+  },
+  "9": {
+    "token_budget_keep75pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.7202,
+      "compressed_context": "NVIDIA GPU architectures from Maxwell (2014) through Ampere (2020) span a critical transition period for AI workloads. The following comparison focuses on features relevant to transformer model inference. Maxwell (GM200/GM204, 2014-2016): Introduced asynchronous compute and improved memory compression. Maxwell lacks FP16 matrix multiply units, INT8 dot products, and tensor cores. All matrix operations execute as FP32 SIMD instructions on CUDA cores. Memory bandwidth on the K4200 (GM204) is 173 GB/s with 4 GB GDDR5. Under Vulkan (for systems without CUDA support), throughput for 3.8B parameter models is approximately 8-9 tok/s decode and 0.7 tok/s prefill for long contexts. Maxwell is the current boundary of practical LLM inference on CUDA-abandoned hardware using Vulkan backends. Pascal (GP100/GP102, 2016-2018): Introduced FP16 storage and computation (though not native FP16 matrix multiply on consumer cards). Pascal added NVLink for multi-GPU communication and introduced unified memory improvements. The GTX 1080 Ti provides 484 GB/s memory bandwidth and 11 GB GDDR5X, yielding approximately 35-45 tok/s for 3.8B parameter models via CUDA. Pascal is widely used for budget LLM inference and remains fully supported by CUDA 12.x. Volta (V100, 2017): First architecture with Tensor Cores - 4x4 matrix multiply-accumulate units operating at FP16 with FP32 accumulation. Tensor cores enable approximately 8x throughput improvement for matrix multiplications versus CUDA cores. The V100 achieves 900 GB/s HBM2 bandwidth. For LLM inference, V100 delivers 150-200 tok/s for 7B models. Turing (RTX 2000 series, 2018): Added INT8 and INT4 tensor cores for quantized inference.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 336,
+        "budget_words": 252,
+        "actual_words": 242,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 0.1
+      },
+      "compressed_words": 242
+    },
+    "token_budget_keep50pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.4881,
+      "compressed_context": "NVIDIA GPU architectures from Maxwell (2014) through Ampere (2020) span a critical transition period for AI workloads. The following comparison focuses on features relevant to transformer model inference. Maxwell (GM200/GM204, 2014-2016): Introduced asynchronous compute and improved memory compression. Maxwell lacks FP16 matrix multiply units, INT8 dot products, and tensor cores. All matrix operations execute as FP32 SIMD instructions on CUDA cores. Memory bandwidth on the K4200 (GM204) is 173 GB/s with 4 GB GDDR5. Under Vulkan (for systems without CUDA support), throughput for 3.8B parameter models is approximately 8-9 tok/s decode and 0.7 tok/s prefill for long contexts. Maxwell is the current boundary of practical LLM inference on CUDA-abandoned hardware using Vulkan backends. Pascal (GP100/GP102, 2016-2018): Introduced FP16 storage and computation (though not native FP16 matrix multiply on consumer cards). Pascal added NVLink for multi-GPU communication and introduced unified memory improvements. The GTX 1080 Ti provides 484 GB/s memory bandwidth and 11 GB GDDR5X, yielding approximately 35-45 tok/s for 3.8B parameter models via CUDA.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 336,
+        "budget_words": 168,
+        "actual_words": 164,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 0.07
+      },
+      "compressed_words": 164
+    },
+    "token_budget_keep25pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2202,
+      "compressed_context": "NVIDIA GPU architectures from Maxwell (2014) through Ampere (2020) span a critical transition period for AI workloads. The following comparison focuses on features relevant to transformer model inference. Maxwell (GM200/GM204, 2014-2016): Introduced asynchronous compute and improved memory compression. Maxwell lacks FP16 matrix multiply units, INT8 dot products, and tensor cores. All matrix operations execute as FP32 SIMD instructions on CUDA cores. Memory bandwidth on the K4200 (GM204) is 173 GB/s with 4 GB GDDR5.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 336,
+        "budget_words": 84,
+        "actual_words": 74,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 0.06
+      },
+      "compressed_words": 74
+    },
+    "extractive_keep75pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.7827,
+      "compressed_context": "NVIDIA GPU architectures from Maxwell (2014) through Ampere (2020) span a critical transition period for AI workloads. The following comparison focuses on features relevant to transformer model inference. Maxwell (GM200/GM204, 2014-2016): Introduced asynchronous compute and improved memory compression. All matrix operations execute as FP32 SIMD instructions on CUDA cores. Under Vulkan (for systems without CUDA support), throughput for 3.8B parameter models is approximately 8-9 tok/s decode and 0.7 tok/s prefill for long contexts. Maxwell is the current boundary of practical LLM inference on CUDA-abandoned hardware using Vulkan backends. Pascal (GP100/GP102, 2016-2018): Introduced FP16 storage and computation (though not native FP16 matrix multiply on consumer cards). Pascal added NVLink for multi-GPU communication and introduced unified memory improvements. Pascal is widely used for budget LLM inference and remains fully supported by CUDA 12.x. Volta (V100, 2017): First architecture with Tensor Cores - 4x4 matrix multiply-accumulate units operating at FP16 with FP32 accumulation. Tensor cores enable approximately 8x throughput improvement for matrix multiplications versus CUDA cores. For LLM inference, V100 delivers 150-200 tok/s for 7B models. Turing (RTX 2000 series, 2018): Added INT8 and INT4 tensor cores for quantized inference. INT8 inference on Turing yields approximately 2x throughput over FP16 for the same model. Ampere (A100/RTX 3000 series, 2020): Third-generation tensor cores with BF16 support, sparsity acceleration (2x speedup for 50% sparse models), and NVLink 3.0. For LLM inference, A100 achieves 600-800 tok/s for 7B models at FP16, representing approximately 70-100x improvement over Maxwell Vulkan for the same workload. Ada Lovelace (RTX 4000 series, 2022) adds FP8 support and transformer engine acceleration, further widening the gap.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 23,
+        "kept_sentences": 17,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 1686.88,
+        "top_scores": [
+          0.6766,
+          0.6056,
+          0.606,
+          0.5656,
+          0.567,
+          0.7168,
+          0.6269,
+          0.5719,
+          0.6953,
+          0.6837,
+          0.5605,
+          0.692,
+          0.7241,
+          0.6795,
+          0.6062,
+          0.7156,
+          0.5419
+        ]
+      },
+      "compressed_words": 263
+    },
+    "extractive_keep50pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.5565,
+      "compressed_context": "NVIDIA GPU architectures from Maxwell (2014) through Ampere (2020) span a critical transition period for AI workloads. The following comparison focuses on features relevant to transformer model inference. Maxwell (GM200/GM204, 2014-2016): Introduced asynchronous compute and improved memory compression. Maxwell is the current boundary of practical LLM inference on CUDA-abandoned hardware using Vulkan backends. Pascal (GP100/GP102, 2016-2018): Introduced FP16 storage and computation (though not native FP16 matrix multiply on consumer cards). Pascal is widely used for budget LLM inference and remains fully supported by CUDA 12.x. Volta (V100, 2017): First architecture with Tensor Cores - 4x4 matrix multiply-accumulate units operating at FP16 with FP32 accumulation. For LLM inference, V100 delivers 150-200 tok/s for 7B models. Turing (RTX 2000 series, 2018): Added INT8 and INT4 tensor cores for quantized inference. INT8 inference on Turing yields approximately 2x throughput over FP16 for the same model. Ampere (A100/RTX 3000 series, 2020): Third-generation tensor cores with BF16 support, sparsity acceleration (2x speedup for 50% sparse models), and NVLink 3.0. For LLM inference, A100 achieves 600-800 tok/s for 7B models at FP16, representing approximately 70-100x improvement over Maxwell Vulkan for the same workload.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 23,
+        "kept_sentences": 12,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 1729.78,
+        "top_scores": [
+          0.6766,
+          0.6056,
+          0.606,
+          0.7168,
+          0.6269,
+          0.6953,
+          0.6837,
+          0.692,
+          0.7241,
+          0.6795,
+          0.6062,
+          0.7156
+        ]
+      },
+      "compressed_words": 187
+    },
+    "extractive_keep25pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2857,
+      "compressed_context": "Maxwell is the current boundary of practical LLM inference on CUDA-abandoned hardware using Vulkan backends. Pascal is widely used for budget LLM inference and remains fully supported by CUDA 12.x. Volta (V100, 2017): First architecture with Tensor Cores - 4x4 matrix multiply-accumulate units operating at FP16 with FP32 accumulation. For LLM inference, V100 delivers 150-200 tok/s for 7B models. Turing (RTX 2000 series, 2018): Added INT8 and INT4 tensor cores for quantized inference. For LLM inference, A100 achieves 600-800 tok/s for 7B models at FP16, representing approximately 70-100x improvement over Maxwell Vulkan for the same workload.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 23,
+        "kept_sentences": 6,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 1775.32,
+        "top_scores": [
+          0.7168,
+          0.6953,
+          0.6837,
+          0.692,
+          0.7241,
+          0.7156
+        ]
+      },
+      "compressed_words": 96
+    },
+    "abstractive_keep75pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.3214,
+      "compressed_context": "The NVIDIA GPU architectures from Maxwell to Ampere span a critical transition period for AI workloads. The following comparison focuses on features relevant to transformer model inference. Maxwell (2014-2016) introduced asynchronous compute and improved memory compression. Pascal (2016-2018) added NVLink for multi-GPU communication and introduced unified memory improvements. Volta (2017) is the first architecture with Tensor Cores - 4x4 matrix multiply-accumulate units operating at FP16 with FP32 accumulation. Turing (2018) added INT8 and INT4 tensor cores for quantized inference. Ampere (2020) is the third-generation tensor cores with BF16 support, sparsity acceleration, and NVLink 3.0. Ada Lovelace (2022) adds FP8 support and transformer engine acceleration, further widening the gap.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 336,
+        "target_words": 252,
+        "actual_words": 108,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 29548.54,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 108
+    },
+    "abstractive_keep50pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.2202,
+      "compressed_context": "Maxwell architecture lacks INT8 tensor cores and native FP16 matrix multiply units, while Pascal introduced NVLink for multi-GPU communication. Volta is the first architecture with Tensor Cores, enabling 8x throughput improvement for matrix multiplications. Turing added INT8 and INT4 tensor cores for quantized inference. Ampere architecture introduces BF16 support, sparsity acceleration, and NVLink 3.0, achieving 70-100x improvement over Maxwell Vulkan for LLM inference at FP16. Ada Lovelace adds FP8 support and transformer engine acceleration.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 336,
+        "target_words": 168,
+        "actual_words": 74,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 23174.71,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 74
+    },
+    "abstractive_keep25pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2143,
+      "compressed_context": "Maxwell architecture lacks INT8 matrix multiply units and tensor cores, while Pascal introduced NVLink for multi-GPU communication. Volta is the first architecture with Tensor Cores - 4x4 matrix multiply-accumulate units operating at FP16 with FP32 accumulation. Turing added INT8 and INT4 tensor cores for quantized inference. Ampere (A100/RTX 3000 series) provides 2 TB/s HBM2e bandwidth, achieving 600-800 tok/s for 7B models at FP16, representing approximately 70-100x improvement over Maxwell Vulkan for the",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 336,
+        "target_words": 84,
+        "actual_words": 72,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 24195.97,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 72
+    }
+  },
+  "10": {
+    "token_budget_keep75pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.6982,
+      "compressed_context": "Deploying LLM inference on legacy Vulkan GPU hardware (Maxwell, Kepler architectures) introduces several categories of risk that organizations must evaluate before committing to this approach for production workloads. Hardware Reliability Risks: Consumer and workstation GPUs from 2013-2016 are operating near or beyond their design lifecycle. Mean time between failures for GPU hardware increases significantly after 7-10 years of operation. Thermal paste degradation, capacitor aging, and fan bearing wear are common failure modes. Unlike modern AI accelerators in enterprise settings, replacement units may be unavailable or expensive on the secondary market. Production deployments should maintain spare GPU inventory and implement failover to CPU-only inference. Driver and Software Support Risks: NVIDIA's proprietary driver support for Maxwell (compute capability 5.0/5.2) is maintained as of 2025 but may be deprecated in future driver releases. Vulkan support for Maxwell depends on driver versions 390+ which remain available on Ubuntu 20.04/22.04/24.04. llama.cpp's Vulkan backend is under active development and API compatibility may break between builds. The b5576 to b9297 transition removed the --draft-max flag and changed tokenizer validation behavior - build-specific testing is essential before upgrading. Performance Degradation Risks: Thermal throttling on Maxwell hardware causes significant tok/s variance across requests (observed range 0.29-1.66 tok/s in LegacyRAG v1 single-GPU operation). Dual-GPU operation mitigates this by halving per-GPU thermal load, but ambient temperature and airflow remain variables. Production deployments should monitor GPU temperature and implement request queuing to prevent thermal runaway under sustained load. Vulkan TDR (Timeout Detection and Recovery): Under sustained concurrent GPU workloads, Maxwell Vulkan drivers may raise vk::DeviceLostError - the GPU kernel exceeds the driver timeout and the device is reset.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 381,
+        "budget_words": 286,
+        "actual_words": 266,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 0.19
+      },
+      "compressed_words": 266
+    },
+    "token_budget_keep50pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.4724,
+      "compressed_context": "Deploying LLM inference on legacy Vulkan GPU hardware (Maxwell, Kepler architectures) introduces several categories of risk that organizations must evaluate before committing to this approach for production workloads. Hardware Reliability Risks: Consumer and workstation GPUs from 2013-2016 are operating near or beyond their design lifecycle. Mean time between failures for GPU hardware increases significantly after 7-10 years of operation. Thermal paste degradation, capacitor aging, and fan bearing wear are common failure modes. Unlike modern AI accelerators in enterprise settings, replacement units may be unavailable or expensive on the secondary market. Production deployments should maintain spare GPU inventory and implement failover to CPU-only inference. Driver and Software Support Risks: NVIDIA's proprietary driver support for Maxwell (compute capability 5.0/5.2) is maintained as of 2025 but may be deprecated in future driver releases. Vulkan support for Maxwell depends on driver versions 390+ which remain available on Ubuntu 20.04/22.04/24.04. llama.cpp's Vulkan backend is under active development and API compatibility may break between builds. The b5576 to b9297 transition removed the --draft-max flag and changed tokenizer validation behavior - build-specific testing is essential before upgrading.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 381,
+        "budget_words": 190,
+        "actual_words": 180,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 0.12
+      },
+      "compressed_words": 180
+    },
+    "token_budget_keep25pct": {
+      "method": "token_budget",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2362,
+      "compressed_context": "Deploying LLM inference on legacy Vulkan GPU hardware (Maxwell, Kepler architectures) introduces several categories of risk that organizations must evaluate before committing to this approach for production workloads. Hardware Reliability Risks: Consumer and workstation GPUs from 2013-2016 are operating near or beyond their design lifecycle. Mean time between failures for GPU hardware increases significantly after 7-10 years of operation. Thermal paste degradation, capacitor aging, and fan bearing wear are common failure modes. Unlike modern AI accelerators in enterprise settings, replacement units may be unavailable or expensive on the secondary market.",
+      "compression_meta": {
+        "method": "token_budget",
+        "original_words": 381,
+        "budget_words": 95,
+        "actual_words": 90,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 0.23
+      },
+      "compressed_words": 90
+    },
+    "extractive_keep75pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.7559,
+      "compressed_context": "Deploying LLM inference on legacy Vulkan GPU hardware (Maxwell, Kepler architectures) introduces several categories of risk that organizations must evaluate before committing to this approach for production workloads. Hardware Reliability Risks: Consumer and workstation GPUs from 2013-2016 are operating near or beyond their design lifecycle. Mean time between failures for GPU hardware increases significantly after 7-10 years of operation. Thermal paste degradation, capacitor aging, and fan bearing wear are common failure modes. Unlike modern AI accelerators in enterprise settings, replacement units may be unavailable or expensive on the secondary market. Production deployments should maintain spare GPU inventory and implement failover to CPU-only inference. Driver and Software Support Risks: NVIDIA's proprietary driver support for Maxwell (compute capability 5.0/5.2) is maintained as of 2025 but may be deprecated in future driver releases. Vulkan support for Maxwell depends on driver versions 390+ which remain available on Ubuntu 20.04/22.04/24.04. llama.cpp's Vulkan backend is under active development and API compatibility may break between builds. The b5576 to b9297 transition removed the --draft-max flag and changed tokenizer validation behavior - build-specific testing is essential before upgrading. Performance Degradation Risks: Thermal throttling on Maxwell hardware causes significant tok/s variance across requests (observed range 0.29-1.66 tok/s in LegacyRAG v1 single-GPU operation). Dual-GPU operation mitigates this by halving per-GPU thermal load, but ambient temperature and airflow remain variables. Production deployments should monitor GPU temperature and implement request queuing to prevent thermal runaway under sustained load. Vulkan TDR (Timeout Detection and Recovery): Under sustained concurrent GPU workloads, Maxwell Vulkan drivers may raise vk::DeviceLostError - the GPU kernel exceeds the driver timeout and the device is reset. Production deployments must serialize GPU access strictly. Security and Compliance Risks: On-premises deployment provides data sovereignty benefits but introduces physical security requirements.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 22,
+        "kept_sentences": 16,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 1876.86,
+        "top_scores": [
+          0.8481,
+          0.5901,
+          0.5419,
+          0.4939,
+          0.516,
+          0.7014,
+          0.5513,
+          0.5109,
+          0.5096,
+          0.5359,
+          0.4823,
+          0.5345,
+          0.5461,
+          0.5251,
+          0.5563,
+          0.5866
+        ]
+      },
+      "compressed_words": 288
+    },
+    "extractive_keep50pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.5381,
+      "compressed_context": "Deploying LLM inference on legacy Vulkan GPU hardware (Maxwell, Kepler architectures) introduces several categories of risk that organizations must evaluate before committing to this approach for production workloads. Hardware Reliability Risks: Consumer and workstation GPUs from 2013-2016 are operating near or beyond their design lifecycle. Mean time between failures for GPU hardware increases significantly after 7-10 years of operation. Production deployments should maintain spare GPU inventory and implement failover to CPU-only inference. Driver and Software Support Risks: NVIDIA's proprietary driver support for Maxwell (compute capability 5.0/5.2) is maintained as of 2025 but may be deprecated in future driver releases. The b5576 to b9297 transition removed the --draft-max flag and changed tokenizer validation behavior - build-specific testing is essential before upgrading. Dual-GPU operation mitigates this by halving per-GPU thermal load, but ambient temperature and airflow remain variables. Production deployments should monitor GPU temperature and implement request queuing to prevent thermal runaway under sustained load. Vulkan TDR (Timeout Detection and Recovery): Under sustained concurrent GPU workloads, Maxwell Vulkan drivers may raise vk::DeviceLostError - the GPU kernel exceeds the driver timeout and the device is reset. Production deployments must serialize GPU access strictly. Security and Compliance Risks: On-premises deployment provides data sovereignty benefits but introduces physical security requirements.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 22,
+        "kept_sentences": 11,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 1873.5,
+        "top_scores": [
+          0.8481,
+          0.5901,
+          0.5419,
+          0.7014,
+          0.5513,
+          0.5359,
+          0.5345,
+          0.5461,
+          0.5251,
+          0.5563,
+          0.5866
+        ]
+      },
+      "compressed_words": 205
+    },
+    "extractive_keep25pct": {
+      "method": "extractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.2808,
+      "compressed_context": "Deploying LLM inference on legacy Vulkan GPU hardware (Maxwell, Kepler architectures) introduces several categories of risk that organizations must evaluate before committing to this approach for production workloads. Hardware Reliability Risks: Consumer and workstation GPUs from 2013-2016 are operating near or beyond their design lifecycle. Production deployments should maintain spare GPU inventory and implement failover to CPU-only inference. Driver and Software Support Risks: NVIDIA's proprietary driver support for Maxwell (compute capability 5.0/5.2) is maintained as of 2025 but may be deprecated in future driver releases. Production deployments must serialize GPU access strictly. Security and Compliance Risks: On-premises deployment provides data sovereignty benefits but introduces physical security requirements.",
+      "compression_meta": {
+        "method": "extractive",
+        "original_sentences": 22,
+        "kept_sentences": 6,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 1955.11,
+        "top_scores": [
+          0.8481,
+          0.5901,
+          0.7014,
+          0.5513,
+          0.5563,
+          0.5866
+        ]
+      },
+      "compressed_words": 107
+    },
+    "abstractive_keep75pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.75,
+      "actual_ratio": 0.5853,
+      "compressed_context": "Legacy Vulkan GPUs for production LLM inference introduce several deployment risks:\n\nHardware Reliability Risks: Maxwell and Kepler GPUs are near or beyond their design lifecycle with high failure modes like thermal paste degradation, capacitor aging, and fan bearing wear. Replacement units may be unavailable or expensive on the secondary market.\n\nDriver and Software Support Risks: NVIDIA's driver support for Maxwell is maintained as of 2025 but may be deprecated in future driver releases. Vulkan support for Maxwell depends on driver versions 390+ which remain available on Ubuntu 20.04/22.04/24.04. llama.cpp's Vulkan backend is under active development and API compatibility may break between builds.\n\nPerformance Degradation Risks: Thermal throttling on Maxwell hardware causes significant tok/s variance across requests, with a range of 0.29-1.66 tok/s in LegacyRAG v1 single-GPU operation. Dual-GPU operation mitigates this by halving per-GPU thermal load but ambient temperature and airflow remain variables.\n\nVulkan TDR (Timeout Detection and Recovery): Maxwell Vulkan drivers may raise vk::DeviceLostError under sustained concurrent GPU workloads, terminating all Vulkan processes and requiring driver reset. Production deployments must serialize GPU access strictly to prevent thermal runaway.\n\nSecurity and Compliance Risks: On-premises deployment provides data sovereignty benefits but introduces physical security requirements. AI-generated responses must be reviewed by qualified staff before legal use.\n\nCapacity Risks: At 8-9 tok/s decode on dual K4200, a 200-token response requires approximately 25 seconds with 400-token",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 381,
+        "target_words": 286,
+        "actual_words": 223,
+        "keep_fraction_target": 0.75,
+        "compression_latency_ms": 39599.34,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 223
+    },
+    "abstractive_keep50pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.5,
+      "actual_ratio": 0.4147,
+      "compressed_context": "Legacy Vulkan GPUs for LLM inference pose several deployment risks that organizations should consider before committing to production workloads. Hardware reliability risks include the high failure rate of consumer and workstation GPUs from 2013-2016, thermal paste degradation, capacitor aging, and fan bearing wear as common failure modes. Software support risks include NVIDIA's proprietary driver support for Maxwell (compute capability 5.0/5.2) being maintained until 2025 but may be deprecated in future driver releases. Performance degradation risks include thermal throttling on Maxwell hardware causing significant tok/s variance across requests, and the need to monitor GPU temperature and implement request queuing to prevent thermal runaway under sustained load. Vulkan TDR (Timeout Detection and Recovery) risks include GPU kernel exceeding driver timeout and device being reset during concurrent GPU workloads. Security and compliance risks include data sovereignty benefits but physical security requirements, and capacity risks including 25-second wall time for a 200-token response with 400-token prompts at single-request throughput on dual K4200.",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 381,
+        "target_words": 190,
+        "actual_words": 158,
+        "keep_fraction_target": 0.5,
+        "compression_latency_ms": 30202.65,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 158
+    },
+    "abstractive_keep25pct": {
+      "method": "abstractive",
+      "keep_fraction_target": 0.25,
+      "actual_ratio": 0.3045,
+      "compressed_context": "Legacy Vulkan GPUs for LLM inference pose several deployment risks that organizations should consider before committing to production workloads. Hardware reliability risks include outdated hardware nearing end of design life and potential GPU failure modes, such as thermal paste degradation and capacitor aging. Driver and software support risks include the lack of driver support for Maxwell's legacy version beyond 2025 and changes in Vulkan support for this architecture. Performance degradation risks include thermal throttling that can lead to significant variance in token/s throughput across requests. Security and compliance risks include data sovereignty benefits but physical security requirements, while capacity risks are high at 8-9 tok/s decode on dual K4200 systems with 200-token prompts requiring approximately 25",
+      "compression_meta": {
+        "method": "abstractive",
+        "original_words": 381,
+        "target_words": 95,
+        "actual_words": 116,
+        "keep_fraction_target": 0.25,
+        "compression_latency_ms": 23525.74,
+        "model": "qwen2:1.5b"
+      },
+      "compressed_words": 116
+    }
+  }
+}

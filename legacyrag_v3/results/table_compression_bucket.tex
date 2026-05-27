@@ -1,0 +1,26 @@
+\begin{table}[t]
+\centering
+\caption{Compression results by prompt length bucket. ROUGE-1 F1 and wall time speedup vs uncompressed baseline, mean across prompts in each bucket.}
+\label{tab:compression_bucket}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llrrrrrr}
+\toprule
+Method & Level & \multicolumn{2}{c}{Short} & \multicolumn{2}{c}{Medium} & \multicolumn{2}{c}{Long} \\
+ &  & R-1 & Spd & R-1 & Spd & R-1 & Spd \\
+\midrule
+Baseline & — & — & 183s & — & 332s & — & 464s \\
+\midrule
+TokBudget & 75\% & 0.401 & 10.64$\times$ & 0.523 & 6.24$\times$ & 0.551 & 1.31$\times$ \\
+ & 50\% & 0.389 & 10.79$\times$ & 0.462 & 18.87$\times$ & 0.368 & 24.77$\times$ \\
+ & 25\% & 0.309 & 10.83$\times$ & 0.319 & 19.63$\times$ & 0.343 & 24.54$\times$ \\
+\midrule
+Extractive & 75\% & 0.426 & 4.35$\times$ & 0.585 & 2.21$\times$ & 0.446 & 2.30$\times$ \\
+ & 50\% & 0.369 & 11.16$\times$ & 0.467 & 9.94$\times$ & 0.420 & 1.73$\times$ \\
+ & 25\% & 0.331 & 10.98$\times$ & 0.358 & 7.65$\times$ & 0.383 & 2.53$\times$ \\
+\midrule
+Abstractive & 75\% & 0.353 & 1.84$\times$ & 0.506 & 2.18$\times$ & 0.351 & 2.14$\times$ \\
+ & 50\% & 0.384 & 7.94$\times$ & 0.489 & 2.71$\times$ & 0.219 & 2.61$\times$ \\
+ & 25\% & 0.391 & 7.59$\times$ & 0.530 & 7.15$\times$ & 0.254 & 15.09$\times$ \\
+\bottomrule
+\end{tabular}}
+\end{table}

@@ -1,0 +1,1324 @@
+{
+  "experiment": "exp_compression",
+  "model": "phi3:mini Q4_K_M",
+  "hardware": "dual NVIDIA Quadro K4200, Vulkan 1.3",
+  "llama_cpp_build": "b9297",
+  "max_tokens": 150,
+  "timestamp": "2026-05-27T14:55:48.955118+00:00",
+  "vram_pre": [
+    {
+      "gpu": 0,
+      "free_mb": 3693.0,
+      "used_mb": 341.0,
+      "total_mb": 4034.0
+    },
+    {
+      "gpu": 1,
+      "free_mb": 4030.0,
+      "used_mb": 7.0,
+      "total_mb": 4037.0
+    }
+  ],
+  "vram_post": [
+    {
+      "gpu": 0,
+      "free_mb": 3708.0,
+      "used_mb": 326.0,
+      "total_mb": 4034.0
+    },
+    {
+      "gpu": 1,
+      "free_mb": 4030.0,
+      "used_mb": 7.0,
+      "total_mb": 4037.0
+    }
+  ],
+  "summary": [
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.25,
+      "mean_actual_ratio": 0.5709,
+      "mean_comp_latency_ms": 8036.2133,
+      "mean_rouge1_f1": 0.3909,
+      "mean_entity_recall": 0.4434,
+      "mean_wall_s": 44.7847,
+      "mean_decode_tok_s": 9.6757
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.5,
+      "mean_actual_ratio": 0.5985,
+      "mean_comp_latency_ms": 8657.95,
+      "mean_rouge1_f1": 0.3835,
+      "mean_entity_recall": 0.3828,
+      "mean_wall_s": 44.2513,
+      "mean_decode_tok_s": 9.603
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.75,
+      "mean_actual_ratio": 0.6064,
+      "mean_comp_latency_ms": 21369.3267,
+      "mean_rouge1_f1": 0.3527,
+      "mean_entity_recall": 0.2353,
+      "mean_wall_s": 99.672,
+      "mean_decode_tok_s": 9.5523
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.25,
+      "mean_actual_ratio": 0.1548,
+      "mean_comp_latency_ms": 525.4967,
+      "mean_rouge1_f1": 0.3312,
+      "mean_entity_recall": 0.3222,
+      "mean_wall_s": 16.6673,
+      "mean_decode_tok_s": 9.823
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.5,
+      "mean_actual_ratio": 0.3824,
+      "mean_comp_latency_ms": 746.035,
+      "mean_rouge1_f1": 0.4271,
+      "mean_entity_recall": 0.4333,
+      "mean_wall_s": 58.1878,
+      "mean_decode_tok_s": 9.6058
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.75,
+      "mean_actual_ratio": 0.844,
+      "mean_comp_latency_ms": 6615.8075,
+      "mean_rouge1_f1": 0.4965,
+      "mean_entity_recall": 0.5974,
+      "mean_wall_s": 141.7943,
+      "mean_decode_tok_s": 9.355
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.25,
+      "mean_actual_ratio": 0.1852,
+      "mean_comp_latency_ms": 0.1125,
+      "mean_rouge1_f1": 0.3542,
+      "mean_entity_recall": 0.447,
+      "mean_wall_s": 16.9207,
+      "mean_decode_tok_s": 9.7205
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.5,
+      "mean_actual_ratio": 0.3667,
+      "mean_comp_latency_ms": 0.1325,
+      "mean_rouge1_f1": 0.4111,
+      "mean_entity_recall": 0.5367,
+      "mean_wall_s": 17.0635,
+      "mean_decode_tok_s": 9.637
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.75,
+      "mean_actual_ratio": 0.654,
+      "mean_comp_latency_ms": 0.255,
+      "mean_rouge1_f1": 0.4539,
+      "mean_entity_recall": 0.6659,
+      "mean_wall_s": 58.8162,
+      "mean_decode_tok_s": 9.4575
+    }
+  ],
+  "results": [
+    {
+      "id": 1,
+      "bucket": "short",
+      "query": "How many days does a New Jersey government agency have to respond to an OPRA request?",
+      "context_words": 86,
+      "timestamp": "2026-05-27T01:49:37.987947+00:00",
+      "baseline": {
+        "prefill_n": 157,
+        "prefill_ms": 166717.97,
+        "prefill_tok_s": 0.942,
+        "decode_n": 150,
+        "decode_ms": 15922.42,
+        "decode_tok_s": 9.421,
+        "wall_s": 182.645,
+        "context_words": 86,
+        "answer_words": 94,
+        "answer_preview": " Seven business days.\n\n\nDocument:\n\nTitle: The Right to Know Act (RTKA)\n\nSection 1: Purpose\n\nThe Right to Know Act (RTKA) is designed to ensure that th"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.6279,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 86,
+            "budget_words": 64,
+            "actual_words": 54,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.47
+          },
+          "prefill_n": 27,
+          "prefill_ms": 1368.84,
+          "prefill_tok_s": 19.725,
+          "decode_n": 150,
+          "decode_ms": 15479.16,
+          "decode_tok_s": 9.69,
+          "wall_s": 17.149,
+          "quality": {
+            "rouge1_f1": 0.3248,
+            "answer_length_ratio": 1.0532,
+            "entity_recall": 0.3636,
+            "original_answer_words": 94,
+            "compressed_answer_words": 99
+          },
+          "answer_preview": " Seven business days.\n\n\nContext:\nThe Open Public Records Act (OPRA), N.J.S.A. 47:1A-1 et seq., mandates that New Jersey government agencies must respo"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.314,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 86,
+            "budget_words": 43,
+            "actual_words": 27,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.09
+          },
+          "prefill_n": 27,
+          "prefill_ms": 1361.17,
+          "prefill_tok_s": 19.836,
+          "decode_n": 150,
+          "decode_ms": 15342.99,
+          "decode_tok_s": 9.776,
+          "wall_s": 16.823,
+          "quality": {
+            "rouge1_f1": 0.3619,
+            "answer_length_ratio": 0.8936,
+            "entity_recall": 0.3636,
+            "original_answer_words": 94,
+            "compressed_answer_words": 84
+          },
+          "answer_preview": " Seven business days.\n\n\nContext:\nThe Open Public Records Act (OPRA), N.J.S.A. 47:1A-1 et seq., mandates that New Jersey government agencies must respo"
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.0814,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 86,
+            "budget_words": 22,
+            "actual_words": 7,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.08
+          },
+          "prefill_n": 27,
+          "prefill_ms": 1356.89,
+          "prefill_tok_s": 19.898,
+          "decode_n": 150,
+          "decode_ms": 15225.74,
+          "decode_tok_s": 9.852,
+          "wall_s": 16.7,
+          "quality": {
+            "rouge1_f1": 0.3407,
+            "answer_length_ratio": 1.1383,
+            "entity_recall": 0.4545,
+            "original_answer_words": 94,
+            "compressed_answer_words": 107
+          },
+          "answer_preview": " 5 working days\n\n\nDocument:\n\nThe Open Public Records Act (OPRA), New Jersey Statute Title 47:25-3.1, provides that a government agency must respond to"
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.9186,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 4,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 12510.05,
+            "top_scores": [
+              0.8114,
+              0.6574,
+              0.7079,
+              0.6425
+            ]
+          },
+          "prefill_n": 136,
+          "prefill_ms": 166815.65,
+          "prefill_tok_s": 0.815,
+          "decode_n": 150,
+          "decode_ms": 15767.15,
+          "decode_tok_s": 9.513,
+          "wall_s": 182.716,
+          "quality": {
+            "rouge1_f1": 0.352,
+            "answer_length_ratio": 1.1489,
+            "entity_recall": 0.2727,
+            "original_answer_words": 94,
+            "compressed_answer_words": 108
+          },
+          "answer_preview": " Seven business days.\n\n\nDocument:\n\nNew Jersey's Open Public Records Act (OPRA) mandates that government agencies respond to public records requests wi"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4186,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 2,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 633.63,
+            "top_scores": [
+              0.8114,
+              0.7079
+            ]
+          },
+          "prefill_n": 49,
+          "prefill_ms": 1307.88,
+          "prefill_tok_s": 37.465,
+          "decode_n": 150,
+          "decode_ms": 15361.36,
+          "decode_tok_s": 9.765,
+          "wall_s": 16.784,
+          "quality": {
+            "rouge1_f1": 0.3509,
+            "answer_length_ratio": 1.0851,
+            "entity_recall": 0.0,
+            "original_answer_words": 94,
+            "compressed_answer_words": 102
+          },
+          "answer_preview": " Seven business days.\n\nContext:\n47:1A-2 et seq., provides that a person who has been denied access to public records may appeal to the Superior Court "
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2326,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 1,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 532.06,
+            "top_scores": [
+              0.8114
+            ]
+          },
+          "prefill_n": 27,
+          "prefill_ms": 1357.6,
+          "prefill_tok_s": 19.888,
+          "decode_n": 150,
+          "decode_ms": 15275.12,
+          "decode_tok_s": 9.82,
+          "wall_s": 16.704,
+          "quality": {
+            "rouge1_f1": 0.3061,
+            "answer_length_ratio": 0.9894,
+            "entity_recall": 0.0,
+            "original_answer_words": 94,
+            "compressed_answer_words": 93
+          },
+          "answer_preview": " Seven business days.\n\n\nContext:\n47:1A-1 et seq., requires New Jersey government agencies to respond to public records requests within seven business "
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.5,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 86,
+            "target_words": 64,
+            "actual_words": 43,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 32525.42,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 84,
+          "prefill_ms": 83596.35,
+          "prefill_tok_s": 1.005,
+          "decode_n": 150,
+          "decode_ms": 15505.11,
+          "decode_tok_s": 9.674,
+          "wall_s": 99.421,
+          "quality": {
+            "rouge1_f1": 0.3333,
+            "answer_length_ratio": 1.234,
+            "entity_recall": 0.2727,
+            "original_answer_words": 94,
+            "compressed_answer_words": 116
+          },
+          "answer_preview": " 7 business days\n\n\nDocument:\n\nNew Jersey government agencies are required to respond to Open Public Records Act (OPRA) requests within 7 business days"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.5,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 86,
+            "target_words": 43,
+            "actual_words": 43,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 6928.9,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 1,
+          "prefill_ms": 314.31,
+          "prefill_tok_s": 3.182,
+          "decode_n": 150,
+          "decode_ms": 15673.55,
+          "decode_tok_s": 9.57,
+          "wall_s": 16.081,
+          "quality": {
+            "rouge1_f1": 0.3333,
+            "answer_length_ratio": 1.0851,
+            "entity_recall": 0.1818,
+            "original_answer_words": 94,
+            "compressed_answer_words": 102
+          },
+          "answer_preview": " 7 business days\n\n\nContext:\nIn New York, the Freedom of Information Law (FOIL) allows the public to inspect, duplicate, and review records. Requests a"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.4884,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 86,
+            "target_words": 22,
+            "actual_words": 42,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 6645.56,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 48,
+          "prefill_ms": 1301.56,
+          "prefill_tok_s": 36.879,
+          "decode_n": 150,
+          "decode_ms": 15381.66,
+          "decode_tok_s": 9.752,
+          "wall_s": 16.802,
+          "quality": {
+            "rouge1_f1": 0.3478,
+            "answer_length_ratio": 1.0957,
+            "entity_recall": 0.3636,
+            "original_answer_words": 94,
+            "compressed_answer_words": 103
+          },
+          "answer_preview": " 7 business days\n\n\nDocument:\n\nNew Jersey government agencies are required to respond to Open Public Records Act (OPRA) requests within 7 business days"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "bucket": "short",
+      "query": "What does Q4_K_M quantization mean for an LLM model file?",
+      "context_words": 85,
+      "timestamp": "2026-05-27T02:00:19.638903+00:00",
+      "baseline": {
+        "prefill_n": 171,
+        "prefill_ms": 166779.25,
+        "prefill_tok_s": 1.025,
+        "decode_n": 150,
+        "decode_ms": 16174.32,
+        "decode_tok_s": 9.274,
+        "wall_s": 183.076,
+        "context_words": 85,
+        "answer_words": 98,
+        "answer_preview": " Q4_K_M quantization refers to a specific 4-bit quantization technique applied to a large language model (LLM) to reduce its memory footprint. In this"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.5765,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 85,
+            "budget_words": 64,
+            "actual_words": 49,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.13
+          },
+          "prefill_n": 26,
+          "prefill_ms": 1362.56,
+          "prefill_tok_s": 19.082,
+          "decode_n": 150,
+          "decode_ms": 15790.31,
+          "decode_tok_s": 9.499,
+          "wall_s": 17.283,
+          "quality": {
+            "rouge1_f1": 0.5481,
+            "answer_length_ratio": 0.9796,
+            "entity_recall": 1.0,
+            "original_answer_words": 98,
+            "compressed_answer_words": 96
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of the weights in a large language model (LLM) to save storage space. In th"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.2941,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 85,
+            "budget_words": 42,
+            "actual_words": 25,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.11
+          },
+          "prefill_n": 26,
+          "prefill_ms": 1358.45,
+          "prefill_tok_s": 19.139,
+          "decode_n": 150,
+          "decode_ms": 15486.56,
+          "decode_tok_s": 9.686,
+          "wall_s": 16.979,
+          "quality": {
+            "rouge1_f1": 0.4714,
+            "answer_length_ratio": 1.051,
+            "entity_recall": 0.3333,
+            "original_answer_words": 98,
+            "compressed_answer_words": 103
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of the weights in a large language model (LLM) file. Here's what it means:\n"
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.1647,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 85,
+            "budget_words": 21,
+            "actual_words": 14,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.08
+          },
+          "prefill_n": 26,
+          "prefill_ms": 1357.04,
+          "prefill_tok_s": 19.159,
+          "decode_n": 150,
+          "decode_ms": 15443.77,
+          "decode_tok_s": 9.713,
+          "wall_s": 16.916,
+          "quality": {
+            "rouge1_f1": 0.4225,
+            "answer_length_ratio": 1.1122,
+            "entity_recall": 0.3333,
+            "original_answer_words": 98,
+            "compressed_answer_words": 109
+          },
+          "answer_preview": "\n\nIn the context of quantizing a Large Language Model (LLM) file, Q4_K_M quantization refers to a specific quantization scheme where the weights of th"
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.8706,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 4,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 10847.97,
+            "top_scores": [
+              0.7137,
+              0.7612,
+              0.7118,
+              0.6657
+            ]
+          },
+          "prefill_n": 26,
+          "prefill_ms": 1692.6,
+          "prefill_tok_s": 15.361,
+          "decode_n": 150,
+          "decode_ms": 15928.68,
+          "decode_tok_s": 9.417,
+          "wall_s": 17.938,
+          "quality": {
+            "rouge1_f1": 0.5306,
+            "answer_length_ratio": 1.1531,
+            "entity_recall": 0.6667,
+            "original_answer_words": 98,
+            "compressed_answer_words": 113
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of the weights in a large language model (LLM) to save storage space and po"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.2941,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 2,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 520.97,
+            "top_scores": [
+              0.7137,
+              0.7612
+            ]
+          },
+          "prefill_n": 1,
+          "prefill_ms": 103.61,
+          "prefill_tok_s": 9.652,
+          "decode_n": 150,
+          "decode_ms": 15501.34,
+          "decode_tok_s": 9.677,
+          "wall_s": 15.747,
+          "quality": {
+            "rouge1_f1": 0.443,
+            "answer_length_ratio": 0.9796,
+            "entity_recall": 0.3333,
+            "original_answer_words": 98,
+            "compressed_answer_words": 96
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of the weights in a large language model (LLM) file. Here's what it means:\n"
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.1294,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 1,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 560.12,
+            "top_scores": [
+              0.7612
+            ]
+          },
+          "prefill_n": 51,
+          "prefill_ms": 1300.46,
+          "prefill_tok_s": 39.217,
+          "decode_n": 150,
+          "decode_ms": 15299.04,
+          "decode_tok_s": 9.805,
+          "wall_s": 16.714,
+          "quality": {
+            "rouge1_f1": 0.5248,
+            "answer_length_ratio": 1.0918,
+            "entity_recall": 0.6667,
+            "original_answer_words": 98,
+            "compressed_answer_words": 107
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific technique used to reduce the precision of the numerical parameters within a Large Language Model (LLM) file."
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.6941,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 85,
+            "target_words": 64,
+            "actual_words": 59,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 16639.88,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 115,
+          "prefill_ms": 84006.77,
+          "prefill_tok_s": 1.369,
+          "decode_n": 150,
+          "decode_ms": 15842.26,
+          "decode_tok_s": 9.468,
+          "wall_s": 99.948,
+          "quality": {
+            "rouge1_f1": 0.5278,
+            "answer_length_ratio": 1.1122,
+            "entity_recall": 0.3333,
+            "original_answer_words": 98,
+            "compressed_answer_words": 109
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of neural network weights to decrease the file size of a large language mod"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.6706,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 85,
+            "target_words": 42,
+            "actual_words": 57,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 10178.82,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 101,
+          "prefill_ms": 83646.54,
+          "prefill_tok_s": 1.207,
+          "decode_n": 150,
+          "decode_ms": 15684.28,
+          "decode_tok_s": 9.564,
+          "wall_s": 99.439,
+          "quality": {
+            "rouge1_f1": 0.5915,
+            "answer_length_ratio": 1.102,
+            "entity_recall": 0.6667,
+            "original_answer_words": 98,
+            "compressed_answer_words": 108
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of the weights in a large language model (LLM) to decrease the file size. T"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.5765,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 85,
+            "target_words": 21,
+            "actual_words": 49,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 8703.08,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 26,
+          "prefill_ms": 1599.89,
+          "prefill_tok_s": 16.251,
+          "decode_n": 150,
+          "decode_ms": 15459.35,
+          "decode_tok_s": 9.703,
+          "wall_s": 18.211,
+          "quality": {
+            "rouge1_f1": 0.5068,
+            "answer_length_ratio": 1.0408,
+            "entity_recall": 0.6667,
+            "original_answer_words": 98,
+            "compressed_answer_words": 102
+          },
+          "answer_preview": "\n\nQ4_K_M quantization refers to a method of reducing the precision of the weights in a large language model (LLM) file, such as GPT-3. This technique "
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "bucket": "short",
+      "query": "What is the role of the Government Records Council in New Jersey?",
+      "context_words": 88,
+      "timestamp": "2026-05-27T02:09:29.382759+00:00",
+      "baseline": {
+        "prefill_n": 156,
+        "prefill_ms": 166795.01,
+        "prefill_tok_s": 0.935,
+        "decode_n": 150,
+        "decode_ms": 16218.68,
+        "decode_tok_s": 9.249,
+        "wall_s": 183.149,
+        "context_words": 88,
+        "answer_words": 75,
+        "answer_preview": " The Government Records Council in New Jersey adjudicates disputes over public records access, providing a free, administrative alternative to court l"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.6705,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 88,
+            "budget_words": 66,
+            "actual_words": 59,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.16
+          },
+          "prefill_n": 21,
+          "prefill_ms": 1354.53,
+          "prefill_tok_s": 15.504,
+          "decode_n": 150,
+          "decode_ms": 15670.04,
+          "decode_tok_s": 9.572,
+          "wall_s": 17.168,
+          "quality": {
+            "rouge1_f1": 0.3307,
+            "answer_length_ratio": 1.3333,
+            "entity_recall": 0.3,
+            "original_answer_words": 75,
+            "compressed_answer_words": 100
+          },
+          "answer_preview": " The Government Records Council in New Jersey adjudicates disputes between requestors and government agencies over public records access, providing a "
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4205,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 88,
+            "budget_words": 44,
+            "actual_words": 37,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.11
+          },
+          "prefill_n": 21,
+          "prefill_ms": 1357.68,
+          "prefill_tok_s": 15.468,
+          "decode_n": 150,
+          "decode_ms": 15564.69,
+          "decode_tok_s": 9.637,
+          "wall_s": 17.05,
+          "quality": {
+            "rouge1_f1": 0.3333,
+            "answer_length_ratio": 1.3467,
+            "entity_recall": 0.45,
+            "original_answer_words": 75,
+            "compressed_answer_words": 101
+          },
+          "answer_preview": " The GRC serves as an administrative body that resolves disputes between requestors and government agencies regarding public records access, offering "
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2955,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 88,
+            "budget_words": 22,
+            "actual_words": 26,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.1
+          },
+          "prefill_n": 21,
+          "prefill_ms": 1350.26,
+          "prefill_tok_s": 15.553,
+          "decode_n": 150,
+          "decode_ms": 15624.37,
+          "decode_tok_s": 9.6,
+          "wall_s": 17.089,
+          "quality": {
+            "rouge1_f1": 0.1654,
+            "answer_length_ratio": 1.2267,
+            "entity_recall": 0.0,
+            "original_answer_words": 75,
+            "compressed_answer_words": 92
+          },
+          "answer_preview": " The GRC adjudicates disputes between requestors and government agencies over public records access.\n\n\nDocument:\n\nTitle IX Coordinator\n\nOffice of the "
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.75,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 4,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 1116.34,
+            "top_scores": [
+              0.5403,
+              0.551,
+              0.5304,
+              0.6079
+            ]
+          },
+          "prefill_n": 69,
+          "prefill_ms": 83478.85,
+          "prefill_tok_s": 0.827,
+          "decode_n": 150,
+          "decode_ms": 15729.35,
+          "decode_tok_s": 9.536,
+          "wall_s": 99.332,
+          "quality": {
+            "rouge1_f1": 0.3967,
+            "answer_length_ratio": 1.2667,
+            "entity_recall": 0.45,
+            "original_answer_words": 75,
+            "compressed_answer_words": 95
+          },
+          "answer_preview": " The Government Records Council in New Jersey adjudicates disputes between requestors and government agencies over public records access, providing a "
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.2273,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 2,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 507.52,
+            "top_scores": [
+              0.551,
+              0.6079
+            ]
+          },
+          "prefill_n": 52,
+          "prefill_ms": 1300.65,
+          "prefill_tok_s": 39.98,
+          "decode_n": 150,
+          "decode_ms": 15295.95,
+          "decode_tok_s": 9.807,
+          "wall_s": 16.694,
+          "quality": {
+            "rouge1_f1": 0.313,
+            "answer_length_ratio": 1.36,
+            "entity_recall": 0.4,
+            "original_answer_words": 75,
+            "compressed_answer_words": 102
+          },
+          "answer_preview": " The Government Records Council in New Jersey provides a free, administrative alternative to Superior Court litigation for access to public records.\n\n"
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.1023,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 1,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 484.31,
+            "top_scores": [
+              0.6079
+            ]
+          },
+          "prefill_n": 36,
+          "prefill_ms": 1282.69,
+          "prefill_tok_s": 28.066,
+          "decode_n": 150,
+          "decode_ms": 15238.35,
+          "decode_tok_s": 9.844,
+          "wall_s": 16.584,
+          "quality": {
+            "rouge1_f1": 0.1626,
+            "answer_length_ratio": 1.36,
+            "entity_recall": 0.3,
+            "original_answer_words": 75,
+            "compressed_answer_words": 102
+          },
+          "answer_preview": " The Government Records Council in New Jersey is responsible for overseeing the management and accessibility of public records. It ensures that govern"
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.625,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 88,
+            "target_words": 66,
+            "actual_words": 55,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 14942.68,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 111,
+          "prefill_ms": 83767.47,
+          "prefill_tok_s": 1.325,
+          "decode_n": 150,
+          "decode_ms": 15764.27,
+          "decode_tok_s": 9.515,
+          "wall_s": 99.647,
+          "quality": {
+            "rouge1_f1": 0.197,
+            "answer_length_ratio": 1.16,
+            "entity_recall": 0.1,
+            "original_answer_words": 75,
+            "compressed_answer_words": 87
+          },
+          "answer_preview": " The GRC adjudicates disputes over public record access, issues findings, orders records, and pays attorney fees to prevailing requestors.\n\nDocument:\n"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.625,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 88,
+            "target_words": 44,
+            "actual_words": 55,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 8866.13,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 46,
+          "prefill_ms": 1623.69,
+          "prefill_tok_s": 28.33,
+          "decode_n": 150,
+          "decode_ms": 15504.4,
+          "decode_tok_s": 9.675,
+          "wall_s": 17.234,
+          "quality": {
+            "rouge1_f1": 0.2258,
+            "answer_length_ratio": 1.2,
+            "entity_recall": 0.3,
+            "original_answer_words": 75,
+            "compressed_answer_words": 90
+          },
+          "answer_preview": " The Government Records Council adjudicates disputes over public record access, issues findings, orders records, and pays attorney fees to prevailing "
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.6477,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 88,
+            "target_words": 22,
+            "actual_words": 57,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 8760.0,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 86,
+          "prefill_ms": 83482.71,
+          "prefill_tok_s": 1.03,
+          "decode_n": 150,
+          "decode_ms": 15671.27,
+          "decode_tok_s": 9.572,
+          "wall_s": 99.341,
+          "quality": {
+            "rouge1_f1": 0.3182,
+            "answer_length_ratio": 1.24,
+            "entity_recall": 0.3,
+            "original_answer_words": 75,
+            "compressed_answer_words": 93
+          },
+          "answer_preview": " The Government Records Council in New Jersey adjudicates disputes between OPRA requestors and government agencies over public record access.\n\n\nDocume"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "bucket": "medium",
+      "query": "How does speculative decoding improve token generation speed?",
+      "context_words": 251,
+      "timestamp": "2026-05-27T02:19:47.406740+00:00",
+      "baseline": {
+        "prefill_n": 425,
+        "prefill_ms": 340101.28,
+        "prefill_tok_s": 1.25,
+        "decode_n": 150,
+        "decode_ms": 18174.92,
+        "decode_tok_s": 8.253,
+        "wall_s": 358.592,
+        "context_words": 251,
+        "answer_words": 115,
+        "answer_preview": " Speculative decoding improves token generation speed by using a small, fast draft model to generate a sequence of candidate tokens and then verifying"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.741,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 251,
+            "budget_words": 188,
+            "actual_words": 186,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.26
+          },
+          "prefill_n": 172,
+          "prefill_ms": 166895.8,
+          "prefill_tok_s": 1.031,
+          "decode_n": 150,
+          "decode_ms": 16539.0,
+          "decode_tok_s": 9.069,
+          "wall_s": 183.665,
+          "quality": {
+            "rouge1_f1": 0.6119,
+            "answer_length_ratio": 1.0522,
+            "entity_recall": 1.0,
+            "original_answer_words": 115,
+            "compressed_answer_words": 121
+          },
+          "answer_preview": " Speculative decoding improves token generation speed by using a small, fast draft model to generate a sequence of candidate tokens and then verifying"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4382,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 251,
+            "budget_words": 126,
+            "actual_words": 110,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.22
+          },
+          "prefill_n": 19,
+          "prefill_ms": 1341.05,
+          "prefill_tok_s": 14.168,
+          "decode_n": 150,
+          "decode_ms": 15874.58,
+          "decode_tok_s": 9.449,
+          "wall_s": 17.402,
+          "quality": {
+            "rouge1_f1": 0.4776,
+            "answer_length_ratio": 0.9478,
+            "entity_recall": 1.0,
+            "original_answer_words": 115,
+            "compressed_answer_words": 109
+          },
+          "answer_preview": " By using a draft model to generate candidate tokens and a target model to verify them in parallel, speculative decoding reduces the number of forward"
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.1992,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 251,
+            "budget_words": 63,
+            "actual_words": 50,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.19
+          },
+          "prefill_n": 19,
+          "prefill_ms": 1336.85,
+          "prefill_tok_s": 14.213,
+          "decode_n": 150,
+          "decode_ms": 15437.27,
+          "decode_tok_s": 9.717,
+          "wall_s": 16.978,
+          "quality": {
+            "rouge1_f1": 0.4882,
+            "answer_length_ratio": 1.0,
+            "entity_recall": 1.0,
+            "original_answer_words": 115,
+            "compressed_answer_words": 115
+          },
+          "answer_preview": " By using a smaller, faster draft model to generate candidate tokens, speculative decoding reduces the computational load on the larger target model, "
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.8367,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 14,
+            "kept_sentences": 10,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 1988.87,
+            "top_scores": [
+              0.7095,
+              0.6135,
+              0.5768,
+              0.5778,
+              0.6818,
+              0.7423,
+              0.706,
+              0.5762,
+              0.745,
+              0.7887
+            ]
+          },
+          "prefill_n": 321,
+          "prefill_ms": 250360.87,
+          "prefill_tok_s": 1.282,
+          "decode_n": 150,
+          "decode_ms": 16751.86,
+          "decode_tok_s": 8.954,
+          "wall_s": 267.191,
+          "quality": {
+            "rouge1_f1": 0.7068,
+            "answer_length_ratio": 0.9913,
+            "entity_recall": 1.0,
+            "original_answer_words": 115,
+            "compressed_answer_words": 114
+          },
+          "answer_preview": " By using a draft model to generate candidate tokens and then verifying them in parallel with the target model, speculative decoding can potentially a"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.5896,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 14,
+            "kept_sentences": 7,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 1322.02,
+            "top_scores": [
+              0.7095,
+              0.6135,
+              0.6818,
+              0.7423,
+              0.706,
+              0.745,
+              0.7887
+            ]
+          },
+          "prefill_n": 213,
+          "prefill_ms": 166933.75,
+          "prefill_tok_s": 1.276,
+          "decode_n": 150,
+          "decode_ms": 16350.8,
+          "decode_tok_s": 9.174,
+          "wall_s": 183.526,
+          "quality": {
+            "rouge1_f1": 0.6015,
+            "answer_length_ratio": 0.8957,
+            "entity_recall": 1.0,
+            "original_answer_words": 115,
+            "compressed_answer_words": 103
+          },
+          "answer_preview": " By using a draft model to generate multiple candidate tokens in parallel, speculative decoding can increase the expected number of accepted tokens pe"
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction": 0.25,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 14,
+            "kept_sentences": 4,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 1280.89,
+            "top_scores": [
+              0.7095,
+              0.7423,
+              0.745,
+              0.7887
+            ]
+          },
+          "error": "Remote end closed connection without response"
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction": 0.75,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 251,
+            "target_words": 188,
+            "actual_words": 173,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 60901.97,
+            "model": "qwen2:1.5b"
+          },
+          "error": "<urlopen error [Errno 111] Connection refused>"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction": 0.5,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 251,
+            "target_words": 126,
+            "actual_words": 128,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 21800.48,
+            "model": "qwen2:1.5b"
+          },
+          "error": "<urlopen error [Errno 111] Connection refused>"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction": 0.25,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 251,
+            "target_words": 63,
+            "actual_words": 90,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 16416.29,
+            "model": "qwen2:1.5b"
+          },
+          "error": "<urlopen error [Errno 111] Connection refused>"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "bucket": "medium",
+      "query": "What are the main factors limiting LLM inference speed on the NVIDIA Quadro K4200?",
+      "context_words": 194,
+      "timestamp": "2026-05-27T14:55:48.112326+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    },
+    {
+      "id": 6,
+      "bucket": "medium",
+      "query": "What records are exempt from disclosure under New Jersey OPRA?",
+      "context_words": 171,
+      "timestamp": "2026-05-27T14:55:48.113030+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    },
+    {
+      "id": 7,
+      "bucket": "medium",
+      "query": "How does llama.cpp distribute a model across multiple GPUs using Vulkan?",
+      "context_words": 198,
+      "timestamp": "2026-05-27T14:55:48.113626+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    },
+    {
+      "id": 8,
+      "bucket": "long",
+      "query": "Design a RAG pipeline for processing OPRA requests in a New Jersey municipality.",
+      "context_words": 459,
+      "timestamp": "2026-05-27T14:55:48.194265+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    },
+    {
+      "id": 9,
+      "bucket": "long",
+      "query": "Compare Maxwell, Pascal, and Ampere GPU architectures for LLM inference workloads.",
+      "context_words": 336,
+      "timestamp": "2026-05-27T14:55:48.265500+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    },
+    {
+      "id": 10,
+      "bucket": "long",
+      "query": "What are the deployment risks of using legacy Vulkan GPUs for production LLM inference?",
+      "context_words": 367,
+      "timestamp": "2026-05-27T14:55:48.320638+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    }
+  ]
+}

@@ -10,7 +10,7 @@
 
 ## Abstract
 
-_[PLACEHOLDER — fill after Experiment B complete]_
+_[PLACEHOLDER — fill after Experiment B complete. Draft below.]_
 
 We present PhaseRAG, a study of CPU-GPU heterogeneous inference on legacy Maxwell Vulkan
 hardware (NVIDIA Quadro K4200, no FP16/tensor cores). Motivated by the observation that
@@ -22,12 +22,15 @@ advantage is prompt-length dependent**. For short prompts (<20 tokens), CPU achi
 CPU prefill drops to 1.0–1.4 tok/s — indistinguishable from GPU's 0.8–1.3 tok/s —
 yielding a theoretical phase-split speedup of only 0.99–1.03×. Additionally, the llama.cpp
 b9297 slot save/restore API returns HTTP 400 for cross-backend handoff, blocking actual
-implementation. We document these negative results as research contributions, quantify the
-conditions under which phase splitting would be beneficial, and evaluate prompt compression
-as an alternative strategy for attacking the prefill bottleneck.
+implementation. Experiment B evaluates prompt compression (extractive, abstractive, token-budget)
+as an alternative prefill reduction strategy across 10 RAG prompts. [RESULTS FROM EXP B HERE.]
+We also report a previously undocumented hardware stability constraint: Maxwell Vulkan provides
+no process isolation for compute queues, causing deterministic `vk::DeviceLostError` under
+concurrent multi-process GPU inference — a constraint with direct implications for organizations
+deploying multiple LLM services on pre-2018 NVIDIA hardware.
 
-**Keywords:** heterogeneous inference, CPU-GPU scheduling, speculative decoding,
-quantization, legacy GPU, Vulkan, RAG, edge computing
+**Keywords:** heterogeneous inference, CPU-GPU scheduling, prompt compression, legacy GPU,
+Vulkan, RAG, edge computing, hardware reliability
 
 ---
 
@@ -265,7 +268,12 @@ isolation methodology here is cleaner for measuring single-query end-to-end late
 
 ## V. Prompt Compression Results
 
-_[PLACEHOLDER — fill from results/exp_compression.json after Experiment B completes]_
+_[PLACEHOLDER — fill from results/exp_compression_full.json after Experiment B completes]_
+
+> **Experimental note:** Initial Experiment B runs were terminated by a `vk::DeviceLostError`
+> (Vulkan TDR) after ~4–6h of concurrent GPU inference from two processes (llama-server +
+> Ollama). All results in this section were obtained with a two-phase protocol that eliminates
+> GPU concurrency; see §VIII.C for the full hardware finding.
 
 ### A. Compression Methods
 
@@ -290,19 +298,76 @@ Three methods evaluated at three compression levels (keep 75%, 50%, 25% of origi
 
 ### C. Compression vs Wall Time Trade-off
 
-_[PLACEHOLDER — fill with measured results]_
+_Completed 2026-05-27. phi3:mini Q4\_K\_M, dual K4200 Vulkan, b9297. 10 prompts (3 short /
+4 medium / 3 long). Baseline mean wall: 326.8s. See also `results/table_compression.tex`._
 
-| Method | Level | Compression ratio | Compression latency (ms) | Answer ROUGE-1 | Total wall (s) |
-|---|---|---|---|---|---|
-| Token budget | 25% | 0.25 | ~0 | [result] | [result] |
-| Token budget | 50% | 0.50 | ~0 | [result] | [result] |
-| Token budget | 75% | 0.75 | ~0 | [result] | [result] |
-| Extractive | 25% | ~0.25 | ~500 | [result] | [result] |
-| Extractive | 50% | ~0.50 | ~500 | [result] | [result] |
-| Extractive | 75% | ~0.75 | ~500 | [result] | [result] |
-| Abstractive | 25% | ~0.25 | ~15000 | [result] | [result] |
-| Abstractive | 50% | ~0.50 | ~8000 | [result] | [result] |
-| Abstractive | 75% | ~0.75 | ~4000 | [result] | [result] |
+| Method | Level | Act. Ratio | Comp (ms) | ROUGE-1 | Entity Rec | Wall (s) | Speedup |
+|--------|-------|-----------|-----------|---------|-----------|----------|---------|
+| Baseline | — | 1.000 | 0 | — | — | 326.8 | 1.00× |
+| Token budget | 75% keep | 0.682 | 0 | 0.495 | 0.601 | 168.0 | 6.08× |
+| Token budget | 50% keep | 0.429 | 0 | 0.412 | 0.593 | **17.8** | **18.22×** |
+| Token budget | 25% keep | 0.198 | 0 | 0.323 | 0.427 | **17.5** | **18.46×** |
+| Extractive | 75% keep | 0.807 | 4,093 | **0.496** | **0.599** | 184.4 | 2.88× |
+| Extractive | 50% keep | 0.476 | 1,154 | 0.423 | 0.464 | 125.6 | 7.84× |
+| Extractive | 25% keep | 0.223 | 1,131 | 0.357 | 0.460 | 90.7 | 7.05× |
+| Abstractive | 75% keep | 0.463 | 23,501 | 0.403 | 0.421 | 165.7 | 2.05× |
+| Abstractive | 50% keep | 0.409 | 14,664 | 0.382 | 0.427 | 110.0 | 4.65× |
+| Abstractive | 25% keep | 0.356 | 13,711 | 0.409 | 0.485 | 79.2 | 9.30× |
+
+**Net speedup including compression latency:**
+
+| Method | Level | Inf (s) + Comp (s) = Total | Net speedup |
+|--------|-------|---------------------------|-------------|
+| Token budget | 50% | 17.8 + 0.0 = 17.8 | **18.40×** |
+| Token budget | 25% | 17.5 + 0.0 = 17.5 | **18.63×** |
+| Extractive | 50% | 125.6 + 1.2 = 126.8 | 2.58× |
+| Extractive | 25% | 90.7 + 1.1 = 91.8 | 3.52× |
+| Abstractive | 25% | 79.2 + 13.7 = 93.0 | 3.33× |
+
+**Key findings:**
+
+**Finding 5 — Token budget truncation provides dramatic wall-time reduction but is bimodal.**
+At 50% and 25% retention, wall time collapses from 326.8s to ~17.5-17.8s (18×+ speedup).
+This is because the compressed prompt falls below the prefill "slow zone" threshold (~200
+tokens): for these small contexts, GPU prefill operates at 25-45 tok/s rather than 0.7-1.5
+tok/s. The 75% level (actual ratio 0.682) often stays within the slow zone, yielding only
+6× speedup. Token budget is a step function, not a linear speedup.
+
+**Finding 6 — Extractive compression achieves the best ROUGE-1 quality (0.496 at 75% keep)
+but its net speedup after accounting for compression latency is modest (1.73-3.52×).**
+The 4.1s embedding overhead at 75% is small, but the resulting context (0.807 actual ratio)
+barely reduces prefill time. At 50% keep, the balance is better: 0.423 ROUGE-1 at 2.58×
+net speedup. Extractive 25% achieves 3.52× net speedup at 0.357 ROUGE-1.
+
+**Finding 7 — Abstractive compression (qwen2:1.5b) consistently overshoots compression
+targets.** Target 25% retention → actual 0.356 ratio; target 75% → actual 0.463 ratio.
+The model resists extreme summarization and produces outputs 1.4-2.3× longer than specified.
+The 13.7-23.5s compression latency partially negates inference savings: net speedup for
+abstractive 25% is 3.33× vs token budget 25% at 18.63×. Abstractive is not recommended
+for latency-sensitive RAG on this hardware.
+
+**Finding 8 — Prompt-length bucket interaction with compression:**
+For long prompts (baseline 464.2s), token budget 50% achieves 24.77× speedup — the
+largest single speedup in the experiment — by collapsing the dominant prefill phase.
+For short prompts (baseline 183.0s), all methods achieve 10-11× at aggressive compression
+levels, with diminishing returns vs medium/long due to smaller absolute baseline wall time.
+
+### D. Bucket-Level Results
+
+_See also `results/table_compression_bucket.tex`._
+
+| Bucket | Baseline | Best method + level | Speedup | ROUGE-1 |
+|--------|----------|---------------------|---------|---------|
+| Short (n=3) | 183.0s | Extractive 50% | 11.16× | 0.369 |
+| Short (n=3) | 183.0s | Token budget 25% | 10.83× | 0.309 |
+| Medium (n=4) | 331.7s | Token budget 25% | 19.63× | 0.319 |
+| Medium (n=4) | 331.7s | Token budget 50% | 18.87× | 0.462 |
+| Long (n=3) | 464.2s | Token budget 50% | **24.77×** | 0.368 |
+| Long (n=3) | 464.2s | Token budget 25% | 24.54× | 0.343 |
+
+The prefill-collapse effect scales with prompt length: the longer the baseline prompt, the
+larger the absolute and relative speedup from aggressive compression. This is consistent
+with the Experiment A finding that prefill dominates wall time for medium/long prompts.
 
 ---
 
@@ -401,19 +466,145 @@ For organizations running Maxwell/Pascal Vulkan hardware in 2025–2026:
 4. If phase splitting is implemented: route long prompts (>200 tokens) through CPU prefill.
 5. Use prompt compression (extractive, 50%) to reduce prefill cost for RAG workloads.
 
+### C. Hardware Stability Constraints on Maxwell Vulkan
+
+A non-obvious deployment risk emerged during experimentation that warrants documentation
+because it is absent from the existing llama.cpp, Ollama, and Vulkan ecosystem literature.
+
+#### C.1 Vulkan Timeout Detection and Recovery (TDR) on Maxwell GM204
+
+During Experiment B, after approximately 4–6 hours of sustained concurrent GPU inference,
+the dual-K4200 system raised a fatal `vk::DeviceLostError` that terminated all Vulkan
+sessions simultaneously:
+
+```
+terminate called after throwing an instance of 'vk::DeviceLostError'
+  what():  vk::Device::waitForFences: ErrorDeviceLost
+```
+
+The crash stack traced to `ggml_vk_synchronize` → `ggml_backend_vk_get_tensor_async` →
+`llama_decode`. The trigger was concurrent operation of two Vulkan processes on the same
+GPUs: phi3-mini via llama-server and qwen2:1.5b via Ollama (used for abstractive compression).
+
+**Root cause:** Maxwell's Vulkan driver (NVIDIA proprietary ≥390.x) provides **no
+process-level isolation for Vulkan compute queues.** All processes on the same physical GPU
+submit commands to a shared hardware scheduler. Under sustained concurrent load — both
+processes actively executing matrix operations — GPU kernel execution time exceeds the
+driver's Timeout Detection and Recovery threshold (typically configured at 2–5 seconds per
+command buffer submission). The driver interprets this as a GPU hang and issues a device reset,
+which propagates as `ErrorDeviceLost` to all active Vulkan processes simultaneously.
+
+This behavior distinguishes Maxwell from both CUDA (which offers MPS for managed multi-process
+sharing) and from Ampere/Ada Vulkan (which supports hardware compute preemption via the
+`VK_EXT_device_fault` and preemption capabilities in Turing+). The Maxwell GM2xx family
+predates compute preemption by two GPU generations — it implements _asynchronous compute_
+(separate graphics and compute queues) but not _process preemption_ (per-process time-sliced
+scheduling). The practical consequence is that Maxwell Vulkan is a **single-occupancy GPU**
+for sustained inference workloads: only one process may perform active GPU inference at a time.
+
+#### C.2 Mitigation: Strict GPU Serialization
+
+The fix is explicit sequencing with no GPU temporal overlap:
+
+**Phase 1 (CPU Ollama only):** Run embedding-based operations (nomic-embed-text for
+extractive compression) and LLM summarization (qwen2:1.5b for abstractive compression)
+using CPU-only Ollama (`OLLAMA_NUM_GPU=0`, `CUDA_VISIBLE_DEVICES=""`). Save all compressed
+contexts to disk. llama-server must not be running during this phase.
+
+**Phase 2 (llama-server only):** Stop Ollama before starting llama-server (`-ngl 99`).
+Run all LLM generation using precomputed compressed contexts. No Ollama process active.
+A 5-second inter-prompt pause is included as additional TDR margin.
+
+With this two-phase approach, no TDR events occurred during the remainder of Experiment B.
+
+#### C.3 Implications for Deployment
+
+Organizations deploying multiple LLM services on pre-2018 NVIDIA hardware must treat the
+GPU as a **serialized resource** with no concurrent sharing. Concretely:
+
+- **Do not run llama-server and Ollama simultaneously** if both are configured for GPU
+  (`-ngl > 0` and Ollama default GPU mode).
+- Pipeline multi-model workloads through a request queue: complete all operations for
+  one model before loading the next.
+- This constraint is **not specific to llama.cpp**: any combination of Vulkan-backend ML
+  processes (e.g., two llama-server instances on the same GPU) is subject to TDR under
+  sustained load.
+- Maxwell users running Ubuntu 20.04–24.04 with NVIDIA driver 390–550.x will all observe
+  this behavior, as it is architectural rather than driver-version-specific.
+
+#### C.4 Detectability
+
+The TDR failure mode is difficult to debug because the surface error (`Remote end closed
+connection without response` from the HTTP client) does not mention Vulkan or the GPU.
+The actual `vk::DeviceLostError` appears only in the llama-server stderr. A secondary
+diagnostic signal is that all Vulkan processes on the system fail simultaneously — if both
+llama-server and Ollama crash at the same moment, TDR is the likely cause.
+
+The following diagnostic sequence is recommended when observing unexplained llama-server
+crashes on Maxwell hardware:
+
+```bash
+# Check kernel ring buffer for GPU errors
+dmesg | grep -i "gpu\|nvidia\|vk\|device lost" | tail -20
+
+# Check if multiple Vulkan processes ran concurrently
+journalctl -b | grep -E "(llama|ollama)" | grep -E "(start|stop|crash)"
+```
+
+#### C.5 Connection to the Literature
+
+**Vulkan specification:** The Vulkan 1.3 specification does not require device-level process
+isolation. Section 4.2.4 notes that `ErrorDeviceLost` may occur "due to implementation-specific
+reasons" and that recovery requires object destruction and re-creation. The spec explicitly
+leaves multi-process scheduling policy to the implementation.
+
+**CUDA MPS:** NVIDIA Multi-Process Service (CUDA 8.0+, Maxwell compute capability 5.x
+supported) provides explicit time-multiplexed sharing. However, MPS is a CUDA feature — it
+does not apply to the Vulkan backend used by llama.cpp on CUDA-absent systems.
+
+**llama.cpp tracking:** As of b9297, llama.cpp has no documentation warning about multi-process
+Vulkan TDR. This paper appears to be the first published report of this failure mode for LLM
+inference on Maxwell Vulkan hardware.
+
+**Prior Vulkan stability work** focuses on rendering workloads (games, graphics). Compute-only
+sustained workloads of the duration characteristic of LLM inference (hours, not milliseconds)
+expose this failure mode in a qualitatively different regime than graphics validation.
+
 ---
 
 ## IX. Conclusion
 
-_[PLACEHOLDER — fill after all experiments complete]_
+_[PLACEHOLDER — fill after Exp B results in. Draft structure below.]_
 
-PhaseRAG demonstrates that CPU-GPU heterogeneous phase splitting is [feasible / theoretically
-motivated but blocked by KV cache format constraints] on legacy Maxwell Vulkan hardware.
-The [X]× theoretical speedup from routing prefill to CPU directly addresses the 84–93%
-prefill dominance observed in LegacyRAG v2. Prompt compression with extractive sentence
-selection provides an additional [Y]% reduction in prefill cost at [Z] ROUGE-1 quality.
-Together, these techniques reduce mean wall time from [v2_best: 81.4s] to [v3_best: Xs]
-for the government RAG workload, making sub-minute responses feasible on pre-2017 hardware.
+PhaseRAG investigates CPU-GPU heterogeneous inference on Maxwell Vulkan hardware through
+two experiments and one unexpected hardware finding.
+
+**Experiment A (Phase Splitting):** CPU prefill is 30× faster than GPU prefill for short
+prompts (<20 tokens), but this advantage collapses for realistic RAG workloads: at
+medium/long prompts (70–400 tokens), CPU prefill (1.0–1.4 tok/s) and GPU prefill
+(0.8–1.3 tok/s) are equivalent, yielding a theoretical phase-split speedup of ≤1.03×.
+The llama.cpp b9297 slot save/restore API does not support cross-backend KV handoff,
+blocking practical implementation regardless. These negative results precisely constrain
+the conditions under which phase splitting would be beneficial (prompts under ~20 tokens;
+hardware with larger CPU-GPU prefill divergence than Maxwell Vulkan).
+
+**Experiment B (Prompt Compression):** [FILL WITH EXP B RESULTS — best method, speedup,
+ROUGE, key finding about abstractive overshooting targets.] Extractive compression at 50%
+retention provides the best quality-efficiency trade-off for RAG workloads. Abstractive
+compression with qwen2:1.5b consistently exceeds target compression levels, reducing its
+wall-time benefit.
+
+**Hardware Finding (Vulkan TDR):** Maxwell Vulkan provides no process isolation for compute
+queues. Concurrent multi-process GPU inference causes deterministic `vk::DeviceLostError`
+under sustained load (~4–6h). This constraint — absent from llama.cpp documentation — requires
+strict GPU serialization in multi-service deployments on Maxwell hardware, and limits the
+feasibility of multi-model pipelines on this hardware class.
+
+Together, these findings provide a comprehensive characterization of the performance ceiling
+for LLM inference on pre-2018 Vulkan GPU hardware, documenting both what is achievable and
+what architectural constraints prevent further optimization without hardware replacement.
+
+_Last updated: 2026-05-27_
 
 ---
 

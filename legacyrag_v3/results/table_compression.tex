@@ -1,0 +1,25 @@
+\begin{table}[t]
+\centering
+\caption{Prompt Compression Results on Dual K4200 Vulkan. phi3-mini Q4\_K\_M, 10 prompts (3 short / 4 medium / 3 long), MAX\_TOKENS=150. Speedup relative to uncompressed baseline. ROUGE-1 and entity recall measured against baseline answer.}
+\label{tab:compression}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llrrrrrr}
+\toprule
+Method & Level & Ratio & Comp (ms) & ROUGE-1 & Ent.Rec & Wall (s) & Speedup \\
+\midrule
+Baseline & — & 1.000 & 0 & — & — & 326.8 & 1.00$\times$ \\
+\midrule
+Token budget & 75\% & 0.682 & 0 & 0.495 & 0.601 & 168.0 & 6.08$\times$ \\
+ & 50\% & 0.429 & 0 & 0.412 & 0.593 & 17.8 & 18.22$\times$ \\
+ & 25\% & 0.198 & 0 & 0.323 & 0.427 & 17.5 & 18.46$\times$ \\
+\midrule
+Extractive & 75\% & 0.807 & 4093 & 0.496 & 0.599 & 184.4 & 2.88$\times$ \\
+ & 50\% & 0.476 & 1154 & 0.423 & 0.464 & 125.6 & 7.84$\times$ \\
+ & 25\% & 0.223 & 1131 & 0.357 & 0.460 & 90.7 & 7.05$\times$ \\
+\midrule
+Abstractive & 75\% & 0.463 & 23501 & 0.403 & 0.421 & 165.7 & 2.05$\times$ \\
+ & 50\% & 0.409 & 14664 & 0.382 & 0.427 & 110.0 & 4.65$\times$ \\
+ & 25\% & 0.356 & 13711 & 0.409 & 0.485 & 79.2 & 9.30$\times$ \\
+\bottomrule
+\end{tabular}}
+\end{table}

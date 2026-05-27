@@ -1,0 +1,3579 @@
+{
+  "experiment": "exp_compression_full",
+  "model": "phi3:mini Q4_K_M",
+  "hardware": "dual NVIDIA Quadro K4200, Vulkan 1.3",
+  "llama_cpp_build": "b9297",
+  "max_tokens": 150,
+  "timestamp": "2026-05-27T20:47:35.652351+00:00",
+  "n_prompts_total": 16,
+  "vdr_tdr_note": "vk::DeviceLostError (Vulkan TDR) occurred during initial run when qwen2:1.5b (Ollama) and phi3-mini (llama-server) ran concurrently on dual K4200. Maxwell Vulkan has no process isolation for compute queues. Fix: precompute all compressions with CPU-only Ollama before starting llama-server. Documented as hardware reliability finding.",
+  "summary": [
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.25,
+      "n_samples": 8,
+      "mean_actual_ratio": 0.3558,
+      "mean_comp_latency_ms": 13711.165,
+      "mean_rouge1_f1": 0.4088,
+      "mean_entity_recall": 0.4854,
+      "mean_answer_length_ratio": 1.1311,
+      "mean_wall_s": 79.2392,
+      "mean_decode_tok_s": 9.6043
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.5,
+      "n_samples": 8,
+      "mean_actual_ratio": 0.4088,
+      "mean_comp_latency_ms": 14663.9613,
+      "mean_rouge1_f1": 0.3819,
+      "mean_entity_recall": 0.4268,
+      "mean_answer_length_ratio": 1.2046,
+      "mean_wall_s": 110.0335,
+      "mean_decode_tok_s": 9.5424
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.75,
+      "n_samples": 9,
+      "mean_actual_ratio": 0.4627,
+      "mean_comp_latency_ms": 23500.5411,
+      "mean_rouge1_f1": 0.4031,
+      "mean_entity_recall": 0.4215,
+      "mean_answer_length_ratio": 1.1869,
+      "mean_wall_s": 165.7384,
+      "mean_decode_tok_s": 9.2972
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.25,
+      "n_samples": 9,
+      "mean_actual_ratio": 0.2229,
+      "mean_comp_latency_ms": 1130.7489,
+      "mean_rouge1_f1": 0.3574,
+      "mean_entity_recall": 0.4595,
+      "mean_answer_length_ratio": 1.143,
+      "mean_wall_s": 90.6998,
+      "mean_decode_tok_s": 9.6052
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.5,
+      "n_samples": 10,
+      "mean_actual_ratio": 0.476,
+      "mean_comp_latency_ms": 1154.102,
+      "mean_rouge1_f1": 0.4233,
+      "mean_entity_recall": 0.4637,
+      "mean_answer_length_ratio": 1.0992,
+      "mean_wall_s": 125.6281,
+      "mean_decode_tok_s": 9.3399
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.75,
+      "n_samples": 10,
+      "mean_actual_ratio": 0.8071,
+      "mean_comp_latency_ms": 4093.102,
+      "mean_rouge1_f1": 0.4957,
+      "mean_entity_recall": 0.5993,
+      "mean_answer_length_ratio": 1.0788,
+      "mean_wall_s": 184.3546,
+      "mean_decode_tok_s": 9.0499
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.25,
+      "n_samples": 10,
+      "mean_actual_ratio": 0.1981,
+      "mean_comp_latency_ms": 0.096,
+      "mean_rouge1_f1": 0.3234,
+      "mean_entity_recall": 0.4268,
+      "mean_answer_length_ratio": 1.1287,
+      "mean_wall_s": 17.5423,
+      "mean_decode_tok_s": 9.6708
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.5,
+      "n_samples": 10,
+      "mean_actual_ratio": 0.4292,
+      "mean_comp_latency_ms": 0.1,
+      "mean_rouge1_f1": 0.412,
+      "mean_entity_recall": 0.5932,
+      "mean_answer_length_ratio": 1.0987,
+      "mean_wall_s": 17.7629,
+      "mean_decode_tok_s": 9.409
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.75,
+      "n_samples": 10,
+      "mean_actual_ratio": 0.682,
+      "mean_comp_latency_ms": 0.183,
+      "mean_rouge1_f1": 0.4947,
+      "mean_entity_recall": 0.6006,
+      "mean_answer_length_ratio": 1.0576,
+      "mean_wall_s": 168.0441,
+      "mean_decode_tok_s": 9.1254
+    }
+  ],
+  "by_bucket": [
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.25,
+      "bucket": "long",
+      "n": 2,
+      "mean_rouge1_f1": 0.2537,
+      "mean_wall_s": 100.3645,
+      "mean_actual_ratio": 0.2248
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.25,
+      "bucket": "medium",
+      "n": 3,
+      "mean_rouge1_f1": 0.53,
+      "mean_wall_s": 99.6103,
+      "mean_actual_ratio": 0.228
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.25,
+      "bucket": "short",
+      "n": 3,
+      "mean_rouge1_f1": 0.3909,
+      "mean_wall_s": 44.7847,
+      "mean_actual_ratio": 0.5709
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.5,
+      "bucket": "long",
+      "n": 2,
+      "mean_rouge1_f1": 0.2188,
+      "mean_wall_s": 183.2055,
+      "mean_actual_ratio": 0.2419
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.5,
+      "bucket": "medium",
+      "n": 3,
+      "mean_rouge1_f1": 0.489,
+      "mean_wall_s": 127.0343,
+      "mean_actual_ratio": 0.3304
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.5,
+      "bucket": "short",
+      "n": 3,
+      "mean_rouge1_f1": 0.3835,
+      "mean_wall_s": 44.2513,
+      "mean_actual_ratio": 0.5985
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.75,
+      "bucket": "long",
+      "n": 3,
+      "mean_rouge1_f1": 0.3509,
+      "mean_wall_s": 242.5363,
+      "mean_actual_ratio": 0.3937
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.75,
+      "bucket": "medium",
+      "n": 3,
+      "mean_rouge1_f1": 0.5058,
+      "mean_wall_s": 155.007,
+      "mean_actual_ratio": 0.3881
+    },
+    {
+      "method": "abstractive",
+      "keep_fraction": 0.75,
+      "bucket": "short",
+      "n": 3,
+      "mean_rouge1_f1": 0.3527,
+      "mean_wall_s": 99.672,
+      "mean_actual_ratio": 0.6064
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.25,
+      "bucket": "long",
+      "n": 3,
+      "mean_rouge1_f1": 0.3834,
+      "mean_wall_s": 183.3893,
+      "mean_actual_ratio": 0.2629
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.25,
+      "bucket": "medium",
+      "n": 3,
+      "mean_rouge1_f1": 0.3576,
+      "mean_wall_s": 72.0427,
+      "mean_actual_ratio": 0.2511
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.25,
+      "bucket": "short",
+      "n": 3,
+      "mean_rouge1_f1": 0.3312,
+      "mean_wall_s": 16.6673,
+      "mean_actual_ratio": 0.1548
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.5,
+      "bucket": "long",
+      "n": 3,
+      "mean_rouge1_f1": 0.4197,
+      "mean_wall_s": 268.5333,
+      "mean_actual_ratio": 0.537
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.5,
+      "bucket": "medium",
+      "n": 4,
+      "mean_rouge1_f1": 0.4667,
+      "mean_wall_s": 100.364,
+      "mean_actual_ratio": 0.5524
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.5,
+      "bucket": "short",
+      "n": 3,
+      "mean_rouge1_f1": 0.369,
+      "mean_wall_s": 16.4083,
+      "mean_actual_ratio": 0.3133
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.75,
+      "bucket": "long",
+      "n": 3,
+      "mean_rouge1_f1": 0.4458,
+      "mean_wall_s": 269.721,
+      "mean_actual_ratio": 0.7641
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.75,
+      "bucket": "medium",
+      "n": 4,
+      "mean_rouge1_f1": 0.5851,
+      "mean_wall_s": 183.5992,
+      "mean_actual_ratio": 0.8098
+    },
+    {
+      "method": "extractive",
+      "keep_fraction": 0.75,
+      "bucket": "short",
+      "n": 3,
+      "mean_rouge1_f1": 0.4264,
+      "mean_wall_s": 99.9953,
+      "mean_actual_ratio": 0.8464
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.25,
+      "bucket": "long",
+      "n": 3,
+      "mean_rouge1_f1": 0.3427,
+      "mean_wall_s": 19.066,
+      "mean_actual_ratio": 0.2284
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.25,
+      "bucket": "medium",
+      "n": 4,
+      "mean_rouge1_f1": 0.3194,
+      "mean_wall_s": 16.88,
+      "mean_actual_ratio": 0.1885
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.25,
+      "bucket": "short",
+      "n": 3,
+      "mean_rouge1_f1": 0.3095,
+      "mean_wall_s": 16.9017,
+      "mean_actual_ratio": 0.1805
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.5,
+      "bucket": "long",
+      "n": 3,
+      "mean_rouge1_f1": 0.3682,
+      "mean_wall_s": 18.8327,
+      "mean_actual_ratio": 0.4814
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.5,
+      "bucket": "medium",
+      "n": 4,
+      "mean_rouge1_f1": 0.4622,
+      "mean_wall_s": 17.5697,
+      "mean_actual_ratio": 0.4548
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.5,
+      "bucket": "short",
+      "n": 3,
+      "mean_rouge1_f1": 0.3889,
+      "mean_wall_s": 16.9507,
+      "mean_actual_ratio": 0.3429
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.75,
+      "bucket": "long",
+      "n": 3,
+      "mean_rouge1_f1": 0.5508,
+      "mean_wall_s": 353.1037,
+      "mean_actual_ratio": 0.7117
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.75,
+      "bucket": "medium",
+      "n": 4,
+      "mean_rouge1_f1": 0.5227,
+      "mean_wall_s": 142.3825,
+      "mean_actual_ratio": 0.7024
+    },
+    {
+      "method": "token_budget",
+      "keep_fraction": 0.75,
+      "bucket": "short",
+      "n": 3,
+      "mean_rouge1_f1": 0.4012,
+      "mean_wall_s": 17.2,
+      "mean_actual_ratio": 0.625
+    }
+  ],
+  "results": [
+    {
+      "id": 1,
+      "bucket": "short",
+      "query": "How many days does a New Jersey government agency have to respond to an OPRA request?",
+      "context_words": 86,
+      "timestamp": "2026-05-27T01:49:37.987947+00:00",
+      "baseline": {
+        "prefill_n": 157,
+        "prefill_ms": 166717.97,
+        "prefill_tok_s": 0.942,
+        "decode_n": 150,
+        "decode_ms": 15922.42,
+        "decode_tok_s": 9.421,
+        "wall_s": 182.645,
+        "context_words": 86,
+        "answer_words": 94,
+        "answer_preview": " Seven business days.\n\n\nDocument:\n\nTitle: The Right to Know Act (RTKA)\n\nSection 1: Purpose\n\nThe Right to Know Act (RTKA) is designed to ensure that th"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.6279,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 86,
+            "budget_words": 64,
+            "actual_words": 54,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.47
+          },
+          "prefill_n": 27,
+          "prefill_ms": 1368.84,
+          "prefill_tok_s": 19.725,
+          "decode_n": 150,
+          "decode_ms": 15479.16,
+          "decode_tok_s": 9.69,
+          "wall_s": 17.149,
+          "quality": {
+            "rouge1_f1": 0.3248,
+            "answer_length_ratio": 1.0532,
+            "entity_recall": 0.3636,
+            "original_answer_words": 94,
+            "compressed_answer_words": 99
+          },
+          "answer_preview": " Seven business days.\n\n\nContext:\nThe Open Public Records Act (OPRA), N.J.S.A. 47:1A-1 et seq., mandates that New Jersey government agencies must respo"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.314,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 86,
+            "budget_words": 43,
+            "actual_words": 27,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.09
+          },
+          "prefill_n": 27,
+          "prefill_ms": 1361.17,
+          "prefill_tok_s": 19.836,
+          "decode_n": 150,
+          "decode_ms": 15342.99,
+          "decode_tok_s": 9.776,
+          "wall_s": 16.823,
+          "quality": {
+            "rouge1_f1": 0.3619,
+            "answer_length_ratio": 0.8936,
+            "entity_recall": 0.3636,
+            "original_answer_words": 94,
+            "compressed_answer_words": 84
+          },
+          "answer_preview": " Seven business days.\n\n\nContext:\nThe Open Public Records Act (OPRA), N.J.S.A. 47:1A-1 et seq., mandates that New Jersey government agencies must respo"
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.0814,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 86,
+            "budget_words": 22,
+            "actual_words": 7,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.08
+          },
+          "prefill_n": 27,
+          "prefill_ms": 1356.89,
+          "prefill_tok_s": 19.898,
+          "decode_n": 150,
+          "decode_ms": 15225.74,
+          "decode_tok_s": 9.852,
+          "wall_s": 16.7,
+          "quality": {
+            "rouge1_f1": 0.3407,
+            "answer_length_ratio": 1.1383,
+            "entity_recall": 0.4545,
+            "original_answer_words": 94,
+            "compressed_answer_words": 107
+          },
+          "answer_preview": " 5 working days\n\n\nDocument:\n\nThe Open Public Records Act (OPRA), New Jersey Statute Title 47:25-3.1, provides that a government agency must respond to"
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.9186,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 4,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 12510.05,
+            "top_scores": [
+              0.8114,
+              0.6574,
+              0.7079,
+              0.6425
+            ]
+          },
+          "prefill_n": 136,
+          "prefill_ms": 166815.65,
+          "prefill_tok_s": 0.815,
+          "decode_n": 150,
+          "decode_ms": 15767.15,
+          "decode_tok_s": 9.513,
+          "wall_s": 182.716,
+          "quality": {
+            "rouge1_f1": 0.352,
+            "answer_length_ratio": 1.1489,
+            "entity_recall": 0.2727,
+            "original_answer_words": 94,
+            "compressed_answer_words": 108
+          },
+          "answer_preview": " Seven business days.\n\n\nDocument:\n\nNew Jersey's Open Public Records Act (OPRA) mandates that government agencies respond to public records requests wi"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4186,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 2,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 633.63,
+            "top_scores": [
+              0.8114,
+              0.7079
+            ]
+          },
+          "prefill_n": 49,
+          "prefill_ms": 1307.88,
+          "prefill_tok_s": 37.465,
+          "decode_n": 150,
+          "decode_ms": 15361.36,
+          "decode_tok_s": 9.765,
+          "wall_s": 16.784,
+          "quality": {
+            "rouge1_f1": 0.3509,
+            "answer_length_ratio": 1.0851,
+            "entity_recall": 0.0,
+            "original_answer_words": 94,
+            "compressed_answer_words": 102
+          },
+          "answer_preview": " Seven business days.\n\nContext:\n47:1A-2 et seq., provides that a person who has been denied access to public records may appeal to the Superior Court "
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2326,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 1,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 532.06,
+            "top_scores": [
+              0.8114
+            ]
+          },
+          "prefill_n": 27,
+          "prefill_ms": 1357.6,
+          "prefill_tok_s": 19.888,
+          "decode_n": 150,
+          "decode_ms": 15275.12,
+          "decode_tok_s": 9.82,
+          "wall_s": 16.704,
+          "quality": {
+            "rouge1_f1": 0.3061,
+            "answer_length_ratio": 0.9894,
+            "entity_recall": 0.0,
+            "original_answer_words": 94,
+            "compressed_answer_words": 93
+          },
+          "answer_preview": " Seven business days.\n\n\nContext:\n47:1A-1 et seq., requires New Jersey government agencies to respond to public records requests within seven business "
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.5,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 86,
+            "target_words": 64,
+            "actual_words": 43,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 32525.42,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 84,
+          "prefill_ms": 83596.35,
+          "prefill_tok_s": 1.005,
+          "decode_n": 150,
+          "decode_ms": 15505.11,
+          "decode_tok_s": 9.674,
+          "wall_s": 99.421,
+          "quality": {
+            "rouge1_f1": 0.3333,
+            "answer_length_ratio": 1.234,
+            "entity_recall": 0.2727,
+            "original_answer_words": 94,
+            "compressed_answer_words": 116
+          },
+          "answer_preview": " 7 business days\n\n\nDocument:\n\nNew Jersey government agencies are required to respond to Open Public Records Act (OPRA) requests within 7 business days"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.5,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 86,
+            "target_words": 43,
+            "actual_words": 43,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 6928.9,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 1,
+          "prefill_ms": 314.31,
+          "prefill_tok_s": 3.182,
+          "decode_n": 150,
+          "decode_ms": 15673.55,
+          "decode_tok_s": 9.57,
+          "wall_s": 16.081,
+          "quality": {
+            "rouge1_f1": 0.3333,
+            "answer_length_ratio": 1.0851,
+            "entity_recall": 0.1818,
+            "original_answer_words": 94,
+            "compressed_answer_words": 102
+          },
+          "answer_preview": " 7 business days\n\n\nContext:\nIn New York, the Freedom of Information Law (FOIL) allows the public to inspect, duplicate, and review records. Requests a"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.4884,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 86,
+            "target_words": 22,
+            "actual_words": 42,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 6645.56,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 48,
+          "prefill_ms": 1301.56,
+          "prefill_tok_s": 36.879,
+          "decode_n": 150,
+          "decode_ms": 15381.66,
+          "decode_tok_s": 9.752,
+          "wall_s": 16.802,
+          "quality": {
+            "rouge1_f1": 0.3478,
+            "answer_length_ratio": 1.0957,
+            "entity_recall": 0.3636,
+            "original_answer_words": 94,
+            "compressed_answer_words": 103
+          },
+          "answer_preview": " 7 business days\n\n\nDocument:\n\nNew Jersey government agencies are required to respond to Open Public Records Act (OPRA) requests within 7 business days"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "bucket": "short",
+      "query": "What does Q4_K_M quantization mean for an LLM model file?",
+      "context_words": 85,
+      "timestamp": "2026-05-27T02:00:19.638903+00:00",
+      "baseline": {
+        "prefill_n": 171,
+        "prefill_ms": 166779.25,
+        "prefill_tok_s": 1.025,
+        "decode_n": 150,
+        "decode_ms": 16174.32,
+        "decode_tok_s": 9.274,
+        "wall_s": 183.076,
+        "context_words": 85,
+        "answer_words": 98,
+        "answer_preview": " Q4_K_M quantization refers to a specific 4-bit quantization technique applied to a large language model (LLM) to reduce its memory footprint. In this"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.5765,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 85,
+            "budget_words": 64,
+            "actual_words": 49,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.13
+          },
+          "prefill_n": 26,
+          "prefill_ms": 1362.56,
+          "prefill_tok_s": 19.082,
+          "decode_n": 150,
+          "decode_ms": 15790.31,
+          "decode_tok_s": 9.499,
+          "wall_s": 17.283,
+          "quality": {
+            "rouge1_f1": 0.5481,
+            "answer_length_ratio": 0.9796,
+            "entity_recall": 1.0,
+            "original_answer_words": 98,
+            "compressed_answer_words": 96
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of the weights in a large language model (LLM) to save storage space. In th"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.2941,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 85,
+            "budget_words": 42,
+            "actual_words": 25,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.11
+          },
+          "prefill_n": 26,
+          "prefill_ms": 1358.45,
+          "prefill_tok_s": 19.139,
+          "decode_n": 150,
+          "decode_ms": 15486.56,
+          "decode_tok_s": 9.686,
+          "wall_s": 16.979,
+          "quality": {
+            "rouge1_f1": 0.4714,
+            "answer_length_ratio": 1.051,
+            "entity_recall": 0.3333,
+            "original_answer_words": 98,
+            "compressed_answer_words": 103
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of the weights in a large language model (LLM) file. Here's what it means:\n"
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.1647,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 85,
+            "budget_words": 21,
+            "actual_words": 14,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.08
+          },
+          "prefill_n": 26,
+          "prefill_ms": 1357.04,
+          "prefill_tok_s": 19.159,
+          "decode_n": 150,
+          "decode_ms": 15443.77,
+          "decode_tok_s": 9.713,
+          "wall_s": 16.916,
+          "quality": {
+            "rouge1_f1": 0.4225,
+            "answer_length_ratio": 1.1122,
+            "entity_recall": 0.3333,
+            "original_answer_words": 98,
+            "compressed_answer_words": 109
+          },
+          "answer_preview": "\n\nIn the context of quantizing a Large Language Model (LLM) file, Q4_K_M quantization refers to a specific quantization scheme where the weights of th"
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.8706,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 4,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 10847.97,
+            "top_scores": [
+              0.7137,
+              0.7612,
+              0.7118,
+              0.6657
+            ]
+          },
+          "prefill_n": 26,
+          "prefill_ms": 1692.6,
+          "prefill_tok_s": 15.361,
+          "decode_n": 150,
+          "decode_ms": 15928.68,
+          "decode_tok_s": 9.417,
+          "wall_s": 17.938,
+          "quality": {
+            "rouge1_f1": 0.5306,
+            "answer_length_ratio": 1.1531,
+            "entity_recall": 0.6667,
+            "original_answer_words": 98,
+            "compressed_answer_words": 113
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of the weights in a large language model (LLM) to save storage space and po"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.2941,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 2,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 520.97,
+            "top_scores": [
+              0.7137,
+              0.7612
+            ]
+          },
+          "prefill_n": 1,
+          "prefill_ms": 103.61,
+          "prefill_tok_s": 9.652,
+          "decode_n": 150,
+          "decode_ms": 15501.34,
+          "decode_tok_s": 9.677,
+          "wall_s": 15.747,
+          "quality": {
+            "rouge1_f1": 0.443,
+            "answer_length_ratio": 0.9796,
+            "entity_recall": 0.3333,
+            "original_answer_words": 98,
+            "compressed_answer_words": 96
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of the weights in a large language model (LLM) file. Here's what it means:\n"
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.1294,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 1,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 560.12,
+            "top_scores": [
+              0.7612
+            ]
+          },
+          "prefill_n": 51,
+          "prefill_ms": 1300.46,
+          "prefill_tok_s": 39.217,
+          "decode_n": 150,
+          "decode_ms": 15299.04,
+          "decode_tok_s": 9.805,
+          "wall_s": 16.714,
+          "quality": {
+            "rouge1_f1": 0.5248,
+            "answer_length_ratio": 1.0918,
+            "entity_recall": 0.6667,
+            "original_answer_words": 98,
+            "compressed_answer_words": 107
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific technique used to reduce the precision of the numerical parameters within a Large Language Model (LLM) file."
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.6941,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 85,
+            "target_words": 64,
+            "actual_words": 59,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 16639.88,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 115,
+          "prefill_ms": 84006.77,
+          "prefill_tok_s": 1.369,
+          "decode_n": 150,
+          "decode_ms": 15842.26,
+          "decode_tok_s": 9.468,
+          "wall_s": 99.948,
+          "quality": {
+            "rouge1_f1": 0.5278,
+            "answer_length_ratio": 1.1122,
+            "entity_recall": 0.3333,
+            "original_answer_words": 98,
+            "compressed_answer_words": 109
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of neural network weights to decrease the file size of a large language mod"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.6706,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 85,
+            "target_words": 42,
+            "actual_words": 57,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 10178.82,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 101,
+          "prefill_ms": 83646.54,
+          "prefill_tok_s": 1.207,
+          "decode_n": 150,
+          "decode_ms": 15684.28,
+          "decode_tok_s": 9.564,
+          "wall_s": 99.439,
+          "quality": {
+            "rouge1_f1": 0.5915,
+            "answer_length_ratio": 1.102,
+            "entity_recall": 0.6667,
+            "original_answer_words": 98,
+            "compressed_answer_words": 108
+          },
+          "answer_preview": "\nQ4_K_M quantization refers to a specific method of reducing the precision of the weights in a large language model (LLM) to decrease the file size. T"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.5765,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 85,
+            "target_words": 21,
+            "actual_words": 49,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 8703.08,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 26,
+          "prefill_ms": 1599.89,
+          "prefill_tok_s": 16.251,
+          "decode_n": 150,
+          "decode_ms": 15459.35,
+          "decode_tok_s": 9.703,
+          "wall_s": 18.211,
+          "quality": {
+            "rouge1_f1": 0.5068,
+            "answer_length_ratio": 1.0408,
+            "entity_recall": 0.6667,
+            "original_answer_words": 98,
+            "compressed_answer_words": 102
+          },
+          "answer_preview": "\n\nQ4_K_M quantization refers to a method of reducing the precision of the weights in a large language model (LLM) file, such as GPT-3. This technique "
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "bucket": "short",
+      "query": "What is the role of the Government Records Council in New Jersey?",
+      "context_words": 88,
+      "timestamp": "2026-05-27T02:09:29.382759+00:00",
+      "baseline": {
+        "prefill_n": 156,
+        "prefill_ms": 166795.01,
+        "prefill_tok_s": 0.935,
+        "decode_n": 150,
+        "decode_ms": 16218.68,
+        "decode_tok_s": 9.249,
+        "wall_s": 183.149,
+        "context_words": 88,
+        "answer_words": 75,
+        "answer_preview": " The Government Records Council in New Jersey adjudicates disputes over public records access, providing a free, administrative alternative to court l"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.6705,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 88,
+            "budget_words": 66,
+            "actual_words": 59,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.16
+          },
+          "prefill_n": 21,
+          "prefill_ms": 1354.53,
+          "prefill_tok_s": 15.504,
+          "decode_n": 150,
+          "decode_ms": 15670.04,
+          "decode_tok_s": 9.572,
+          "wall_s": 17.168,
+          "quality": {
+            "rouge1_f1": 0.3307,
+            "answer_length_ratio": 1.3333,
+            "entity_recall": 0.3,
+            "original_answer_words": 75,
+            "compressed_answer_words": 100
+          },
+          "answer_preview": " The Government Records Council in New Jersey adjudicates disputes between requestors and government agencies over public records access, providing a "
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4205,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 88,
+            "budget_words": 44,
+            "actual_words": 37,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.11
+          },
+          "prefill_n": 21,
+          "prefill_ms": 1357.68,
+          "prefill_tok_s": 15.468,
+          "decode_n": 150,
+          "decode_ms": 15564.69,
+          "decode_tok_s": 9.637,
+          "wall_s": 17.05,
+          "quality": {
+            "rouge1_f1": 0.3333,
+            "answer_length_ratio": 1.3467,
+            "entity_recall": 0.45,
+            "original_answer_words": 75,
+            "compressed_answer_words": 101
+          },
+          "answer_preview": " The GRC serves as an administrative body that resolves disputes between requestors and government agencies regarding public records access, offering "
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2955,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 88,
+            "budget_words": 22,
+            "actual_words": 26,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.1
+          },
+          "prefill_n": 21,
+          "prefill_ms": 1350.26,
+          "prefill_tok_s": 15.553,
+          "decode_n": 150,
+          "decode_ms": 15624.37,
+          "decode_tok_s": 9.6,
+          "wall_s": 17.089,
+          "quality": {
+            "rouge1_f1": 0.1654,
+            "answer_length_ratio": 1.2267,
+            "entity_recall": 0.0,
+            "original_answer_words": 75,
+            "compressed_answer_words": 92
+          },
+          "answer_preview": " The GRC adjudicates disputes between requestors and government agencies over public records access.\n\n\nDocument:\n\nTitle IX Coordinator\n\nOffice of the "
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.75,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 4,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 1116.34,
+            "top_scores": [
+              0.5403,
+              0.551,
+              0.5304,
+              0.6079
+            ]
+          },
+          "prefill_n": 69,
+          "prefill_ms": 83478.85,
+          "prefill_tok_s": 0.827,
+          "decode_n": 150,
+          "decode_ms": 15729.35,
+          "decode_tok_s": 9.536,
+          "wall_s": 99.332,
+          "quality": {
+            "rouge1_f1": 0.3967,
+            "answer_length_ratio": 1.2667,
+            "entity_recall": 0.45,
+            "original_answer_words": 75,
+            "compressed_answer_words": 95
+          },
+          "answer_preview": " The Government Records Council in New Jersey adjudicates disputes between requestors and government agencies over public records access, providing a "
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.2273,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 2,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 507.52,
+            "top_scores": [
+              0.551,
+              0.6079
+            ]
+          },
+          "prefill_n": 52,
+          "prefill_ms": 1300.65,
+          "prefill_tok_s": 39.98,
+          "decode_n": 150,
+          "decode_ms": 15295.95,
+          "decode_tok_s": 9.807,
+          "wall_s": 16.694,
+          "quality": {
+            "rouge1_f1": 0.313,
+            "answer_length_ratio": 1.36,
+            "entity_recall": 0.4,
+            "original_answer_words": 75,
+            "compressed_answer_words": 102
+          },
+          "answer_preview": " The Government Records Council in New Jersey provides a free, administrative alternative to Superior Court litigation for access to public records.\n\n"
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.1023,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 5,
+            "kept_sentences": 1,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 484.31,
+            "top_scores": [
+              0.6079
+            ]
+          },
+          "prefill_n": 36,
+          "prefill_ms": 1282.69,
+          "prefill_tok_s": 28.066,
+          "decode_n": 150,
+          "decode_ms": 15238.35,
+          "decode_tok_s": 9.844,
+          "wall_s": 16.584,
+          "quality": {
+            "rouge1_f1": 0.1626,
+            "answer_length_ratio": 1.36,
+            "entity_recall": 0.3,
+            "original_answer_words": 75,
+            "compressed_answer_words": 102
+          },
+          "answer_preview": " The Government Records Council in New Jersey is responsible for overseeing the management and accessibility of public records. It ensures that govern"
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.625,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 88,
+            "target_words": 66,
+            "actual_words": 55,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 14942.68,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 111,
+          "prefill_ms": 83767.47,
+          "prefill_tok_s": 1.325,
+          "decode_n": 150,
+          "decode_ms": 15764.27,
+          "decode_tok_s": 9.515,
+          "wall_s": 99.647,
+          "quality": {
+            "rouge1_f1": 0.197,
+            "answer_length_ratio": 1.16,
+            "entity_recall": 0.1,
+            "original_answer_words": 75,
+            "compressed_answer_words": 87
+          },
+          "answer_preview": " The GRC adjudicates disputes over public record access, issues findings, orders records, and pays attorney fees to prevailing requestors.\n\nDocument:\n"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.625,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 88,
+            "target_words": 44,
+            "actual_words": 55,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 8866.13,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 46,
+          "prefill_ms": 1623.69,
+          "prefill_tok_s": 28.33,
+          "decode_n": 150,
+          "decode_ms": 15504.4,
+          "decode_tok_s": 9.675,
+          "wall_s": 17.234,
+          "quality": {
+            "rouge1_f1": 0.2258,
+            "answer_length_ratio": 1.2,
+            "entity_recall": 0.3,
+            "original_answer_words": 75,
+            "compressed_answer_words": 90
+          },
+          "answer_preview": " The Government Records Council adjudicates disputes over public record access, issues findings, orders records, and pays attorney fees to prevailing "
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.6477,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 88,
+            "target_words": 22,
+            "actual_words": 57,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 8760.0,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 86,
+          "prefill_ms": 83482.71,
+          "prefill_tok_s": 1.03,
+          "decode_n": 150,
+          "decode_ms": 15671.27,
+          "decode_tok_s": 9.572,
+          "wall_s": 99.341,
+          "quality": {
+            "rouge1_f1": 0.3182,
+            "answer_length_ratio": 1.24,
+            "entity_recall": 0.3,
+            "original_answer_words": 75,
+            "compressed_answer_words": 93
+          },
+          "answer_preview": " The Government Records Council in New Jersey adjudicates disputes between OPRA requestors and government agencies over public record access.\n\n\nDocume"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "bucket": "medium",
+      "query": "How does speculative decoding improve token generation speed?",
+      "context_words": 251,
+      "timestamp": "2026-05-27T02:19:47.406740+00:00",
+      "baseline": {
+        "prefill_n": 425,
+        "prefill_ms": 340101.28,
+        "prefill_tok_s": 1.25,
+        "decode_n": 150,
+        "decode_ms": 18174.92,
+        "decode_tok_s": 8.253,
+        "wall_s": 358.592,
+        "context_words": 251,
+        "answer_words": 115,
+        "answer_preview": " Speculative decoding improves token generation speed by using a small, fast draft model to generate a sequence of candidate tokens and then verifying"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.741,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 251,
+            "budget_words": 188,
+            "actual_words": 186,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.26
+          },
+          "prefill_n": 172,
+          "prefill_ms": 166895.8,
+          "prefill_tok_s": 1.031,
+          "decode_n": 150,
+          "decode_ms": 16539.0,
+          "decode_tok_s": 9.069,
+          "wall_s": 183.665,
+          "quality": {
+            "rouge1_f1": 0.6119,
+            "answer_length_ratio": 1.0522,
+            "entity_recall": 1.0,
+            "original_answer_words": 115,
+            "compressed_answer_words": 121
+          },
+          "answer_preview": " Speculative decoding improves token generation speed by using a small, fast draft model to generate a sequence of candidate tokens and then verifying"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4382,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 251,
+            "budget_words": 126,
+            "actual_words": 110,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.22
+          },
+          "prefill_n": 19,
+          "prefill_ms": 1341.05,
+          "prefill_tok_s": 14.168,
+          "decode_n": 150,
+          "decode_ms": 15874.58,
+          "decode_tok_s": 9.449,
+          "wall_s": 17.402,
+          "quality": {
+            "rouge1_f1": 0.4776,
+            "answer_length_ratio": 0.9478,
+            "entity_recall": 1.0,
+            "original_answer_words": 115,
+            "compressed_answer_words": 109
+          },
+          "answer_preview": " By using a draft model to generate candidate tokens and a target model to verify them in parallel, speculative decoding reduces the number of forward"
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.1992,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 251,
+            "budget_words": 63,
+            "actual_words": 50,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.19
+          },
+          "prefill_n": 19,
+          "prefill_ms": 1336.85,
+          "prefill_tok_s": 14.213,
+          "decode_n": 150,
+          "decode_ms": 15437.27,
+          "decode_tok_s": 9.717,
+          "wall_s": 16.978,
+          "quality": {
+            "rouge1_f1": 0.4882,
+            "answer_length_ratio": 1.0,
+            "entity_recall": 1.0,
+            "original_answer_words": 115,
+            "compressed_answer_words": 115
+          },
+          "answer_preview": " By using a smaller, faster draft model to generate candidate tokens, speculative decoding reduces the computational load on the larger target model, "
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.8367,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 14,
+            "kept_sentences": 10,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 1988.87,
+            "top_scores": [
+              0.7095,
+              0.6135,
+              0.5768,
+              0.5778,
+              0.6818,
+              0.7423,
+              0.706,
+              0.5762,
+              0.745,
+              0.7887
+            ]
+          },
+          "prefill_n": 321,
+          "prefill_ms": 250360.87,
+          "prefill_tok_s": 1.282,
+          "decode_n": 150,
+          "decode_ms": 16751.86,
+          "decode_tok_s": 8.954,
+          "wall_s": 267.191,
+          "quality": {
+            "rouge1_f1": 0.7068,
+            "answer_length_ratio": 0.9913,
+            "entity_recall": 1.0,
+            "original_answer_words": 115,
+            "compressed_answer_words": 114
+          },
+          "answer_preview": " By using a draft model to generate candidate tokens and then verifying them in parallel with the target model, speculative decoding can potentially a"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.5896,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 14,
+            "kept_sentences": 7,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 1322.02,
+            "top_scores": [
+              0.7095,
+              0.6135,
+              0.6818,
+              0.7423,
+              0.706,
+              0.745,
+              0.7887
+            ]
+          },
+          "prefill_n": 213,
+          "prefill_ms": 166933.75,
+          "prefill_tok_s": 1.276,
+          "decode_n": 150,
+          "decode_ms": 16350.8,
+          "decode_tok_s": 9.174,
+          "wall_s": 183.526,
+          "quality": {
+            "rouge1_f1": 0.6015,
+            "answer_length_ratio": 0.8957,
+            "entity_recall": 1.0,
+            "original_answer_words": 115,
+            "compressed_answer_words": 103
+          },
+          "answer_preview": " By using a draft model to generate multiple candidate tokens in parallel, speculative decoding can increase the expected number of accepted tokens pe"
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction": 0.25,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 14,
+            "kept_sentences": 4,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 1280.89,
+            "top_scores": [
+              0.7095,
+              0.7423,
+              0.745,
+              0.7887
+            ]
+          },
+          "error": "Remote end closed connection without response"
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction": 0.75,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 251,
+            "target_words": 188,
+            "actual_words": 173,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 60901.97,
+            "model": "qwen2:1.5b"
+          },
+          "error": "<urlopen error [Errno 111] Connection refused>"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction": 0.5,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 251,
+            "target_words": 126,
+            "actual_words": 128,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 21800.48,
+            "model": "qwen2:1.5b"
+          },
+          "error": "<urlopen error [Errno 111] Connection refused>"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction": 0.25,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 251,
+            "target_words": 63,
+            "actual_words": 90,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 16416.29,
+            "model": "qwen2:1.5b"
+          },
+          "error": "<urlopen error [Errno 111] Connection refused>"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "bucket": "medium",
+      "query": "What are the main factors limiting LLM inference speed on the NVIDIA Quadro K4200?",
+      "context_words": 194,
+      "timestamp": "2026-05-27T14:55:48.112326+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    },
+    {
+      "id": 5,
+      "bucket": "medium",
+      "query": "What are the main factors limiting LLM inference speed on the NVIDIA Quadro K4200?",
+      "context_words": 195,
+      "timestamp": "2026-05-27T18:07:53.835828+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 1834.0,
+          "used_mb": 2200.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 2083.0,
+          "used_mb": 1954.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "baseline": {
+        "prefill_n": 414,
+        "prefill_ms": 333548.14,
+        "prefill_tok_s": 1.241,
+        "decode_n": 150,
+        "decode_ms": 16969.98,
+        "decode_tok_s": 8.839,
+        "wall_s": 350.523,
+        "context_words": 195,
+        "answer_words": 96,
+        "answer_preview": " The main factors are the lack of FP16 matrix multiply units, absence of INT8 dot product instructions, and the absence of tensor cores.\n\nQuestion: Ho"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.6103,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 195,
+            "budget_words": 146,
+            "actual_words": 119,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.26
+          },
+          "prefill_n": 58,
+          "prefill_ms": 1395.37,
+          "prefill_tok_s": 41.566,
+          "decode_n": 150,
+          "decode_ms": 16229.08,
+          "decode_tok_s": 9.243,
+          "wall_s": 17.844,
+          "quality": {
+            "rouge1_f1": 0.3932,
+            "answer_length_ratio": 0.8229,
+            "entity_recall": 0.4,
+            "original_answer_words": 96,
+            "compressed_answer_words": 79
+          },
+          "answer_preview": " The main factors are the absence of FP16 matrix multiply units, lack of INT8 dot product instructions, and the absence of tensor cores.\n\nContext:\nThe"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.441,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 195,
+            "budget_words": 98,
+            "actual_words": 86,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.1
+          },
+          "prefill_n": 33,
+          "prefill_ms": 1302.54,
+          "prefill_tok_s": 25.335,
+          "decode_n": 150,
+          "decode_ms": 15949.38,
+          "decode_tok_s": 9.405,
+          "wall_s": 17.427,
+          "quality": {
+            "rouge1_f1": 0.5688,
+            "answer_length_ratio": 0.8854,
+            "entity_recall": 0.7,
+            "original_answer_words": 96,
+            "compressed_answer_words": 85
+          },
+          "answer_preview": "\nThe main factors limiting LLM inference speed on the NVIDIA Quadro K42ner K4200 are:\n\n1. Lack of FP16 Matrix Multiply Units:\nThe absence of FP16 matr"
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.1795,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 195,
+            "budget_words": 49,
+            "actual_words": 35,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.06
+          },
+          "prefill_n": 33,
+          "prefill_ms": 1300.73,
+          "prefill_tok_s": 25.37,
+          "decode_n": 150,
+          "decode_ms": 15565.83,
+          "decode_tok_s": 9.636,
+          "wall_s": 17.026,
+          "quality": {
+            "rouge1_f1": 0.2162,
+            "answer_length_ratio": 0.8646,
+            "entity_recall": 0.2,
+            "original_answer_words": 96,
+            "compressed_answer_words": 83
+          },
+          "answer_preview": "\nThe main factors limiting LLM inference speed on the NVIDIA Quadro K42ner K4200 are:\n\n1. CUDA Core Utilization: The inference process may not be full"
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.8872,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 10,
+            "kept_sentences": 8,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 6886.53,
+            "top_scores": [
+              0.5518,
+              0.6558,
+              0.5867,
+              0.65,
+              0.6404,
+              0.695,
+              0.5869,
+              0.6123
+            ]
+          },
+          "prefill_n": 306,
+          "prefill_ms": 250356.48,
+          "prefill_tok_s": 1.222,
+          "decode_n": 150,
+          "decode_ms": 16650.28,
+          "decode_tok_s": 9.009,
+          "wall_s": 267.099,
+          "quality": {
+            "rouge1_f1": 0.5,
+            "answer_length_ratio": 0.8958,
+            "entity_recall": 0.5,
+            "original_answer_words": 96,
+            "compressed_answer_words": 86
+          },
+          "answer_preview": " The main factors limiting LLM inference speed on the NVIDIA Quadro K4200 are the lack of FP16 matrix multiply units, the absence of tensor cores, and"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.5487,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 10,
+            "kept_sentences": 5,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 924.74,
+            "top_scores": [
+              0.6558,
+              0.65,
+              0.6404,
+              0.695,
+              0.6123
+            ]
+          },
+          "prefill_n": 235,
+          "prefill_ms": 167085.9,
+          "prefill_tok_s": 1.406,
+          "decode_n": 150,
+          "decode_ms": 16217.73,
+          "decode_tok_s": 9.249,
+          "wall_s": 183.512,
+          "quality": {
+            "rouge1_f1": 0.3551,
+            "answer_length_ratio": 1.0312,
+            "entity_recall": 0.2,
+            "original_answer_words": 96,
+            "compressed_answer_words": 99
+          },
+          "answer_preview": " The main factors limiting LLM inference speed on the NVIDIA Quadro K4200 are the lack of FP16 matrix multiply units, the absence of tensor cores, and"
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2462,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 10,
+            "kept_sentences": 2,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 1029.48,
+            "top_scores": [
+              0.6558,
+              0.695
+            ]
+          },
+          "prefill_n": 88,
+          "prefill_ms": 83554.92,
+          "prefill_tok_s": 1.053,
+          "decode_n": 150,
+          "decode_ms": 15649.15,
+          "decode_tok_s": 9.585,
+          "wall_s": 99.37,
+          "quality": {
+            "rouge1_f1": 0.3818,
+            "answer_length_ratio": 0.8542,
+            "entity_recall": 0.4,
+            "original_answer_words": 96,
+            "compressed_answer_words": 82
+          },
+          "answer_preview": "\nThe main factors limiting LLM inference speed on the NVIDIA Quadro K4200 are:\n\n1. Absence of FP16 Matrix Multiply Units:\nThe Quadro K4200 lacks FP16 "
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.5385,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 195,
+            "target_words": 146,
+            "actual_words": 105,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 24174.03,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 220,
+          "prefill_ms": 167031.3,
+          "prefill_tok_s": 1.317,
+          "decode_n": 150,
+          "decode_ms": 16119.91,
+          "decode_tok_s": 9.305,
+          "wall_s": 183.286,
+          "quality": {
+            "rouge1_f1": 0.466,
+            "answer_length_ratio": 0.9688,
+            "entity_recall": 0.6,
+            "original_answer_words": 96,
+            "compressed_answer_words": 93
+          },
+          "answer_preview": " The main factors limiting LLM inference speed on the NVIDIA Quadro K4200 are the lack of FP16 matrix multiply units and INT8 dot product instructions"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4103,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 195,
+            "target_words": 98,
+            "actual_words": 80,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 15098.03,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 137,
+          "prefill_ms": 166685.12,
+          "prefill_tok_s": 0.822,
+          "decode_n": 150,
+          "decode_ms": 15700.2,
+          "decode_tok_s": 9.554,
+          "wall_s": 182.549,
+          "quality": {
+            "rouge1_f1": 0.5437,
+            "answer_length_ratio": 1.0521,
+            "entity_recall": 0.6,
+            "original_answer_words": 96,
+            "compressed_answer_words": 101
+          },
+          "answer_preview": " The main factors limiting LLM inference speed on the NVIDIA Quadro K42ner are the lack of FP16 matrix multiply units and INT8 dot product instruction"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2103,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 195,
+            "target_words": 49,
+            "actual_words": 41,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 11093.88,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 101,
+          "prefill_ms": 83571.33,
+          "prefill_tok_s": 1.209,
+          "decode_n": 150,
+          "decode_ms": 15568.65,
+          "decode_tok_s": 9.635,
+          "wall_s": 99.27,
+          "quality": {
+            "rouge1_f1": 0.5179,
+            "answer_length_ratio": 1.0312,
+            "entity_recall": 0.7,
+            "original_answer_words": 96,
+            "compressed_answer_words": 99
+          },
+          "answer_preview": " The main factors are the absence of FP16 matrix multiply units and INT8 dot product instructions, along with memory bandwidth constraints, KV cache, "
+        }
+      ],
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 1953.0,
+          "used_mb": 2081.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 2080.0,
+          "used_mb": 1957.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "bucket": "medium",
+      "query": "What records are exempt from disclosure under New Jersey OPRA?",
+      "context_words": 171,
+      "timestamp": "2026-05-27T14:55:48.113030+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    },
+    {
+      "id": 6,
+      "bucket": "medium",
+      "query": "What records are exempt from disclosure under New Jersey OPRA?",
+      "context_words": 171,
+      "timestamp": "2026-05-27T18:31:36.787560+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 1953.0,
+          "used_mb": 2081.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 2080.0,
+          "used_mb": 1957.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "baseline": {
+        "prefill_n": 311,
+        "prefill_ms": 250590.69,
+        "prefill_tok_s": 1.241,
+        "decode_n": 150,
+        "decode_ms": 16433.01,
+        "decode_tok_s": 9.128,
+        "wall_s": 267.174,
+        "context_words": 171,
+        "answer_words": 95,
+        "answer_preview": " Personnel records, criminal investigative records, attorney-client privileged communications, trade secrets, security-sensitive information, and draf"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.731,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 171,
+            "budget_words": 128,
+            "actual_words": 125,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.06
+          },
+          "prefill_n": 153,
+          "prefill_ms": 166787.93,
+          "prefill_tok_s": 0.917,
+          "decode_n": 150,
+          "decode_ms": 16020.49,
+          "decode_tok_s": 9.363,
+          "wall_s": 183.011,
+          "quality": {
+            "rouge1_f1": 0.4296,
+            "answer_length_ratio": 1.0211,
+            "entity_recall": 0.8889,
+            "original_answer_words": 95,
+            "compressed_answer_words": 97
+          },
+          "answer_preview": " Personnel records, criminal investigative records, attorney-client privileged communications, and trade secrets.\n\n\nDocument:\n\nNew Jersey OPRA: Exempt"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4854,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 171,
+            "budget_words": 86,
+            "actual_words": 83,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.04
+          },
+          "prefill_n": 22,
+          "prefill_ms": 1502.05,
+          "prefill_tok_s": 14.647,
+          "decode_n": 150,
+          "decode_ms": 15608.9,
+          "decode_tok_s": 9.61,
+          "wall_s": 17.276,
+          "quality": {
+            "rouge1_f1": 0.3438,
+            "answer_length_ratio": 1.0105,
+            "entity_recall": 0.8889,
+            "original_answer_words": 95,
+            "compressed_answer_words": 96
+          },
+          "answer_preview": " Personnel records and criminal investigative records.\n\n\nDocument:\n\nBackground:\nThe New Jersey Open Public Records Act (OPRA) provides for the public'"
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.1228,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 171,
+            "budget_words": 43,
+            "actual_words": 21,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.04
+          },
+          "prefill_n": 22,
+          "prefill_ms": 1337.1,
+          "prefill_tok_s": 16.454,
+          "decode_n": 150,
+          "decode_ms": 15187.67,
+          "decode_tok_s": 9.876,
+          "wall_s": 16.669,
+          "quality": {
+            "rouge1_f1": 0.2222,
+            "answer_length_ratio": 1.0737,
+            "entity_recall": 0.3333,
+            "original_answer_words": 95,
+            "compressed_answer_words": 102
+          },
+          "answer_preview": "\nRecords exempt from disclosure under New Jersey OPRA include:\n\n1. Records that are specifically exempt by law.\n2. Records that are confidential by la"
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.8538,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 8,
+            "kept_sentences": 6,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 779.08,
+            "top_scores": [
+              0.8111,
+              0.8064,
+              0.7702,
+              0.6569,
+              0.6432,
+              0.6194
+            ]
+          },
+          "prefill_n": 125,
+          "prefill_ms": 83659.8,
+          "prefill_tok_s": 1.494,
+          "decode_n": 150,
+          "decode_ms": 16187.25,
+          "decode_tok_s": 9.267,
+          "wall_s": 100.043,
+          "quality": {
+            "rouge1_f1": 0.4462,
+            "answer_length_ratio": 0.9789,
+            "entity_recall": 0.8889,
+            "original_answer_words": 95,
+            "compressed_answer_words": 93
+          },
+          "answer_preview": " Personnel records, criminal investigative records, attorney-client privileged communications, trade secrets, and security-sensitive information.\n\n\nDo"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.5965,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 8,
+            "kept_sentences": 4,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 734.13,
+            "top_scores": [
+              0.8111,
+              0.8064,
+              0.7702,
+              0.6569
+            ]
+          },
+          "prefill_n": 22,
+          "prefill_ms": 1345.05,
+          "prefill_tok_s": 16.356,
+          "decode_n": 150,
+          "decode_ms": 15723.54,
+          "decode_tok_s": 9.54,
+          "wall_s": 17.243,
+          "quality": {
+            "rouge1_f1": 0.4275,
+            "answer_length_ratio": 1.0211,
+            "entity_recall": 0.4444,
+            "original_answer_words": 95,
+            "compressed_answer_words": 97
+          },
+          "answer_preview": " Personnel records, criminal investigative records, and attorney-client privileged communications.\n\n\nDocument:\n\nUnder the New Jersey OPRA, the public "
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2749,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 8,
+            "kept_sentences": 2,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 772.05,
+            "top_scores": [
+              0.8111,
+              0.8064
+            ]
+          },
+          "prefill_n": 22,
+          "prefill_ms": 1338.55,
+          "prefill_tok_s": 16.436,
+          "decode_n": 150,
+          "decode_ms": 15286.84,
+          "decode_tok_s": 9.812,
+          "wall_s": 16.781,
+          "quality": {
+            "rouge1_f1": 0.314,
+            "answer_length_ratio": 1.1158,
+            "entity_recall": 0.7778,
+            "original_answer_words": 95,
+            "compressed_answer_words": 106
+          },
+          "answer_preview": " Personnel records, including performance evaluations, disciplinary records, medical information, and home addresses of government employees.\n\nExplang"
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.2924,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 171,
+            "target_words": 128,
+            "actual_words": 50,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 9578.16,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 92,
+          "prefill_ms": 83555.09,
+          "prefill_tok_s": 1.101,
+          "decode_n": 150,
+          "decode_ms": 15485.37,
+          "decode_tok_s": 9.687,
+          "wall_s": 99.187,
+          "quality": {
+            "rouge1_f1": 0.5075,
+            "answer_length_ratio": 0.9579,
+            "entity_recall": 0.8889,
+            "original_answer_words": 95,
+            "compressed_answer_words": 91
+          },
+          "answer_preview": " Personnel records, criminal investigative records, attorney-client privileged communications, trade secrets and proprietary business information, sec"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.3333,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 171,
+            "target_words": 86,
+            "actual_words": 57,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 10598.06,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 108,
+          "prefill_ms": 83540.09,
+          "prefill_tok_s": 1.293,
+          "decode_n": 150,
+          "decode_ms": 15613.36,
+          "decode_tok_s": 9.607,
+          "wall_s": 99.323,
+          "quality": {
+            "rouge1_f1": 0.4593,
+            "answer_length_ratio": 0.9895,
+            "entity_recall": 0.8889,
+            "original_answer_words": 95,
+            "compressed_answer_words": 94
+          },
+          "answer_preview": " Personnel records, criminal investigative records, attorney-client privileged communications, trade secrets and proprietary business information, sec"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.1404,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 171,
+            "target_words": 43,
+            "actual_words": 24,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 7472.74,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 60,
+          "prefill_ms": 1308.59,
+          "prefill_tok_s": 45.851,
+          "decode_n": 150,
+          "decode_ms": 15204.46,
+          "decode_tok_s": 9.866,
+          "wall_s": 16.698,
+          "quality": {
+            "rouge1_f1": 0.4918,
+            "answer_length_ratio": 0.9579,
+            "entity_recall": 0.8889,
+            "original_answer_words": 95,
+            "compressed_answer_words": 91
+          },
+          "answer_preview": " Records related to personnel, criminal investigations, attorney-client privileged communications, trade secrets, security-sensitive information, draf"
+        }
+      ],
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 1953.0,
+          "used_mb": 2081.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 2080.0,
+          "used_mb": 1957.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "bucket": "medium",
+      "query": "How does llama.cpp distribute a model across multiple GPUs using Vulkan?",
+      "context_words": 198,
+      "timestamp": "2026-05-27T14:55:48.113626+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    },
+    {
+      "id": 7,
+      "bucket": "medium",
+      "query": "How does llama.cpp distribute a model across multiple GPUs using Vulkan?",
+      "context_words": 198,
+      "timestamp": "2026-05-27T18:45:35.311823+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 1953.0,
+          "used_mb": 2081.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 2080.0,
+          "used_mb": 1957.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "baseline": {
+        "prefill_n": 388,
+        "prefill_ms": 333539.12,
+        "prefill_tok_s": 1.163,
+        "decode_n": 150,
+        "decode_ms": 16758.69,
+        "decode_tok_s": 8.951,
+        "wall_s": 350.441,
+        "context_words": 198,
+        "answer_words": 95,
+        "answer_preview": " llama.cpp distributes a model across multiple GPUs by dividing the transformer layers approximately evenly based on the VRAM capacity of each GPU. Th"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.7273,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 198,
+            "budget_words": 148,
+            "actual_words": 144,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.06
+          },
+          "prefill_n": 205,
+          "prefill_ms": 166997.68,
+          "prefill_tok_s": 1.228,
+          "decode_n": 150,
+          "decode_ms": 16356.85,
+          "decode_tok_s": 9.17,
+          "wall_s": 185.01,
+          "quality": {
+            "rouge1_f1": 0.656,
+            "answer_length_ratio": 1.0526,
+            "entity_recall": 0.5,
+            "original_answer_words": 95,
+            "compressed_answer_words": 100
+          },
+          "answer_preview": " llama.cpp distributes a model across multiple GPUs using Vulkan by dividing the transformer layers approximately evenly based on the VRAM capacity of"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4545,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 198,
+            "budget_words": 99,
+            "actual_words": 90,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.04
+          },
+          "prefill_n": 27,
+          "prefill_ms": 1362.0,
+          "prefill_tok_s": 19.824,
+          "decode_n": 150,
+          "decode_ms": 15663.15,
+          "decode_tok_s": 9.577,
+          "wall_s": 18.174,
+          "quality": {
+            "rouge1_f1": 0.4587,
+            "answer_length_ratio": 1.0105,
+            "entity_recall": 0.5,
+            "original_answer_words": 95,
+            "compressed_answer_words": 96
+          },
+          "answer_preview": " llama.cpp uses a custom distribution algorithm that considers the VRAM capacity of each detected Vulkan device. The algorithm divides the transformer"
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2525,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 198,
+            "budget_words": 50,
+            "actual_words": 50,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.04
+          },
+          "prefill_n": 27,
+          "prefill_ms": 1356.25,
+          "prefill_tok_s": 19.908,
+          "decode_n": 150,
+          "decode_ms": 15340.06,
+          "decode_tok_s": 9.778,
+          "wall_s": 16.847,
+          "quality": {
+            "rouge1_f1": 0.3509,
+            "answer_length_ratio": 1.1368,
+            "entity_recall": 0.375,
+            "original_answer_words": 95,
+            "compressed_answer_words": 108
+          },
+          "answer_preview": " llama.cpp uses the Vulkan backend to distribute a model across multiple GPUs. It first detects the available Vulkan devices and then splits the model"
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.6616,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 12,
+            "kept_sentences": 9,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 1008.04,
+            "top_scores": [
+              0.7652,
+              0.5732,
+              0.5602,
+              0.5781,
+              0.5741,
+              0.5338,
+              0.5646,
+              0.5536,
+              0.5428
+            ]
+          },
+          "prefill_n": 89,
+          "prefill_ms": 83581.32,
+          "prefill_tok_s": 1.065,
+          "decode_n": 150,
+          "decode_ms": 16101.77,
+          "decode_tok_s": 9.316,
+          "wall_s": 100.064,
+          "quality": {
+            "rouge1_f1": 0.6875,
+            "answer_length_ratio": 1.1158,
+            "entity_recall": 0.75,
+            "original_answer_words": 95,
+            "compressed_answer_words": 106
+          },
+          "answer_preview": " llama.cpp distributes a model across multiple GPUs by dividing the transformer layers approximately evenly based on the VRAM capacity of each GPU. Th"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4747,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 12,
+            "kept_sentences": 6,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 995.15,
+            "top_scores": [
+              0.7652,
+              0.5732,
+              0.5602,
+              0.5781,
+              0.5741,
+              0.5646
+            ]
+          },
+          "prefill_n": 46,
+          "prefill_ms": 1308.5,
+          "prefill_tok_s": 35.155,
+          "decode_n": 150,
+          "decode_ms": 15696.83,
+          "decode_tok_s": 9.556,
+          "wall_s": 17.175,
+          "quality": {
+            "rouge1_f1": 0.4828,
+            "answer_length_ratio": 1.1579,
+            "entity_recall": 0.5,
+            "original_answer_words": 95,
+            "compressed_answer_words": 110
+          },
+          "answer_preview": " llama.cpp uses its Vulkan backend to distribute a model across multiple GPUs. When the -ngl flag is set, the model's transformer layers are divided a"
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2323,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 12,
+            "kept_sentences": 3,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 964.97,
+            "top_scores": [
+              0.7652,
+              0.5781,
+              0.5741
+            ]
+          },
+          "prefill_n": 81,
+          "prefill_ms": 83523.36,
+          "prefill_tok_s": 0.97,
+          "decode_n": 150,
+          "decode_ms": 15519.92,
+          "decode_tok_s": 9.665,
+          "wall_s": 99.977,
+          "quality": {
+            "rouge1_f1": 0.377,
+            "answer_length_ratio": 1.0316,
+            "entity_recall": 0.5,
+            "original_answer_words": 95,
+            "compressed_answer_words": 98
+          },
+          "answer_preview": " llama.cpp uses a custom distribution algorithm that divides the model layers across GPUs based on their VRAM capacities. The algorithm ensures that e"
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.3333,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 198,
+            "target_words": 148,
+            "actual_words": 66,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 13900.21,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 139,
+          "prefill_ms": 166718.18,
+          "prefill_tok_s": 0.834,
+          "decode_n": 150,
+          "decode_ms": 15626.73,
+          "decode_tok_s": 9.599,
+          "wall_s": 182.548,
+          "quality": {
+            "rouge1_f1": 0.544,
+            "answer_length_ratio": 1.0526,
+            "entity_recall": 0.5,
+            "original_answer_words": 95,
+            "compressed_answer_words": 100
+          },
+          "answer_preview": " llama.cpp distributes a model across multiple GPUs by dividing the transformer layers approximately evenly based on VRAM capacity. It places the embe"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.2475,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 198,
+            "target_words": 99,
+            "actual_words": 49,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 12501.16,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 101,
+          "prefill_ms": 83535.86,
+          "prefill_tok_s": 1.209,
+          "decode_n": 150,
+          "decode_ms": 15556.55,
+          "decode_tok_s": 9.642,
+          "wall_s": 99.231,
+          "quality": {
+            "rouge1_f1": 0.464,
+            "answer_length_ratio": 0.9579,
+            "entity_recall": 0.5,
+            "original_answer_words": 95,
+            "compressed_answer_words": 91
+          },
+          "answer_preview": " llama.cpp divides the transformer layers of a model evenly across multiple GPUs based on their VRAM capacities. For two GPUs with equal VRAM, the lay"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.3333,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 198,
+            "target_words": 50,
+            "actual_words": 66,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 15228.28,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 141,
+          "prefill_ms": 166803.88,
+          "prefill_tok_s": 0.845,
+          "decode_n": 150,
+          "decode_ms": 15927.95,
+          "decode_tok_s": 9.417,
+          "wall_s": 182.863,
+          "quality": {
+            "rouge1_f1": 0.5802,
+            "answer_length_ratio": 0.8947,
+            "entity_recall": 0.625,
+            "original_answer_words": 95,
+            "compressed_answer_words": 85
+          },
+          "answer_preview": " llama.cpp distributes a model across multiple GPUs by dividing the transformer layers approximately evenly based on the VRAM capacity of each GPU. It"
+        }
+      ],
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 1952.0,
+          "used_mb": 2082.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 2080.0,
+          "used_mb": 1957.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "bucket": "long",
+      "query": "Design a RAG pipeline for processing OPRA requests in a New Jersey municipality.",
+      "context_words": 459,
+      "timestamp": "2026-05-27T14:55:48.194265+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    },
+    {
+      "id": 8,
+      "bucket": "long",
+      "query": "Design a RAG pipeline for processing OPRA requests in a New Jersey municipality.",
+      "context_words": 459,
+      "timestamp": "2026-05-27T19:06:32.852335+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 1952.0,
+          "used_mb": 2082.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 2080.0,
+          "used_mb": 1957.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "baseline": {
+        "prefill_n": 856,
+        "prefill_ms": 459268.53,
+        "prefill_tok_s": 1.864,
+        "decode_n": 150,
+        "decode_ms": 18887.24,
+        "decode_tok_s": 7.942,
+        "wall_s": 478.339,
+        "context_words": 459,
+        "answer_words": 81,
+        "answer_preview": "\n\nDocument Ingestion Layer:\n- Scanned documents are OCR'd using Tesseract or equivalent software.\n- Digital PDFs are processed with PyMuPDF to extract"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.7168,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 459,
+            "budget_words": 344,
+            "actual_words": 329,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.14
+          },
+          "prefill_n": 562,
+          "prefill_ms": 334705.11,
+          "prefill_tok_s": 1.679,
+          "decode_n": 150,
+          "decode_ms": 17649.04,
+          "decode_tok_s": 8.499,
+          "wall_s": 353.045,
+          "quality": {
+            "rouge1_f1": 0.5636,
+            "answer_length_ratio": 0.9012,
+            "entity_recall": 0.4286,
+            "original_answer_words": 81,
+            "compressed_answer_words": 73
+          },
+          "answer_preview": "\n\nDocument Ingestion Layer:\n1. Scanned Documents:\n   - OCR: Tesseract or equivalent OCR engine to convert scanned documents into text.\n   - PDF Docume"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4837,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 459,
+            "budget_words": 230,
+            "actual_words": 222,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.1
+          },
+          "prefill_n": 24,
+          "prefill_ms": 1373.22,
+          "prefill_tok_s": 17.477,
+          "decode_n": 150,
+          "decode_ms": 16713.16,
+          "decode_tok_s": 8.975,
+          "wall_s": 18.092,
+          "quality": {
+            "rouge1_f1": 0.3548,
+            "answer_length_ratio": 1.2099,
+            "entity_recall": 0.5714,
+            "original_answer_words": 81,
+            "compressed_answer_words": 98
+          },
+          "answer_preview": "\n\nTo design a RAG pipeline for processing OPRA requests in a New Jersey municipality, we need to consider the specific requirements of the OPRA reques"
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2288,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 459,
+            "budget_words": 115,
+            "actual_words": 105,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.08
+          },
+          "prefill_n": 24,
+          "prefill_ms": 1347.5,
+          "prefill_tok_s": 17.811,
+          "decode_n": 150,
+          "decode_ms": 15777.99,
+          "decode_tok_s": 9.507,
+          "wall_s": 18.075,
+          "quality": {
+            "rouge1_f1": 0.3307,
+            "answer_length_ratio": 1.1481,
+            "entity_recall": 0.5714,
+            "original_answer_words": 81,
+            "compressed_answer_words": 93
+          },
+          "answer_preview": "\n\nTo design a RAG pipeline for processing OPRA requests in a New Jersey municipality, we need to consider the specific requirements for OPRA complianc"
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.7538,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 26,
+            "kept_sentences": 20,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 2230.4,
+            "top_scores": [
+              0.7483,
+              0.6118,
+              0.5984,
+              0.6709,
+              0.5467,
+              0.5031,
+              0.5468,
+              0.5183,
+              0.6518,
+              0.5096,
+              0.5762,
+              0.5596,
+              0.5576,
+              0.5474,
+              0.5319,
+              0.5909,
+              0.5404,
+              0.6102,
+              0.5073,
+              0.6128
+            ]
+          },
+          "prefill_n": 497,
+          "prefill_ms": 334048.15,
+          "prefill_tok_s": 1.488,
+          "decode_n": 150,
+          "decode_ms": 17748.76,
+          "decode_tok_s": 8.451,
+          "wall_s": 352.351,
+          "quality": {
+            "rouge1_f1": 0.176,
+            "answer_length_ratio": 1.1605,
+            "entity_recall": 0.2143,
+            "original_answer_words": 81,
+            "compressed_answer_words": 94
+          },
+          "answer_preview": "\n\nDocument:\n\nTitle: Design of a Retrieval-Augmented Generation Pipeline for Municipal OPRA Requests\n\nAbstract:\n\nThis paper presents a design for a Ret"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.5163,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 26,
+            "kept_sentences": 13,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 2299.58,
+            "top_scores": [
+              0.7483,
+              0.6118,
+              0.5984,
+              0.6709,
+              0.5468,
+              0.6518,
+              0.5762,
+              0.5596,
+              0.5576,
+              0.5474,
+              0.5909,
+              0.6102,
+              0.6128
+            ]
+          },
+          "prefill_n": 283,
+          "prefill_ms": 250339.88,
+          "prefill_tok_s": 1.13,
+          "decode_n": 150,
+          "decode_ms": 16833.17,
+          "decode_tok_s": 8.911,
+          "wall_s": 268.02,
+          "quality": {
+            "rouge1_f1": 0.336,
+            "answer_length_ratio": 1.1728,
+            "entity_recall": 0.5714,
+            "original_answer_words": 81,
+            "compressed_answer_words": 95
+          },
+          "answer_preview": "\n\nTo design a RAG pipeline for processing OPRA requests in a New Jersey municipality, we need to consider the specific requirements of the OPRA proces"
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2222,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 26,
+            "kept_sentences": 6,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 2103.32,
+            "top_scores": [
+              0.7483,
+              0.6118,
+              0.6709,
+              0.6518,
+              0.6102,
+              0.6128
+            ]
+          },
+          "prefill_n": 146,
+          "prefill_ms": 166788.82,
+          "prefill_tok_s": 0.875,
+          "decode_n": 150,
+          "decode_ms": 15906.83,
+          "decode_tok_s": 9.43,
+          "wall_s": 182.953,
+          "quality": {
+            "rouge1_f1": 0.3577,
+            "answer_length_ratio": 1.037,
+            "entity_recall": 0.4286,
+            "original_answer_words": 81,
+            "compressed_answer_words": 84
+          },
+          "answer_preview": "\n\nTo design a RAG pipeline for processing OPRA requests in a New Jersey municipality, we need to consider the following components:\n\n1. Document Retri"
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.2745,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 459,
+            "target_words": 344,
+            "actual_words": 126,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 30596.61,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 247,
+          "prefill_ms": 167115.14,
+          "prefill_tok_s": 1.478,
+          "decode_n": 150,
+          "decode_ms": 16196.42,
+          "decode_tok_s": 9.261,
+          "wall_s": 183.472,
+          "quality": {
+            "rouge1_f1": 0.3307,
+            "answer_length_ratio": 1.1852,
+            "entity_recall": 0.2857,
+            "original_answer_words": 81,
+            "compressed_answer_words": 96
+          },
+          "answer_preview": "\n\nTo design a RAG pipeline for processing OPRA requests in a New Jersey municipality, we need to consider the context provided and the specific requir"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.2636,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 459,
+            "target_words": 230,
+            "actual_words": 121,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 29965.88,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 200,
+          "prefill_ms": 166893.67,
+          "prefill_tok_s": 1.198,
+          "decode_n": 150,
+          "decode_ms": 16121.26,
+          "decode_tok_s": 9.304,
+          "wall_s": 183.223,
+          "quality": {
+            "rouge1_f1": 0.303,
+            "answer_length_ratio": 1.1481,
+            "entity_recall": 0.2143,
+            "original_answer_words": 81,
+            "compressed_answer_words": 93
+          },
+          "answer_preview": "\n\nTo design a RAG pipeline for processing OPRA requests in a New Jersey municipality, we need to consider the context provided and the specific requir"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2353,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 459,
+            "target_words": 115,
+            "actual_words": 108,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 27589.81,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 61,
+          "prefill_ms": 1334.4,
+          "prefill_tok_s": 45.713,
+          "decode_n": 150,
+          "decode_ms": 15837.02,
+          "decode_tok_s": 9.471,
+          "wall_s": 17.349,
+          "quality": {
+            "rouge1_f1": 0.3566,
+            "answer_length_ratio": 1.1358,
+            "entity_recall": 0.2143,
+            "original_answer_words": 81,
+            "compressed_answer_words": 92
+          },
+          "answer_preview": "\n\nTo design a RAG pipeline for processing OPRA requests in a New Jersey municipality, we need to consider the following components:\n\n1. Document Inges"
+        }
+      ],
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 1953.0,
+          "used_mb": 2081.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 2080.0,
+          "used_mb": 1957.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "bucket": "long",
+      "query": "Compare Maxwell, Pascal, and Ampere GPU architectures for LLM inference workloads.",
+      "context_words": 336,
+      "timestamp": "2026-05-27T14:55:48.265500+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    },
+    {
+      "id": 9,
+      "bucket": "long",
+      "query": "Compare Maxwell, Pascal, and Ampere GPU architectures for LLM inference workloads.",
+      "context_words": 336,
+      "timestamp": "2026-05-27T19:40:53.095225+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 1953.0,
+          "used_mb": 2081.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 2080.0,
+          "used_mb": 1957.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "baseline": {
+        "prefill_n": 799,
+        "prefill_ms": 459670.74,
+        "prefill_tok_s": 1.738,
+        "decode_n": 150,
+        "decode_ms": 18565.54,
+        "decode_tok_s": 8.079,
+        "wall_s": 478.548,
+        "context_words": 336,
+        "answer_words": 49,
+        "answer_preview": "\n\nMaxwell (GM200/GM204, 2014-2016):\n- Memory Bandwidth: 173 GB/s (4 GB GDDR5)\n- Throughput: Approximately 8-9 tok/s decode and 0.7 tok/s prefill for 3"
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.7202,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 336,
+            "budget_words": 252,
+            "actual_words": 242,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.1
+          },
+          "prefill_n": 506,
+          "prefill_ms": 333924.65,
+          "prefill_tok_s": 1.515,
+          "decode_n": 150,
+          "decode_ms": 17504.82,
+          "decode_tok_s": 8.569,
+          "wall_s": 352.509,
+          "quality": {
+            "rouge1_f1": 0.6733,
+            "answer_length_ratio": 1.3265,
+            "entity_recall": 0.5,
+            "original_answer_words": 49,
+            "compressed_answer_words": 65
+          },
+          "answer_preview": "\n\nMaxwell (GM200/GM204, 2014-2016):\n- Lacks FP16 matrix multiply units, INT8 dot products, and tensor cores.\n- Executes matrix operations as FP32 SIMD"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4881,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 336,
+            "budget_words": 168,
+            "actual_words": 164,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.07
+          },
+          "prefill_n": 29,
+          "prefill_ms": 1398.02,
+          "prefill_tok_s": 20.744,
+          "decode_n": 150,
+          "decode_ms": 16707.25,
+          "decode_tok_s": 8.978,
+          "wall_s": 18.122,
+          "quality": {
+            "rouge1_f1": 0.3119,
+            "answer_length_ratio": 1.5306,
+            "entity_recall": 0.375,
+            "original_answer_words": 49,
+            "compressed_answer_words": 75
+          },
+          "answer_preview": "\n\nMaxwell (GM200/GM204, 2014-2016):\n- Maxwell GPUs, specifically the GM204 variant used in the NVIDIA TITAN Xp and Titan Ampere, were significant for "
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2202,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 336,
+            "budget_words": 84,
+            "actual_words": 74,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.06
+          },
+          "prefill_n": 29,
+          "prefill_ms": 1369.94,
+          "prefill_tok_s": 21.169,
+          "decode_n": 150,
+          "decode_ms": 15780.96,
+          "decode_tok_s": 9.505,
+          "wall_s": 18.116,
+          "quality": {
+            "rouge1_f1": 0.3178,
+            "answer_length_ratio": 1.5306,
+            "entity_recall": 0.375,
+            "original_answer_words": 49,
+            "compressed_answer_words": 75
+          },
+          "answer_preview": "\n\nMaxwell (GM200/GM204, 2014-2016):\n- Maxwell introduced asynchronous compute and improved memory compression, which are beneficial for data-intensive"
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.7827,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 23,
+            "kept_sentences": 17,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 1686.88,
+            "top_scores": [
+              0.6766,
+              0.6056,
+              0.606,
+              0.5656,
+              0.567,
+              0.7168,
+              0.6269,
+              0.5719,
+              0.6953,
+              0.6837,
+              0.5605,
+              0.692,
+              0.7241,
+              0.6795,
+              0.6062,
+              0.7156,
+              0.5419
+            ]
+          },
+          "prefill_n": 521,
+          "prefill_ms": 334708.05,
+          "prefill_tok_s": 1.557,
+          "decode_n": 150,
+          "decode_ms": 17744.95,
+          "decode_tok_s": 8.453,
+          "wall_s": 352.945,
+          "quality": {
+            "rouge1_f1": 0.6316,
+            "answer_length_ratio": 1.1224,
+            "entity_recall": 0.375,
+            "original_answer_words": 49,
+            "compressed_answer_words": 55
+          },
+          "answer_preview": "\n\nMaxwell:\n\n- Architecture: GM200/GM204\n- Release Year: 2014-2016\n- Key Features: Asynchronous compute, improved memory compression\n- Matrix Operation"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.5565,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 23,
+            "kept_sentences": 12,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 1729.78,
+            "top_scores": [
+              0.6766,
+              0.6056,
+              0.606,
+              0.7168,
+              0.6269,
+              0.6953,
+              0.6837,
+              0.692,
+              0.7241,
+              0.6795,
+              0.6062,
+              0.7156
+            ]
+          },
+          "prefill_n": 374,
+          "prefill_ms": 250646.67,
+          "prefill_tok_s": 1.492,
+          "decode_n": 150,
+          "decode_ms": 17159.12,
+          "decode_tok_s": 8.742,
+          "wall_s": 270.252,
+          "quality": {
+            "rouge1_f1": 0.419,
+            "answer_length_ratio": 1.3673,
+            "entity_recall": 0.3125,
+            "original_answer_words": 49,
+            "compressed_answer_words": 67
+          },
+          "answer_preview": "\n\nMaxwell, Pascal, and Ampere GPU architectures have distinct features that impact the performance of large language model (LLM) inference workloads. "
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2857,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 23,
+            "kept_sentences": 6,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 1775.32,
+            "top_scores": [
+              0.7168,
+              0.6953,
+              0.6837,
+              0.692,
+              0.7241,
+              0.7156
+            ]
+          },
+          "prefill_n": 243,
+          "prefill_ms": 167100.7,
+          "prefill_tok_s": 1.454,
+          "decode_n": 150,
+          "decode_ms": 16447.4,
+          "decode_tok_s": 9.12,
+          "wall_s": 184.231,
+          "quality": {
+            "rouge1_f1": 0.2569,
+            "answer_length_ratio": 1.7959,
+            "entity_recall": 0.1875,
+            "original_answer_words": 49,
+            "compressed_answer_words": 88
+          },
+          "answer_preview": "\n\nMaxwell, Pascal, and Ampere GPU architectures represent different generations of NVIDIA GPUs, each with unique features and performance characterist"
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.3214,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 336,
+            "target_words": 252,
+            "actual_words": 108,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 29548.54,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 248,
+          "prefill_ms": 167450.14,
+          "prefill_tok_s": 1.481,
+          "decode_n": 150,
+          "decode_ms": 16269.95,
+          "decode_tok_s": 9.219,
+          "wall_s": 184.445,
+          "quality": {
+            "rouge1_f1": 0.193,
+            "answer_length_ratio": 2.0,
+            "entity_recall": 0.0625,
+            "original_answer_words": 49,
+            "compressed_answer_words": 98
+          },
+          "answer_preview": "\n\nThe Maxwell architecture, introduced by NVIDIA in 2014, was the first to introduce asynchronous compute and improved memory compression. These featu"
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.2202,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 336,
+            "target_words": 168,
+            "actual_words": 74,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 23174.71,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 169,
+          "prefill_ms": 166858.46,
+          "prefill_tok_s": 1.013,
+          "decode_n": 150,
+          "decode_ms": 15918.07,
+          "decode_tok_s": 9.423,
+          "wall_s": 183.188,
+          "quality": {
+            "rouge1_f1": 0.1345,
+            "answer_length_ratio": 2.102,
+            "entity_recall": 0.0625,
+            "original_answer_words": 49,
+            "compressed_answer_words": 103
+          },
+          "answer_preview": "\nMaxwell, Pascal, and Ampere GPU architectures have evolved significantly in their support for LLM inference workloads. Maxwell architecture lacks INT"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2143,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 336,
+            "target_words": 84,
+            "actual_words": 72,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 24195.97,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 178,
+          "prefill_ms": 166885.5,
+          "prefill_tok_s": 1.067,
+          "decode_n": 150,
+          "decode_ms": 15927.18,
+          "decode_tok_s": 9.418,
+          "wall_s": 183.38,
+          "quality": {
+            "rouge1_f1": 0.1509,
+            "answer_length_ratio": 1.6531,
+            "entity_recall": 0.125,
+            "original_answer_words": 49,
+            "compressed_answer_words": 81
+          },
+          "answer_preview": "\n\nMaxwell, Pascal, and Ampere are three different GPU architectures that have been used for various computing tasks, including Large Language Model (L"
+        }
+      ],
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 1953.0,
+          "used_mb": 2081.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 2080.0,
+          "used_mb": 1957.0,
+          "total_mb": 4037.0
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "bucket": "long",
+      "query": "What are the deployment risks of using legacy Vulkan GPUs for production LLM inference?",
+      "context_words": 367,
+      "timestamp": "2026-05-27T14:55:48.320638+00:00",
+      "baseline": {
+        "error": "<urlopen error [Errno 111] Connection refused>"
+      }
+    },
+    {
+      "id": 10,
+      "bucket": "long",
+      "query": "What are the deployment risks of using legacy Vulkan GPUs for production LLM inference?",
+      "context_words": 381,
+      "timestamp": "2026-05-27T20:18:04.235290+00:00",
+      "vram_start": [
+        {
+          "gpu": 0,
+          "free_mb": 1953.0,
+          "used_mb": 2081.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 2080.0,
+          "used_mb": 1957.0,
+          "total_mb": 4037.0
+        }
+      ],
+      "baseline": {
+        "prefill_n": 736,
+        "prefill_ms": 416445.68,
+        "prefill_tok_s": 1.767,
+        "decode_n": 150,
+        "decode_ms": 18358.0,
+        "decode_tok_s": 8.171,
+        "wall_s": 435.663,
+        "context_words": 381,
+        "answer_words": 89,
+        "answer_preview": " The deployment risks of using legacy Vulkan GPUs for production LLM inference include hardware reliability risks, driver and software support risks, "
+      },
+      "variants": [
+        {
+          "label": "token_budget_keep75pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.6982,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 381,
+            "budget_words": 286,
+            "actual_words": 266,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 0.19
+          },
+          "prefill_n": 462,
+          "prefill_ms": 334603.37,
+          "prefill_tok_s": 1.381,
+          "decode_n": 150,
+          "decode_ms": 17482.72,
+          "decode_tok_s": 8.58,
+          "wall_s": 353.757,
+          "quality": {
+            "rouge1_f1": 0.4154,
+            "answer_length_ratio": 1.0337,
+            "entity_recall": 0.625,
+            "original_answer_words": 89,
+            "compressed_answer_words": 92
+          },
+          "answer_preview": " The deployment risks include hardware reliability risks, driver and software support risks, and performance degradation risks.\n\n\nDocument:\n\nAbstract:"
+        },
+        {
+          "label": "token_budget_keep50pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.4724,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 381,
+            "budget_words": 190,
+            "actual_words": 180,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 0.12
+          },
+          "prefill_n": 28,
+          "prefill_ms": 1430.16,
+          "prefill_tok_s": 19.578,
+          "decode_n": 150,
+          "decode_ms": 16672.23,
+          "decode_tok_s": 8.997,
+          "wall_s": 20.284,
+          "quality": {
+            "rouge1_f1": 0.438,
+            "answer_length_ratio": 1.1011,
+            "entity_recall": 0.75,
+            "original_answer_words": 89,
+            "compressed_answer_words": 98
+          },
+          "answer_preview": " Deployment risks include hardware reliability concerns due to the age of the GPUs, potential driver and software support issues as NVIDIA may depreca"
+        },
+        {
+          "label": "token_budget_keep25pct",
+          "method": "token_budget",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2362,
+          "compression_meta": {
+            "method": "token_budget",
+            "original_words": 381,
+            "budget_words": 95,
+            "actual_words": 90,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 0.23
+          },
+          "prefill_n": 28,
+          "prefill_ms": 1513.02,
+          "prefill_tok_s": 18.506,
+          "decode_n": 150,
+          "decode_ms": 15749.93,
+          "decode_tok_s": 9.524,
+          "wall_s": 21.007,
+          "quality": {
+            "rouge1_f1": 0.3796,
+            "answer_length_ratio": 1.0562,
+            "entity_recall": 0.625,
+            "original_answer_words": 89,
+            "compressed_answer_words": 94
+          },
+          "answer_preview": " Deploying LLM inference on legacy Vulkan GPUs introduces several risks, including hardware reliability concerns, potential performance bottlenecks, a"
+        },
+        {
+          "label": "extractive_keep75pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.7559,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 22,
+            "kept_sentences": 16,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 1876.86,
+            "top_scores": [
+              0.8481,
+              0.5901,
+              0.5419,
+              0.4939,
+              0.516,
+              0.7014,
+              0.5513,
+              0.5109,
+              0.5096,
+              0.5359,
+              0.4823,
+              0.5345,
+              0.5461,
+              0.5251,
+              0.5563,
+              0.5866
+            ]
+          },
+          "prefill_n": 65,
+          "prefill_ms": 84360.6,
+          "prefill_tok_s": 0.771,
+          "decode_n": 150,
+          "decode_ms": 17477.06,
+          "decode_tok_s": 8.583,
+          "wall_s": 103.867,
+          "quality": {
+            "rouge1_f1": 0.5299,
+            "answer_length_ratio": 0.9551,
+            "entity_recall": 0.875,
+            "original_answer_words": 89,
+            "compressed_answer_words": 85
+          },
+          "answer_preview": " Hardware reliability, driver and software support, performance degradation, Vulkan TDR, and security and compliance risks.\n\n\nDocument:\n\nAbstract:\n\nTh"
+        },
+        {
+          "label": "extractive_keep50pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.5,
+          "actual_ratio": 0.5381,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 22,
+            "kept_sentences": 11,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 1873.5,
+            "top_scores": [
+              0.8481,
+              0.5901,
+              0.5419,
+              0.7014,
+              0.5513,
+              0.5359,
+              0.5345,
+              0.5461,
+              0.5251,
+              0.5563,
+              0.5866
+            ]
+          },
+          "prefill_n": 275,
+          "prefill_ms": 250289.85,
+          "prefill_tok_s": 1.099,
+          "decode_n": 150,
+          "decode_ms": 16707.63,
+          "decode_tok_s": 8.978,
+          "wall_s": 267.328,
+          "quality": {
+            "rouge1_f1": 0.5041,
+            "answer_length_ratio": 0.9213,
+            "entity_recall": 0.875,
+            "original_answer_words": 89,
+            "compressed_answer_words": 82
+          },
+          "answer_preview": " The deployment risks include hardware reliability concerns, potential driver and software support deprecation, dual-GPU operation challenges, Vulkan "
+        },
+        {
+          "label": "extractive_keep25pct",
+          "method": "extractive",
+          "keep_fraction_target": 0.25,
+          "actual_ratio": 0.2808,
+          "compression_meta": {
+            "method": "extractive",
+            "original_sentences": 22,
+            "kept_sentences": 6,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 1955.11,
+            "top_scores": [
+              0.8481,
+              0.5901,
+              0.7014,
+              0.5513,
+              0.5563,
+              0.5866
+            ]
+          },
+          "prefill_n": 134,
+          "prefill_ms": 166746.13,
+          "prefill_tok_s": 0.804,
+          "decode_n": 150,
+          "decode_ms": 16015.82,
+          "decode_tok_s": 9.366,
+          "wall_s": 182.984,
+          "quality": {
+            "rouge1_f1": 0.5357,
+            "answer_length_ratio": 1.0112,
+            "entity_recall": 0.875,
+            "original_answer_words": 89,
+            "compressed_answer_words": 90
+          },
+          "answer_preview": " Hardware reliability, driver and software support, and security and compliance risks.\n\n\nDocument:\n\nTitle: Legacy Vulkan GPU Deployment Risks for LLM "
+        },
+        {
+          "label": "abstractive_keep75pct",
+          "method": "abstractive",
+          "keep_fraction_target": 0.75,
+          "actual_ratio": 0.5853,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 381,
+            "target_words": 286,
+            "actual_words": 223,
+            "keep_fraction_target": 0.75,
+            "compression_latency_ms": 39599.34,
+            "model": "qwen2:1.5b"
+          },
+          "prefill_n": 453,
+          "prefill_ms": 338537.98,
+          "prefill_tok_s": 1.338,
+          "decode_n": 150,
+          "decode_ms": 18875.09,
+          "decode_tok_s": 7.947,
+          "wall_s": 359.692,
+          "quality": {
+            "rouge1_f1": 0.5289,
+            "answer_length_ratio": 1.0112,
+            "entity_recall": 0.75,
+            "original_answer_words": 89,
+            "compressed_answer_words": 90
+          },
+          "answer_preview": " The deployment risks of using legacy Vulkan GPUs for production LLM inference include hardware reliability risks, driver and software support risks, "
+        },
+        {
+          "label": "abstractive_keep50pct",
+          "method": "abstractive",
+          "keep_fraction": 0.5,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 381,
+            "target_words": 190,
+            "actual_words": 158,
+            "keep_fraction_target": 0.5,
+            "compression_latency_ms": 30202.65,
+            "model": "qwen2:1.5b"
+          },
+          "error": "Remote end closed connection without response"
+        },
+        {
+          "label": "abstractive_keep25pct",
+          "method": "abstractive",
+          "keep_fraction": 0.25,
+          "compression_meta": {
+            "method": "abstractive",
+            "original_words": 381,
+            "target_words": 95,
+            "actual_words": 116,
+            "keep_fraction_target": 0.25,
+            "compression_latency_ms": 23525.74,
+            "model": "qwen2:1.5b"
+          },
+          "error": "<urlopen error [Errno 111] Connection refused>"
+        }
+      ],
+      "vram_end": [
+        {
+          "gpu": 0,
+          "free_mb": 3838.0,
+          "used_mb": 196.0,
+          "total_mb": 4034.0
+        },
+        {
+          "gpu": 1,
+          "free_mb": 4030.0,
+          "used_mb": 7.0,
+          "total_mb": 4037.0
+        }
+      ]
+    }
+  ]
+}
