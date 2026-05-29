@@ -27,10 +27,10 @@ Both CPU and GPU collapse from peak throughput to ~1 tok/s above ~20-token promp
 
 Quality-efficiency tradeoff across 9 compression configurations (3 methods × 3 retention levels). Token budget 75% and extractive 75% dominate the frontier. Token budget 50% achieves the highest speedup (18×) at moderate ROUGE-1 loss.
 
-### Figure 3 — Change Magnitude Distribution
-![Change Distribution](results/fig3_change_dist.png)
+### Figure 3 — Speedup by Prompt Length Bucket
+![Speedup by Bucket](results/fig3_bucket_speedup.png)
 
-Bimodal distribution across 62 consecutive version pairs: 36 low-change pairs (Wikipedia incremental edits, M≈0) and 26 high-change pairs (regulatory documents, M=0.6–1.6). No pairs fall in the medium band.
+Long prompts benefit most from token-budget compression (24.77×). Extractive 50% collapses on long prompts (1.73×) because sentence similarity scores homogenize at high context lengths. Abstractive 25% recovers on long prompts (15.09×).
 
 ## Contributions
 

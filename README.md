@@ -230,6 +230,8 @@ prefill advantage at realistic RAG prompt lengths.
 | Medium (n=4, 70–110 tokens) | ~1.1 tok/s | ~1.0 tok/s | ~1.00× |
 | Long (n=3, 130–340 tokens) | ~1.3 tok/s | ~0.9 tok/s | ~1.00× |
 
+![Phase Transition in Prefill Throughput](legacyrag_v3/results/fig1_phase_transition.png)
+
 ---
 
 ## Findings
@@ -281,6 +283,20 @@ All experiments: phi3:mini Q4_K_M, dual K4200 Vulkan, b9297.
 | exp2: Speculative decoding (qwen2 pair) | 3.36 | 112.2 s | 202.1 s | −59% vs exp1 |
 | exp3: N-gram (ngram-simple) | **9.08** | **81.4 s** | 191.3 s | **+10%** vs exp1 |
 | exp4: qwen2.5-7B Q2_K | 3.82 | 72.3 s | 192.3 s | −54% vs exp1 |
+
+---
+
+## Experiment B: Prompt Compression Results
+
+Nine compression configurations (3 methods × 3 retention levels) benchmarked on 10 prompts. Best single config: token-budget 50% at 18.22× speedup, ROUGE-1=0.412.
+
+![Quality-Efficiency Pareto Frontier](legacyrag_v3/results/fig2_pareto.png)
+
+Token budget 75% and extractive 75% dominate on quality; token budget 50% achieves the largest speedup. Abstractive compression is outperformed by simpler methods at every level.
+
+![Speedup by Prompt Length Bucket](legacyrag_v3/results/fig3_bucket_speedup.png)
+
+Long prompts see the largest gains from token-budget compression (24.77×). Extractive 50% collapses on long prompts (1.73×) because sentence-level similarity scores homogenize at high context lengths.
 
 ---
 
