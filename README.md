@@ -1,86 +1,317 @@
-# LegacyRAG
+# PhaseRAG — LegacyRAG v3
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/)
-[![arXiv](https://img.shields.io/badge/arXiv-preprint-red.svg)](https://arxiv.org/)
+[![MLSys 2027](https://img.shields.io/badge/venue-MLSys%202027-blueviolet.svg)](https://mlsys.org/)
+[![Series: LegacyRAG](https://img.shields.io/badge/series-LegacyRAG%20v3-orange.svg)](#research-series)
 
-A VRAM-aware Retrieval-Augmented Generation pipeline designed for legacy GPU hardware. Built for a research paper on inference constraints with dual NVIDIA Quadro K4200 GPUs (4 GB VRAM each) running llama.cpp via the Vulkan backend.
+> **Can we speed up AI on old hardware by making the CPU do the reading and the GPU do the writing?**
+> Short answer: theoretically yes for tiny prompts, practically no — because the handoff mechanism
+> isn't supported between CPU and GPU backends in the current llama.cpp build.
+
+---
 
 ## What It Does
 
-LegacyRAG solves a real problem: running a full RAG pipeline (embed → retrieve → generate) on GPUs that predate FP16, tensor cores, and NVLink. The key innovation is a VRAM-aware scheduler that queries `nvidia-smi` before every embedding operation and routes to CPU or GPU based on live free-VRAM thresholds — protecting generation VRAM while keeping embeddings fast.
+When a language model processes your question and generates an answer, it does two fundamentally
+different things:
+
+1. **Prefill (reading phase)** — the model ingests all your input tokens at once. It "reads"
+   your question, the retrieved documents, and any context. This is compute-intensive and
+   processes many tokens in parallel.
+
+2. **Decode (writing phase)** — the model generates tokens one by one. It "writes" the
+   answer, emitting a single new token per forward pass.
+
+On legacy Maxwell Vulkan hardware (NVIDIA Quadro K4200, no FP16, no tensor cores), an
+interesting inversion occurs: **the CPU is faster at reading for short prompts, while the
+GPU is consistently faster at writing.** CPU prefill reaches ~20 tok/s for short inputs
+because BLAS SIMD routines outperform Vulkan dispatch overhead. GPU decode hits 8–9 tok/s
+versus CPU's 5.3 tok/s because the GPU's 173 GB/s memory bandwidth dominates
+the weight-loading bottleneck.
+
+**PhaseRAG tests whether handing off between devices mid-generation — CPU handles prefill,
+GPU handles decode — can speed up end-to-end inference.**
 
 ```
-POST /ingest  →  chunk → embed (VRAM-aware) → store
-POST /query   →  embed query → cosine retrieve → generate → benchmark
+Your question + retrieved docs
+         |
+         v
+  [CPU: prefill phase]          <- reads all input tokens at once (~20 tok/s short)
+  "What is the OPRA deadline?"      (BLAS-vectorized, no Vulkan dispatch overhead)
+  + 3 retrieved document chunks
+         |
+         | KV cache handoff
+         | POST /slots/0  <-- HTTP 400: NOT SUPPORTED in llama.cpp b9297
+         |
+         v
+  [GPU: decode phase]           <- generates answer tokens one by one (~9 tok/s)
+  "The OPRA deadline is..."         (memory-bandwidth-bound, 173 GB/s GDDR5)
+         |
+         v
+  Streamed response to user
 ```
+
+**What we found:** The handoff fails in practice (llama.cpp b9297 slot API does not support
+cross-backend KV cache transfer). More importantly, the theoretical speedup is negligible for
+realistic RAG prompts — CPU and GPU prefill at the same rate for medium and long contexts
+because both are memory-bandwidth-bound at those lengths. The CPU advantage only holds for
+prompts shorter than ~20 tokens.
+
+This repo documents the full investigation, including the v2 baseline code that motivated it.
+Target venue: **MLSys 2027**.
+
+---
 
 ## Hardware Target
 
 | Component | Spec |
 |---|---|
 | GPU | 2× NVIDIA Quadro K4200 |
-| VRAM | 4 GB GDDR5 per card |
-| Architecture | Maxwell (2014), no FP16, no matrix cores |
-| Inference backend | llama.cpp b5576 + Vulkan |
-| LLM | phi3-mini (3.82B, Q4_0, ~2.1 GB) |
-| Embedding model | nomic-embed-text via Ollama |
+| VRAM | 4 GB GDDR5 per card (8 GB total) |
+| Memory bandwidth | 173 GB/s per GPU |
+| Architecture | Maxwell GM204 (2014), no FP16, no INT8, no tensor cores |
+| Inference backend | llama.cpp b9297 + Vulkan 1.3 |
+| CPU | Intel Xeon E5-1620 v3 (4C/8T, 3.5 GHz) |
+| RAM | 7.7 GB DDR4 ECC |
+| OS | Ubuntu 24.04 LTS |
+| LLM | phi3:mini (3.8B, Q4_K_M, ~2.1 GB) |
 
-## Stack
-
-- **FastAPI** — HTTP endpoints (`/ingest`, `/query`, `/health`, `/stress-test`)
-- **llama.cpp server** — OpenAI-compatible generation on port 8080
-- **Ollama** — nomic-embed-text embeddings on port 11434
-- **numpy** — in-memory cosine similarity retrieval
-- **nvidia-smi** — real-time per-GPU VRAM monitoring
+---
 
 ## Key Features
 
-- **Per-GPU VRAM scheduler** — checks both GPUs independently against an 800 MB threshold; logs every routing decision with timestamp to `schedule_decisions.jsonl`
-- **GenerationContext guard** — while generation is active, embeddings are automatically blocked from GPU to prevent VRAM contention
-- **Stall detection with retry** — streaming generation with two-phase timeout: 600s queue-wait, 45s inter-token. On stall, retries with progressively reduced context (all chunks → half → 1)
-- **Benchmark logger** — records per-request latency breakdown, tok/s, and VRAM snapshots to `benchmark_results.json`
-- **Stress test endpoint** — `POST /stress-test?n_concurrent=N` fires N concurrent requests and reports per-GPU VRAM delta, CPU fallback rate, and aggregate throughput
+- **`phase_splitter.py`** — CPU→GPU heterogeneous phase splitting implementation. Runs CPU
+  prefill via a `-ngl 0` llama-server instance, then attempts KV cache handoff to a GPU
+  decode server via the `/slots/{id}` API. Documents the HTTP 400 failure and theoretical
+  fallback measurement.
+- **`prompt_compressor.py`** — Three compression methods (extractive sentence similarity,
+  abstractive qwen2:1.5b summarization, token-budget hard truncation) with ROUGE-1 F1,
+  entity recall, and answer-length-ratio quality measurement.
+- **`auto_config.py`** — Hardware-aware model and parameter selection. Detects GPU count and
+  total VRAM via `nvidia-smi`, selects the optimal model and `ngl` value, and enables
+  ngram speculative decoding automatically when a GPU is present.
+- **`benchmark_v3.py`** — Experiment A runner: 10 prompts × 4 configs (CPU-only, GPU-only,
+  GPU+ngram, phase-split) with per-request timing breakdowns.
+- **`web_ui/`** — FastAPI SSE streaming interface with plain HTML, no JS framework dependency.
+  Works in any browser. Displays real-time tok/s and VRAM usage.
+- **`install.sh`** — One-script installer: OS detection, hardware detection, Ollama model pull,
+  llama-server startup, web UI launch.
+- **`legacyrag_v2/`** — Full v2 benchmark code included as a baseline reference. Four
+  experiments: GPU baseline, speculative decoding, n-gram, and quantization.
+
+---
+
+## The v2 Insight That Motivated This Work
+
+LegacyRAG v2 ([IC2E 2026](https://github.com/azeez-1904/LegacyRAG-v2-experiments)) revealed
+that **prefill consumes 80–92% of wall time for medium and long prompts on Maxwell Vulkan**.
+
+| Prompt length | Prefill time | Prefill share of wall time |
+|---|---|---|
+| Short (18 tok) | 1.65 s | ~7% |
+| Medium (78–110 tok) | 124.9 s | **84%** |
+| Long (260–367 tok) | 379.3 s | **93%** |
+
+The Vulkan GLSL attention shaders process attention heads without fused kernels, producing
+near-quadratic prefill cost for longer contexts. Meanwhile, CPU prefill was measured at ~21
+tok/s for short prompts, versus GPU's ~11 tok/s — a 2× advantage. This motivated the
+hypothesis that routing prefill to the CPU could eliminate the dominant bottleneck.
+
+---
+
+## Experiment A: CPU-GPU Phase Splitting
+
+### Architecture Diagram
+
+```
+ ┌─────────────────────────────────────────────────────────────────────┐
+ │                    PhaseRAG Phase Splitter                          │
+ │                                                                     │
+ │  Incoming prompt (P tokens)                                         │
+ │         │                                                           │
+ │         ▼                                                           │
+ │  ┌─────────────┐    POST /completion     ┌──────────────────────┐  │
+ │  │ llama-server │    ngl=0 (CPU-only)     │   CPU prefill        │  │
+ │  │  :8082      │◄───────────────────────►│   ~20 tok/s (short)  │  │
+ │  │  -ngl 0     │                         │   ~1.1 tok/s (long)  │  │
+ │  └─────────────┘                         └──────────────────────┘  │
+ │         │                                                           │
+ │         │  POST /slots/0                                           │
+ │         │  {"action":"save","filename":"slot0.bin"}                 │
+ │         │                                                           │
+ │         │  ◄── HTTP 400 ── NOT SUPPORTED in b9297 ──────────────── │
+ │         │       cross-backend KV cache transfer blocked             │
+ │         │                                                           │
+ │         │  (theoretical path, if handoff worked)                   │
+ │         ▼                                                           │
+ │  ┌─────────────┐    POST /completion     ┌──────────────────────┐  │
+ │  │ llama-server │    ngl=99 (GPU)         │   GPU decode         │  │
+ │  │  :8081      │◄───────────────────────►│   ~9.3 tok/s         │  │
+ │  │  -ngl 99    │    empty prompt +        └──────────────────────┘  │
+ │  └─────────────┘    restored KV cache                               │
+ │                                                                     │
+ └─────────────────────────────────────────────────────────────────────┘
+```
+
+### Results Summary
+
+phi3:mini Q4_K_M, dual K4200 Vulkan, llama.cpp b9297, 10 prompts (3 short / 4 medium / 3 long):
+
+| Mode | Mean decode tok/s | Mean wall time | vs GPU-only |
+|---|---|---|---|
+| GPU-only (ngl=99) | **9.29** | 122.3 s | baseline |
+| GPU + ngram-simple | 8.73 | 123.8 s | −6% |
+| Phase-split theoretical | 9.29* | 123.0 s | ~0% |
+| Phase-split actual | FAILED | — | — |
+| CPU-only (ngl=0) | 5.34 | 139.1 s | −43% |
+
+*Decode phase from GPU, prefill from CPU — theoretical composition only.
+
+### Throughput Bar Chart
+
+```
+Decode tok/s (mean across 10 prompts, phi3:mini Q4_K_M)
+
+GPU-only      ████████████████████████████████████████████████  9.29
+GPU+ngram     █████████████████████████████████████████████     8.73
+Phase-split*  ████████████████████████████████████████████████  9.29
+CPU-only      ████████████████████████████                      5.34
+
+              0         2         4         6         8        10
+              └─────────┴─────────┴─────────┴─────────┴─────────┘
+
+* Theoretical only — actual handoff failed (HTTP 400)
+```
+
+### Prefill Speed by Prompt Length
+
+The CPU prefill advantage is prompt-length dependent — the critical finding:
+
+```
+Prefill tok/s by prompt length bucket
+
+SHORT (<20 tok)
+  CPU:  ████████████████████  ~20 tok/s
+  GPU:  █████████████          ~13 tok/s
+  --> CPU wins 1.54×, theoretical phase-split speedup: 1.03×
+
+MEDIUM (70–110 tok)
+  CPU:  █                      ~1.1 tok/s
+  GPU:  █                      ~1.0 tok/s
+  --> No meaningful difference. Theoretical speedup: ~1.0×
+
+LONG (130–340 tok)
+  CPU:  █                      ~1.3 tok/s
+  GPU:  █                      ~0.9 tok/s
+  --> Within noise. Theoretical speedup: ~1.0×
+
+      0     5     10    15    20
+      └─────┴─────┴─────┴─────┘
+
+Root cause: both CPU (50 GB/s DDR4) and GPU (173 GB/s GDDR5) become
+memory-bandwidth-bound for large KV caches. Neither has a systematic
+prefill advantage at realistic RAG prompt lengths.
+```
+
+| Prompt length | CPU prefill tok/s | GPU prefill tok/s | Theoretical speedup |
+|---|---|---|---|
+| Short (n=3, <20 tokens) | **~20 tok/s** | ~13 tok/s | **1.03×** |
+| Medium (n=4, 70–110 tokens) | ~1.1 tok/s | ~1.0 tok/s | ~1.00× |
+| Long (n=3, 130–340 tokens) | ~1.3 tok/s | ~0.9 tok/s | ~1.00× |
+
+---
+
+## What We Found
+
+### Finding 1 — The slot handoff fails: HTTP 400
+
+`POST /slots/0` with `{"action": "save", "filename": "..."}` on a CPU llama-server
+(b9297 with `--slot-save-path`) returns **HTTP 400**. The llama.cpp slot API is designed for
+same-server session continuation — resuming a paused conversation on the same backend.
+It does not support transferring KV cache state between a CPU backend (FP32, host memory)
+and a GPU backend (FP32, Vulkan device memory). This is a fundamental architecture constraint
+in the current llama.cpp build, not a configuration issue.
+
+### Finding 2 — Theoretical speedup is negligible for realistic RAG prompts
+
+The "CPU = 21 tok/s prefill" observation from v2 only holds for prompts shorter than
+~20 tokens, where BLAS SIMD vectorization outperforms Vulkan dispatch overhead. For medium
+and long RAG prompts (the common case), CPU prefill drops to 1.0–1.4 tok/s — essentially
+identical to GPU's 0.8–1.3 tok/s. Both are memory-bandwidth-bound at those context lengths.
+Phase splitting would provide a theoretical speedup of 0.99–1.03× for the actual workload.
+
+### Finding 3 — GPU+ngram underperforms GPU-only in this setup (8.73 vs 9.29 tok/s)
+
+This contradicts v2's +9.7% result. The root cause: ngram speculative decoding builds its
+candidate lookup table from tokens generated in the current server session. Each prompt in
+this experiment starts a fresh server, so the ngram table is empty for every query. v2's
++9.7% required a sustained multi-prompt session to accumulate prior generated tokens.
+Single-query isolation (the correct methodology for measuring cold-start latency) shows no
+ngram benefit. v2's improvement reflects batch/sustained use.
+
+### Finding 4 — Memory bandwidth is the true bottleneck
+
+Both CPU (DDR4, ~50 GB/s) and GPU (GDDR5, 173 GB/s) become memory-bandwidth-bound when
+the KV cache grows with prompt length. Neither has a systematic prefill advantage at
+realistic RAG context lengths. The CPU's BLAS advantage for short prompts disappears once
+attention becomes memory-bound rather than compute-bound.
+
+---
+
+## v2 Baseline Results (included in `legacyrag_v2/`)
+
+All experiments: phi3:mini Q4_K_M, dual K4200 Vulkan, b9297.
+
+| Configuration | Mean tok/s | Mean wall (s) | p95 wall (s) | vs v1 |
+|---|---|---|---|---|
+| v1 (single GPU, Ollama) | 0.95 | 469.4 s | — | baseline |
+| exp1: GPU-only baseline | 8.28 | 188.4 s | 410.0 s | **+772%** |
+| exp2: Speculative decoding (qwen2 pair) | 3.36 | 112.2 s | 202.1 s | −59% vs exp1 |
+| exp3: N-gram (ngram-simple) | **9.08** | **81.4 s** | 191.3 s | **+10%** vs exp1 |
+| exp4: qwen2.5-7B Q2_K | 3.82 | 72.3 s | 192.3 s | −54% vs exp1 |
+
+---
 
 ## Setup
 
 ### Prerequisites
 
 ```bash
-# llama.cpp server with Vulkan backend running on port 8080
+# llama.cpp b9297 built with Vulkan backend
+# llama-server binary at build/bin/llama-server
 # Ollama running on port 11434
+
+ollama pull phi3:mini
 ollama pull nomic-embed-text
 ```
 
 ### Install
 
 ```bash
-pip install -r requirements.txt
+# Automated (detects hardware, pulls models, starts servers)
+bash legacyrag_v3/install.sh
+
+# Manual
+pip install -r legacyrag_v3/requirements.txt
 ```
 
-### Run
+### Run Phase Split Experiment
 
 ```bash
-uvicorn main:app --host 0.0.0.0 --port 8001
+cd legacyrag_v3
+python3 benchmark_v3.py
+# Results written to results/exp_phase_split.json
 ```
 
-### Ingest a document
+### Launch Web UI
 
 ```bash
-curl -X POST http://localhost:8001/ingest \
-  -H "Content-Type: application/json" \
-  -d '{"text": "your document text here", "doc_id": "doc1"}'
+uvicorn legacyrag_v3.web_ui.app:app --host 0.0.0.0 --port 8002
+# Open http://localhost:8002 in any browser
 ```
 
-### Query
-
-```bash
-curl -X POST http://localhost:8001/query \
-  -H "Content-Type: application/json" \
-  -d '{"question": "your question here", "top_k": 5, "max_tokens": 128}'
-```
-
-### llama-server (dual-GPU, recommended for benchmarking)
+### llama-server (dual-GPU, for v2 baseline replication)
 
 ```bash
 LD_LIBRARY_PATH=build/bin build/bin/llama-server \
@@ -89,74 +320,154 @@ LD_LIBRARY_PATH=build/bin build/bin/llama-server \
   --split-mode layer \
   --tensor-split 1,1 \
   --main-gpu 0 \
-  --port 8080 \
+  --port 8081 \
+  --slot-save-path /tmp/legacyrag_v3_slots/ \
+  --slots
+
+# CPU-only server for phase split prefill
+LD_LIBRARY_PATH=build/bin build/bin/llama-server \
+  -m /path/to/phi3-mini.gguf \
+  -ngl 0 \
+  --port 8082 \
+  --slot-save-path /tmp/legacyrag_v3_slots/ \
   --slots
 ```
 
-## Benchmark Results
+---
 
-See [`paper_findings.md`](paper_findings.md) for the full research summary.
-
-### Latency Breakdown
-![Latency Breakdown](graphs/latency_breakdown.png)
-
-Generation dominates at **99.86% of total latency**. Embedding (0.6–0.8s) and retrieval (0.0002s) are negligible.
-
-### Generation Speed — Single GPU vs Dual-GPU
-![Tokens per Second](graphs/tokens_per_second.png)
-
-| Config | Prefill tok/s | Decode tok/s |
-|---|---|---|
-| Single GPU (idle) | ~26 | ~9 |
-| Single GPU (sustained load) | 1–6 | 0.29–1.66 |
-| Dual GPU (idle, layer split) | **0.52** | **8.35** |
-
-**Key finding:** Dual-GPU Vulkan layer split on Maxwell hardware degrades prefill by 50× due to inter-device synchronization overhead, while decode speed is unchanged.
-
-### VRAM Usage Per Request
-![VRAM Usage](graphs/vram_usage.png)
-
-Both GPUs stayed well above the 800 MB threshold throughout all tests. The VRAM scheduler never triggered a CPU fallback during the baseline runs.
-
-### VRAM Scheduler Decisions
-![Scheduler Decisions](graphs/scheduler_decisions.png)
-
-All 7 embedding decisions routed to GPU. Free VRAM remained stable between 1,400–2,000 MB across both cards.
-
-## Files
+## File Tree
 
 ```
-legacyrag/
-  vram_scheduler.py   — per-GPU nvidia-smi monitoring + routing decisions
-  embedder.py         — nomic-embed-text via Ollama, respects scheduler
-  retriever.py        — cosine similarity store with disk persistence
-  generator.py        — llama.cpp streaming client with stall detection
-  pipeline.py         — ingest + query orchestration
-  benchmark.py        — per-request logging + stress_test()
-main.py               — FastAPI app
-requirements.txt
-paper_findings.md     — full benchmark writeup with tables
-results_table.csv     — tabular export of benchmark_results.json
-benchmark_results.json
-stress_test_results.json
+PhaseRAG-LegacyRAG-v3/
+│
+├── legacyrag_v3/                       # v3 PhaseRAG code
+│   ├── phase_splitter.py               # CPU→GPU phase splitting (Contribution 1)
+│   ├── prompt_compressor.py            # 3 compression methods + quality metrics (Contribution 2)
+│   ├── auto_config.py                  # Hardware detection + model/config selection (Contribution 3)
+│   ├── benchmark_v3.py                 # Experiment A runner (10 prompts × 4 configs)
+│   ├── install.sh                      # One-script hardware-aware installer
+│   ├── requirements.txt                # FastAPI, uvicorn, jinja2, python-multipart
+│   ├── RESEARCH_LOG.md                 # Dated research log with raw findings
+│   ├── results/
+│   │   └── exp_phase_split.json        # Experiment A raw results
+│   ├── paper_notes/
+│   │   └── PhaseRAG_draft.md           # Full paper scaffold (MLSys 2027)
+│   └── web_ui/
+│       ├── app.py                      # FastAPI SSE streaming server
+│       └── templates/
+│           └── index.html              # Plain HTML, no JS framework, SSE streaming
+│
+├── legacyrag_v2/                       # v2 baseline code (IC2E 2026)
+│   ├── experiment1_baseline.py         # GPU-only: 8.28 tok/s
+│   ├── experiment2_speculative_draft.py # Speculative decoding: 3.36 tok/s (−59%)
+│   ├── experiment3_ngram.py            # N-gram: 9.08 tok/s (+10%)
+│   ├── experiment4_quantization.py     # qwen2.5-7B Q2_K: 3.82 tok/s (−54%)
+│   ├── benchmark_runner.py             # Shared runner infrastructure
+│   ├── analysis.py                     # Result aggregation and statistics
+│   ├── RESEARCH_LOG.md                 # v2 dated research log
+│   ├── results/                        # Raw JSON results per experiment
+│   └── paper_notes/
+│       └── IC2E_demo_draft.md          # IC2E 2026 demo paper draft
+│
+├── legacyrag/                          # v1 LegacyRAG pipeline (imported as baseline)
+│   ├── vram_scheduler.py               # Per-GPU nvidia-smi monitoring + routing
+│   ├── embedder.py                     # nomic-embed-text via Ollama
+│   ├── retriever.py                    # Cosine similarity store
+│   ├── generator.py                    # llama.cpp streaming client
+│   ├── pipeline.py                     # Ingest + query orchestration
+│   └── benchmark.py                    # Per-request logging
+│
+├── main.py                             # FastAPI app (v1 endpoints)
+├── requirements.txt                    # v1 dependencies
+├── benchmark_results.json              # v1 raw results
+├── benchmark_results_baseline.json     # v1 baseline snapshot
+├── graphs/                             # Result visualizations
+│   ├── latency_breakdown.png
+│   ├── tokens_per_second.png
+│   ├── vram_usage.png
+│   └── scheduler_decisions.png
+├── paper_findings.md                   # v1 research summary
+├── results_table.csv                   # v1 tabular results
+├── schedule_decisions.jsonl            # v1 VRAM scheduler log
+├── stress_test_results.json            # v1 stress test output
+└── LICENSE
 ```
 
-## Research Context
+---
 
-This system was built to document real-world inference performance on legacy data-center GPUs (Quadro K4200, EOL 2019) as part of an arXiv research paper on edge inference constraints. The goal is to characterize what RAG pipelines are feasible on hardware that institutions may still have deployed — and where the actual bottlenecks lie.
+## Research Series
+
+This repo is the third in the LegacyRAG series, documenting progressive inference optimization
+on a fixed hardware platform (Dell Precision Tower 5810, dual NVIDIA Quadro K4200):
+
+| Repo | Venue | Best result | What was tested |
+|---|---|---|---|
+| [LegacyRAG v1](https://github.com/azeez-1904/LegacyRAG) | arXiv 2026 | 0.95 tok/s | VRAM-aware RAG pipeline; characterized the baseline bottleneck (99.86% latency in generation) |
+| [LegacyRAG v2](https://github.com/azeez-1904/LegacyRAG-v2-experiments) | IC2E 2026 | 9.08 tok/s (+772%) | Dual-GPU layer split, speculative decoding, n-gram, quantization |
+| **PhaseRAG / LegacyRAG v3** (this repo) | MLSys 2027 | 9.29 tok/s (GPU-only) | CPU-GPU phase splitting, prompt compression, auto-config |
+| [TemporalRAG](https://github.com/azeez-1904/TemporalRAG) | ACL 2027 | — | Version-aware document retrieval; temporal consistency in RAG |
+
+### Evolution
+
+```
+v1: Single GPU, Ollama
+    0.95 tok/s ──────────────────────────────────────────┐
+                                                          │
+v2: Dual-GPU layer split + n-gram speculative             │
+    9.08 tok/s  ──── +772% ───────────────────────────── ┤
+                     (b9297, -ngl 99, --spec-type ngram)  │
+                                                          │
+v3: Phase split investigation                             │
+    9.29 tok/s  ──── marginal; handoff blocked ─────────  ┤
+                     (phase split: HTTP 400 in b9297)     │
+                                                          │
+TemporalRAG: Temporal document versioning                 │
+    [see repo] ──────────────────────────────────────── ──┘
+```
+
+---
+
+## Novel Contributions (v3)
+
+1. **Phase Splitter** (`legacyrag_v3/phase_splitter.py`) — First systematic study of
+   cross-backend CPU→GPU KV cache handoff in llama.cpp. Documents the HTTP 400 failure
+   mode and the conditions under which phase splitting would be beneficial (short prompts
+   only, <20 tokens). Provides theoretical speedup measurements as a validated upper bound.
+
+2. **Prompt Compressor** (`legacyrag_v3/prompt_compressor.py`) — Three compression
+   strategies (extractive, abstractive, token-budget) with automated quality measurement
+   (ROUGE-1 F1, entity recall, answer-length ratio). Designed for VRAM-constrained
+   deployments where no separate compression model can be loaded.
+
+3. **Auto-Config** (`legacyrag_v3/auto_config.py`) — Hardware detection that auto-selects
+   optimal model, `ngl`, and speculative decoding settings for detected GPU configuration.
+   Enables zero-config deployment for institutions without ML expertise.
+
+---
 
 ## Citation
 
-If you use LegacyRAG in your research, please cite:
-
 ```bibtex
-@misc{legacyrag2026,
-  title   = {LegacyRAG: VRAM-Aware Retrieval-Augmented Generation on Legacy GPU Hardware},
-  author  = {Azeez},
-  year    = {2026},
-  url     = {https://github.com/azeez-1904/LegacyRAG}
+@misc{phaserag2027,
+  title   = {PhaseRAG: CPU-GPU Heterogeneous Phase Splitting for LLM Inference on Legacy Hardware},
+  author  = {Ahmad, Azeez},
+  year    = {2027},
+  url     = {https://github.com/azeez-1904/PhaseRAG-LegacyRAG-v3}
 }
 ```
+
+For the v2 baseline results, please also cite:
+
+```bibtex
+@misc{legacyrag_v2_2026,
+  title   = {LegacyRAG v2: Speculative Decoding and Quantization on Maxwell Vulkan},
+  author  = {Ahmad, Azeez},
+  year    = {2026},
+  url     = {https://github.com/azeez-1904/LegacyRAG-v2-experiments}
+}
+```
+
+---
 
 ## License
 
