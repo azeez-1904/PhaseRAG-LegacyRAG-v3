@@ -2,11 +2,18 @@
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/)
 
-CPU-GPU heterogeneous phase splitting for LLM inference on CUDA-abandoned hardware. Built for the MLSys 2027 paper *"PhaseRAG: CPU-GPU Heterogeneous Phase Splitting for LLM Inference on CUDA-Abandoned Hardware"*.
+CPU-GPU heterogeneous phase splitting for LLM inference on CUDA-abandoned hardware.
 
 ## Key Idea
 
 On Maxwell-era Vulkan GPUs, prefill throughput collapses above ~20-token prompts. CPU handles prefill (21 tok/s for short prompts); GPU handles decode (8–9 tok/s). Phase splitting routes each stage to its faster device.
+
+## Novel Contributions
+
+1. **CPU-GPU prefill inversion measurement** — first empirical documentation of CPU outperforming GPU on prefill for short prompts (~20 tok/s vs ~11 tok/s) due to Vulkan dispatch overhead on Maxwell hardware.
+2. **Phase splitting architecture** — routes prefill to a CPU llama-server (`-ngl 0`) and decode to a GPU server (`-ngl 99`); documents the KV cache handoff failure (HTTP 400 from `/slots` API in llama.cpp b9297).
+3. **Prompt compression with quality tracking** — three strategies (extractive, abstractive, token-budget) benchmarked against ROUGE-1 and entity recall; token-budget 75% is Pareto-optimal at 18× speedup.
+4. **Zero-config installer** — `auto_config.py` + `install.sh` auto-detect hardware and launch the full stack without manual configuration.
 
 ## Figures
 

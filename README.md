@@ -2,7 +2,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/)
-[![MLSys 2027](https://img.shields.io/badge/venue-MLSys%202027-blueviolet.svg)](https://mlsys.org/)
 [![Series: LegacyRAG](https://img.shields.io/badge/series-LegacyRAG%20v3-orange.svg)](#research-series)
 
 > PhaseRAG investigates CPU-GPU heterogeneous phase splitting for LLM inference: offloading the
@@ -60,7 +59,7 @@ contexts because both become memory-bandwidth-bound at those context lengths. Th
 advantage is confined to prompts shorter than ~20 tokens.
 
 This repo documents the full experimental investigation, including the v2 baseline suite that
-motivated the hypothesis. Target venue: **MLSys 2027**.
+motivated the hypothesis.
 
 ---
 
@@ -103,9 +102,19 @@ motivated the hypothesis. Target venue: **MLSys 2027**.
 
 ---
 
+## Novel Contributions
+
+1. **First empirical measurement of CPU-GPU prefill inversion on Maxwell Vulkan hardware** — CPU BLAS-vectorized prefill reaches ~20 tok/s for short prompts vs GPU's ~13 tok/s, inverting the expected GPU advantage due to Vulkan dispatch overhead at small batch sizes.
+2. **Phase splitting architecture** — `phase_splitter.py` routes prefill to a `-ngl 0` CPU llama-server and decode to a `-ngl 99` GPU llama-server; documents the HTTP 400 failure of cross-backend KV cache transfer in llama.cpp b9297.
+3. **Prompt compression module** — `prompt_compressor.py` implements three strategies (extractive cosine, abstractive qwen2:1.5b, token-budget truncation) with ROUGE-1 and entity-recall quality tracking; token-budget at 75% retention achieves 18× speedup while preserving 97% of ROUGE-1.
+4. **Zero-config deployment** — `auto_config.py` + `install.sh` detect GPU count and VRAM via nvidia-smi, select optimal model and `ngl` value, and start all services automatically on supported hardware.
+5. **Negative result: slot handoff is not viable in current llama.cpp** — documents that `/slots` API returns HTTP 400 for cross-backend state transfer, providing a reproducible test case for future llama.cpp builds.
+
+---
+
 ## Motivation: v2 Prefill Bottleneck Analysis
 
-LegacyRAG v2 ([IC2E 2026](https://github.com/azeez-1904/LegacyRAG-v2-experiments)) established
+LegacyRAG v2 ([experiments repo](https://github.com/azeez-1904/LegacyRAG-v2-experiments)) established
 that **prefill consumes 80–92% of wall time for medium and long prompts on Maxwell Vulkan**.
 
 | Prompt length | Prefill time | Prefill share of wall time |
@@ -353,13 +362,13 @@ PhaseRAG-LegacyRAG-v3/
 │   ├── results/
 │   │   └── exp_phase_split.json        # Experiment A raw results
 │   ├── paper_notes/
-│   │   └── PhaseRAG_draft.md           # Full paper scaffold (MLSys 2027)
+│   │   └── PhaseRAG_draft.md           # Full paper scaffold
 │   └── web_ui/
 │       ├── app.py                      # FastAPI SSE streaming server
 │       └── templates/
 │           └── index.html              # Plain HTML, no JS framework, SSE streaming
 │
-├── legacyrag_v2/                       # v2 baseline code (IC2E 2026)
+├── legacyrag_v2/                       # v2 baseline code
 │   ├── experiment1_baseline.py         # GPU-only: 8.28 tok/s
 │   ├── experiment2_speculative_draft.py # Speculative decoding: 3.36 tok/s (−59%)
 │   ├── experiment3_ngram.py            # N-gram: 9.08 tok/s (+10%)
@@ -369,7 +378,7 @@ PhaseRAG-LegacyRAG-v3/
 │   ├── RESEARCH_LOG.md                 # v2 dated research log
 │   ├── results/                        # Raw JSON results per experiment
 │   └── paper_notes/
-│       └── IC2E_demo_draft.md          # IC2E 2026 demo paper draft
+│       └── IC2E_demo_draft.md          # demo paper draft
 │
 ├── legacyrag/                          # v1 LegacyRAG pipeline (imported as baseline)
 │   ├── vram_scheduler.py               # Per-GPU nvidia-smi monitoring + routing
@@ -402,12 +411,12 @@ PhaseRAG-LegacyRAG-v3/
 This repo is the third in the LegacyRAG series, documenting progressive inference optimization
 on a fixed hardware platform (Dell Precision Tower 5810, dual NVIDIA Quadro K4200):
 
-| Repo | Venue | Best result | What was tested |
-|---|---|---|---|
-| [LegacyRAG v1](https://github.com/azeez-1904/LegacyRAG) | arXiv 2026 | 0.95 tok/s | VRAM-aware RAG pipeline; characterized the baseline bottleneck (99.86% latency in generation) |
-| [LegacyRAG v2](https://github.com/azeez-1904/LegacyRAG-v2-experiments) | IC2E 2026 | 9.08 tok/s (+772%) | Dual-GPU layer split, speculative decoding, n-gram, quantization |
-| **PhaseRAG / LegacyRAG v3** (this repo) | MLSys 2027 | 9.29 tok/s (GPU-only) | CPU-GPU phase splitting, prompt compression, auto-config |
-| [TemporalRAG](https://github.com/azeez-1904/TemporalRAG) | ACL 2027 | — | Version-aware document retrieval; temporal consistency in RAG |
+| Repo | Best result | What was tested |
+|---|---|---|
+| [LegacyRAG v1](https://github.com/azeez-1904/LegacyRAG) | 0.95 tok/s | VRAM-aware RAG pipeline; characterized the baseline bottleneck (99.86% latency in generation) |
+| [LegacyRAG v2](https://github.com/azeez-1904/LegacyRAG-v2-experiments) | 9.08 tok/s (+772%) | Dual-GPU layer split, speculative decoding, n-gram, quantization |
+| **PhaseRAG / LegacyRAG v3** (this repo) | 9.29 tok/s (GPU-only) | CPU-GPU phase splitting, prompt compression, auto-config |
+| [TemporalRAG](https://github.com/azeez-1904/TemporalRAG) | — | Version-aware document retrieval; temporal consistency in RAG |
 
 ### Evolution
 
