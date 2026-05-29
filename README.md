@@ -5,61 +5,62 @@
 [![MLSys 2027](https://img.shields.io/badge/venue-MLSys%202027-blueviolet.svg)](https://mlsys.org/)
 [![Series: LegacyRAG](https://img.shields.io/badge/series-LegacyRAG%20v3-orange.svg)](#research-series)
 
-> **Can we speed up AI on old hardware by making the CPU do the reading and the GPU do the writing?**
-> Short answer: theoretically yes for tiny prompts, practically no — because the handoff mechanism
-> isn't supported between CPU and GPU backends in the current llama.cpp build.
+> PhaseRAG investigates CPU-GPU heterogeneous phase splitting for LLM inference: offloading the
+> prefill phase (prompt processing) to CPU while reserving GPU for the decode phase (token generation).
+> The hypothesis is that CPU BLAS-accelerated prefill outperforms Vulkan-dispatched prefill on Maxwell
+> hardware, enabling the GPU's memory bandwidth advantage to be reserved exclusively for decode.
+> This repo also contains the complete LegacyRAG v2 benchmark suite as a reference baseline.
 
 ---
 
 ## What It Does
 
-When a language model processes your question and generates an answer, it does two fundamentally
-different things:
+LLM inference decomposes into two structurally distinct phases:
 
-1. **Prefill (reading phase)** — the model ingests all your input tokens at once. It "reads"
-   your question, the retrieved documents, and any context. This is compute-intensive and
-   processes many tokens in parallel.
+1. **Prefill** — the model processes all input tokens in a single forward pass, constructing
+   the KV cache for the full prompt. This phase is compute-intensive and parallelizable across
+   tokens.
 
-2. **Decode (writing phase)** — the model generates tokens one by one. It "writes" the
-   answer, emitting a single new token per forward pass.
+2. **Decode** — the model performs autoregressive token generation, emitting one token per
+   forward pass. This phase is memory-bandwidth-bound, loading model weights and KV cache on
+   every step.
 
-On legacy Maxwell Vulkan hardware (NVIDIA Quadro K4200, no FP16, no tensor cores), an
-interesting inversion occurs: **the CPU is faster at reading for short prompts, while the
-GPU is consistently faster at writing.** CPU prefill reaches ~20 tok/s for short inputs
-because BLAS SIMD routines outperform Vulkan dispatch overhead. GPU decode hits 8–9 tok/s
-versus CPU's 5.3 tok/s because the GPU's 173 GB/s memory bandwidth dominates
-the weight-loading bottleneck.
+On legacy Maxwell Vulkan hardware (NVIDIA Quadro K4200, no FP16, no tensor cores), a
+performance inversion is observed at short prompt lengths: CPU BLAS-accelerated prefill
+reaches ~20 tok/s for short inputs, exceeding GPU Vulkan prefill (~13 tok/s) due to Vulkan
+dispatch overhead at small batch sizes. GPU decode reaches 8–9 tok/s versus CPU's 5.3 tok/s
+because the GPU's 173 GB/s GDDR5 memory bandwidth dominates the weight-loading bottleneck.
 
-**PhaseRAG tests whether handing off between devices mid-generation — CPU handles prefill,
-GPU handles decode — can speed up end-to-end inference.**
+**PhaseRAG evaluates whether heterogeneous phase splitting — routing prefill to CPU and decode
+to GPU — reduces end-to-end inference latency on this hardware class.**
 
 ```
-Your question + retrieved docs
+Input prompt + retrieved context (P tokens)
          |
          v
-  [CPU: prefill phase]          <- reads all input tokens at once (~20 tok/s short)
-  "What is the OPRA deadline?"      (BLAS-vectorized, no Vulkan dispatch overhead)
-  + 3 retrieved document chunks
+  [CPU llama-server :8082]      prefill via POST /completion, ngl=0
+  BLAS-vectorized attention      ~20 tok/s (short); ~1.1 tok/s (medium/long)
          |
-         | KV cache handoff
+         | KV cache state transfer
          | POST /slots/0  <-- HTTP 400: NOT SUPPORTED in llama.cpp b9297
+         |       cross-backend KV cache transfer blocked
+         |
+         v  (theoretical path only)
+  [GPU llama-server :8081]      decode via POST /completion, ngl=99
+  Vulkan-dispatched attention    ~9.3 tok/s (memory-bandwidth-bound, 173 GB/s GDDR5)
          |
          v
-  [GPU: decode phase]           <- generates answer tokens one by one (~9 tok/s)
-  "The OPRA deadline is..."         (memory-bandwidth-bound, 173 GB/s GDDR5)
-         |
-         v
-  Streamed response to user
+  Streamed token output
 ```
 
-**What we found:** The handoff fails in practice (llama.cpp b9297 slot API does not support
-cross-backend KV cache transfer). More importantly, the theoretical speedup is negligible for
-realistic RAG prompts — CPU and GPU prefill at the same rate for medium and long contexts
-because both are memory-bandwidth-bound at those lengths. The CPU advantage only holds for
-prompts shorter than ~20 tokens.
+**Result:** The KV cache transfer fails at runtime (llama.cpp b9297 slot API does not support
+cross-backend state transfer). Furthermore, the theoretical speedup for realistic RAG prompts
+is negligible — CPU and GPU prefill converge to the same throughput for medium and long
+contexts because both become memory-bandwidth-bound at those context lengths. The CPU
+advantage is confined to prompts shorter than ~20 tokens.
 
-This repo documents the full investigation, including the v2 baseline code that motivated it.
-Target venue: **MLSys 2027**.
+This repo documents the full experimental investigation, including the v2 baseline suite that
+motivated the hypothesis. Target venue: **MLSys 2027**.
 
 ---
 
@@ -82,8 +83,8 @@ Target venue: **MLSys 2027**.
 ## Key Features
 
 - **`phase_splitter.py`** — CPU→GPU heterogeneous phase splitting implementation. Runs CPU
-  prefill via a `-ngl 0` llama-server instance, then attempts KV cache handoff to a GPU
-  decode server via the `/slots/{id}` API. Documents the HTTP 400 failure and theoretical
+  prefill via a `-ngl 0` llama-server instance, then attempts KV cache state transfer to a
+  GPU decode server via the `/slots/{id}` API. Documents the HTTP 400 failure and theoretical
   fallback measurement.
 - **`prompt_compressor.py`** — Three compression methods (extractive sentence similarity,
   abstractive qwen2:1.5b summarization, token-budget hard truncation) with ROUGE-1 F1,
@@ -102,9 +103,9 @@ Target venue: **MLSys 2027**.
 
 ---
 
-## The v2 Insight That Motivated This Work
+## Motivation: v2 Prefill Bottleneck Analysis
 
-LegacyRAG v2 ([IC2E 2026](https://github.com/azeez-1904/LegacyRAG-v2-experiments)) revealed
+LegacyRAG v2 ([IC2E 2026](https://github.com/azeez-1904/LegacyRAG-v2-experiments)) established
 that **prefill consumes 80–92% of wall time for medium and long prompts on Maxwell Vulkan**.
 
 | Prompt length | Prefill time | Prefill share of wall time |
@@ -114,9 +115,9 @@ that **prefill consumes 80–92% of wall time for medium and long prompts on Max
 | Long (260–367 tok) | 379.3 s | **93%** |
 
 The Vulkan GLSL attention shaders process attention heads without fused kernels, producing
-near-quadratic prefill cost for longer contexts. Meanwhile, CPU prefill was measured at ~21
-tok/s for short prompts, versus GPU's ~11 tok/s — a 2× advantage. This motivated the
-hypothesis that routing prefill to the CPU could eliminate the dominant bottleneck.
+near-quadratic prefill cost at longer contexts. CPU prefill was measured at ~21 tok/s for
+short prompts versus GPU's ~11 tok/s — a 2× throughput advantage — motivating the hypothesis
+that routing prefill to the CPU could reduce the dominant latency component.
 
 ---
 
@@ -143,7 +144,7 @@ hypothesis that routing prefill to the CPU could eliminate the dominant bottlene
  │         │  ◄── HTTP 400 ── NOT SUPPORTED in b9297 ──────────────── │
  │         │       cross-backend KV cache transfer blocked             │
  │         │                                                           │
- │         │  (theoretical path, if handoff worked)                   │
+ │         │  (theoretical path; cross-backend transfer not supported)  │
  │         ▼                                                           │
  │  ┌─────────────┐    POST /completion     ┌──────────────────────┐  │
  │  │ llama-server │    ngl=99 (GPU)         │   GPU decode         │  │
@@ -181,7 +182,7 @@ CPU-only      ██████████████████████
               0         2         4         6         8        10
               └─────────┴─────────┴─────────┴─────────┴─────────┘
 
-* Theoretical only — actual handoff failed (HTTP 400)
+* Theoretical only — cross-backend KV cache transfer failed (HTTP 400)
 ```
 
 ### Prefill Speed by Prompt Length
@@ -222,24 +223,25 @@ prefill advantage at realistic RAG prompt lengths.
 
 ---
 
-## What We Found
+## Findings
 
-### Finding 1 — The slot handoff fails: HTTP 400
+### Finding 1 — KV cache state transfer fails: HTTP 400
 
 `POST /slots/0` with `{"action": "save", "filename": "..."}` on a CPU llama-server
 (b9297 with `--slot-save-path`) returns **HTTP 400**. The llama.cpp slot API is designed for
-same-server session continuation — resuming a paused conversation on the same backend.
-It does not support transferring KV cache state between a CPU backend (FP32, host memory)
-and a GPU backend (FP32, Vulkan device memory). This is a fundamental architecture constraint
-in the current llama.cpp build, not a configuration issue.
+same-server session continuation — reloading a serialized KV cache on the same backend
+instance. It does not support transferring KV cache state between a CPU backend (FP32, host
+memory) and a GPU backend (FP32, Vulkan device memory). This is a fundamental architectural
+constraint in the current llama.cpp build, not a configuration issue.
 
 ### Finding 2 — Theoretical speedup is negligible for realistic RAG prompts
 
-The "CPU = 21 tok/s prefill" observation from v2 only holds for prompts shorter than
-~20 tokens, where BLAS SIMD vectorization outperforms Vulkan dispatch overhead. For medium
-and long RAG prompts (the common case), CPU prefill drops to 1.0–1.4 tok/s — essentially
-identical to GPU's 0.8–1.3 tok/s. Both are memory-bandwidth-bound at those context lengths.
-Phase splitting would provide a theoretical speedup of 0.99–1.03× for the actual workload.
+The ~21 tok/s CPU prefill throughput measured in v2 is observed exclusively for prompts
+shorter than ~20 tokens, where BLAS SIMD vectorization outperforms Vulkan dispatch overhead.
+For medium and long RAG prompts — the representative workload — CPU prefill drops to
+1.0–1.4 tok/s, which is statistically indistinguishable from GPU's 0.8–1.3 tok/s. Both
+backends are memory-bandwidth-bound at those context lengths. Phase splitting provides a
+theoretical speedup of 0.99–1.03× over the actual workload distribution.
 
 ### Finding 3 — GPU+ngram underperforms GPU-only in this setup (8.73 vs 9.29 tok/s)
 
@@ -418,7 +420,7 @@ v2: Dual-GPU layer split + n-gram speculative             │
                      (b9297, -ngl 99, --spec-type ngram)  │
                                                           │
 v3: Phase split investigation                             │
-    9.29 tok/s  ──── marginal; handoff blocked ─────────  ┤
+    9.29 tok/s  ──── marginal; KV transfer blocked ─────  ┤
                      (phase split: HTTP 400 in b9297)     │
                                                           │
 TemporalRAG: Temporal document versioning                 │
@@ -430,9 +432,10 @@ TemporalRAG: Temporal document versioning                 │
 ## Novel Contributions (v3)
 
 1. **Phase Splitter** (`legacyrag_v3/phase_splitter.py`) — First systematic study of
-   cross-backend CPU→GPU KV cache handoff in llama.cpp. Documents the HTTP 400 failure
-   mode and the conditions under which phase splitting would be beneficial (short prompts
-   only, <20 tokens). Provides theoretical speedup measurements as a validated upper bound.
+   cross-backend CPU→GPU KV cache state transfer in llama.cpp. Documents the HTTP 400 failure
+   mode and the conditions under which phase splitting would yield throughput gains (short
+   prompts only, <20 tokens). Provides theoretical speedup measurements as a validated upper
+   bound.
 
 2. **Prompt Compressor** (`legacyrag_v3/prompt_compressor.py`) — Three compression
    strategies (extractive, abstractive, token-budget) with automated quality measurement
